@@ -4,7 +4,9 @@
 
 int main(int agrc, char* argv[])
 {
-	Application* app{};
+	Application* app = new Application();
 	app->Run();
 	delete app;
+
+	return 0;
 }

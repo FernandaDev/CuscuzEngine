@@ -21,5 +21,6 @@ Window::Window(const char* Name, int Width, int Height):
 
 Window::~Window()
 {
-	SDL_DestroyWindow(m_Window);
+	if(m_Window)
+		SDL_DestroyWindow(m_Window);
 }

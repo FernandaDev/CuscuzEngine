@@ -10,32 +10,32 @@ project "App"
    includedirs
    {
       "Source",
-      "Dependencies/SDL/include",
-      --"Dependencies/SDL2_image/include",
+      "Dependencies/SDL2/include",
+      "Dependencies/SDL2_image/include",
 
 	  -- Include Core
-	  "../Core/Source"
+	  "../Game/Source"
    }
 
    libdirs
    { 
       "Dependencies/SDL2/lib",
-      --"Dependencies/SDL2_image/lib" 
+      "Dependencies/SDL2_image/lib" 
    } 
 
    links
    {
-      "Core",
+      "Game",
       "SDL2.lib",
       "SDL2main.lib",
-      --"SDL2_image.lib",
+      "SDL2_image.lib",
    }
 
    local scriptDir = path.getdirectory(_SCRIPT)
    postbuildcommands 
    {
     '{COPY} ' .. path.join(scriptDir, 'SDL2.dll') .. ' "$(TargetDir)"',
-    --'{COPY} ' .. path.join(scriptDir, 'SDL2_image.dll') .. ' "$(TargetDir)"'
+    '{COPY} ' .. path.join(scriptDir, 'SDL2_image.dll') .. ' "$(TargetDir)"'
    }
 
    targetdir ("../Binaries/" .. OutputDir .. "/%{prj.name}")

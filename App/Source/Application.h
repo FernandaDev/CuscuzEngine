@@ -3,11 +3,12 @@
 #include <iostream>
 
 #include "Window.h"
+#include "RendererSystem.h"
 
 class Application 
 {
 	Window* m_Window;
-	SDL_Renderer* m_Renderer;
+	RendererSystem* m_RendererSystem;
 
 	bool m_IsRunning = true;
 

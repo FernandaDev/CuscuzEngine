@@ -7,28 +7,23 @@
 #define SCREEN_HEIGHT  720
 
 Application::Application():
-	m_Window{ new Window("Game", SCREEN_WIDTH, SCREEN_HEIGHT) }
-{
-	m_Renderer = SDL_CreateRenderer(m_Window->GetWindow(), -1, 0);
-
-	if (!m_Renderer)
-	{
-		std::cout << "Could not create a renderer." << std::endl;
-		return;
-	}
-}
+	m_Window{ new Window("Game", SCREEN_WIDTH, SCREEN_HEIGHT) },
+	m_RendererSystem { new RendererSystem {m_Window}}
+{}
 
 Application::~Application()
 {
-	SDL_DestroyRenderer(m_Renderer);
-
+	delete m_RendererSystem;
 	delete m_Window;
-
 	SDL_Quit();
 }
 
 void Application::Run()
 {
+	m_RendererSystem->AddTexture("Floor1.png");
+	m_RendererSystem->AddTexture("Floor2.png");
+	m_RendererSystem->AddTexture("Floor3.png");
+
 	while (m_IsRunning)
 	{
 		SDL_Event event;
@@ -37,5 +32,7 @@ void Application::Run()
 			if (event.type == SDL_QUIT)
 				m_IsRunning = false;
 		}
+
+		m_RendererSystem->Update();
 	}
 }

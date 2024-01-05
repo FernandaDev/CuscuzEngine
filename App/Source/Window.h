@@ -10,6 +10,7 @@ class Window
 	SDL_Window* m_Window{nullptr};
 
 public:
+	Window() = delete;
 	Window(const char* Name, int Width, int Height);
 	~Window();
 
