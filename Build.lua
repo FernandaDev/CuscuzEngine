@@ -10,8 +10,8 @@ workspace "Game"
 
 OutputDir = "%{cfg.system}-%{cfg.architecture}/%{cfg.buildcfg}"
 
-group "Core"
-	include "Core/Build-Core.lua"
+group "Game"
+	include "Game/Build-Game.lua"
 group ""
 
 include "App/Build-App.lua"
