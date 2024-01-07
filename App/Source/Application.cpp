@@ -1,15 +1,23 @@
 #include <iostream>
-
 #include <SDL.h>
-#include "Application.h"
 
-#define SCREEN_WIDTH   1280
-#define SCREEN_HEIGHT  720
+#include "Application.h"
+#include "Events/EventHandler.h"
+#include "Events/WindowEvents.h"
+
+enum
+{
+	SCREEN_WIDTH = 1280,
+	SCREEN_HEIGHT = 720
+};
 
 Application::Application():
 	m_Window{ new Window("Game", SCREEN_WIDTH, SCREEN_HEIGHT) },
-	m_RendererSystem { new RendererSystem {m_Window}}
-{}
+	m_RendererSystem { new RendererSystem {m_Window}},
+	m_EventSystem{ new EventSystem() }
+{
+	ADD_WINDOW_EVENT_LISTENER(WindowEventType::Close, this, Application::Quit);
+}
 
 Application::~Application()
 {
@@ -18,21 +26,22 @@ Application::~Application()
 	SDL_Quit();
 }
 
-void Application::Run()
+void Application::Run() const
 {
 	m_RendererSystem->AddTexture("Floor1.png");
 	m_RendererSystem->AddTexture("Floor2.png");
 	m_RendererSystem->AddTexture("Floor3.png");
 
+	m_EventSystem->Start();
+	
 	while (m_IsRunning)
 	{
-		SDL_Event event;
-		while (SDL_PollEvent(&event))
-		{
-			if (event.type == SDL_QUIT)
-				m_IsRunning = false;
-		}
-
+		m_EventSystem->Update();
 		m_RendererSystem->Update();
 	}
+}
+
+void Application::Quit(const Event<WindowEventType>& Event)
+{
+	m_IsRunning = false;
 }

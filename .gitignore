@@ -1,5 +1,6 @@
 # Directories
 .vs/
+.idea/
 Binaries/
 
 # Files
@@ -8,6 +9,7 @@ Binaries/
 *.vcxproj.filters
 *.sln
 *.log
+*.user
 Makefile
 
 # Exclude
