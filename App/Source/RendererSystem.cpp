@@ -5,7 +5,7 @@
 #include "SDL_image.h"
 
 #define IMAGE_ROOT_PATH "Source/Assets/Images/"
-#define MAX_TEXTURE_AMOUNT 24
+#define MAX_SPRITE_AMOUNT 24
 
 RendererSystem::RendererSystem(Window* Window):
 	m_Renderer{nullptr}
@@ -19,7 +19,7 @@ RendererSystem::RendererSystem(Window* Window):
 	
 	IMG_Init(IMG_INIT_PNG | IMG_INIT_JPG);
 	
-	m_Textures.reserve(MAX_TEXTURE_AMOUNT);
+	m_Sprites.reserve(MAX_SPRITE_AMOUNT);
 }
 
 RendererSystem::~RendererSystem()
@@ -28,21 +28,25 @@ RendererSystem::~RendererSystem()
 		SDL_DestroyRenderer(m_Renderer);
 }
 
-SDL_Texture* RendererSystem::LoadTexture(std::string FilePath)
+void RendererSystem::CreateSprite(const std::string& FilePath)
 {
-	std::string filePath = IMAGE_ROOT_PATH + FilePath;
-	return IMG_LoadTexture(m_Renderer, filePath.c_str());
+	CreateSprite(FilePath, 0, 0);
 }
 
-void RendererSystem::AddTexture(std::string FilePath)
+void RendererSystem::CreateSprite(const std::string& FilePath, int X, int Y)
 {
-	if (m_Textures.size() >= MAX_TEXTURE_AMOUNT)
+	CreateSprite(FilePath, X, Y, 1, 1);
+}
+
+void RendererSystem::CreateSprite(const std::string& FilePath, int X, int Y, int SizeX, int SizeY)
+{
+	if (m_Sprites.size() >= MAX_SPRITE_AMOUNT)
 	{
 		std::cout << "Cannot load more textures!" << std::endl;
 		return;
 	}
 
-	auto newTexture = LoadTexture(FilePath);
+	SDL_Texture* newTexture = LoadTexture(FilePath);
 
 	if (!newTexture)
 	{
@@ -50,41 +54,48 @@ void RendererSystem::AddTexture(std::string FilePath)
 		return;
 	}
 
-	m_Textures.push_back(newTexture);
+	m_Sprites.emplace_back(new Sprite{newTexture, X, Y, SizeX, SizeY});
 }
 
-void RendererSystem::Update()
+// Note: somewhere else, the sprites X and Y are going to be set.
+void RendererSystem::Update() const
 {
 	Clear();
 
-	if (m_Textures.size() <= 0)
+	if (m_Sprites.empty())
 		return;
 
-	for (int i = 0; i < m_Textures.size(); i++)
+	for (const auto& sprite : m_Sprites)
 	{
-		Blit(m_Textures[i], i * 64, 0);
+		const int targetX = sprite->GetX() + 1;
+		
+		sprite->SetPosition(targetX, sprite->GetY()); // TEMP
+		Blit(*sprite);
 	}
 
 	Present();
 }
 
-void RendererSystem::Blit(SDL_Texture* Texture, int X, int Y)
+//PRIVATE
+
+SDL_Texture* RendererSystem::LoadTexture(const std::string& FilePath) const
 {
-	SDL_Rect dest;
-
-	dest.x = X;
-	dest.y = Y;
-	SDL_QueryTexture(Texture, NULL, NULL, &dest.w, &dest.h);
-
-	SDL_RenderCopy(m_Renderer, Texture, NULL, &dest);
+	const std::string filePath = IMAGE_ROOT_PATH + FilePath;
+	return IMG_LoadTexture(m_Renderer, filePath.c_str());
 }
 
-void RendererSystem::Clear()
+void RendererSystem::Blit(const Sprite& Sprite) const
+{
+	const SDL_Rect dest = Sprite.GetRect();	
+	SDL_RenderCopy(m_Renderer, Sprite.GetTexture(), NULL, &dest);
+}
+
+void RendererSystem::Clear() const
 {
 	SDL_RenderClear(m_Renderer);
 }
 
-void RendererSystem::Present()
+void RendererSystem::Present() const
 {
 	SDL_RenderPresent(m_Renderer);
 }

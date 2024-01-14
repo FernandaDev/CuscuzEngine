@@ -1,12 +1,14 @@
 #pragma once
 
 #include <vector>
+#include <memory>
+#include "Render/Sprite.h"
 #include "SDL.h"
 
 class RendererSystem
 {
 	SDL_Renderer* m_Renderer;
-	std::vector<SDL_Texture*> m_Textures;
+	std::vector<std::shared_ptr<Sprite>> m_Sprites;
 
 public:
 	RendererSystem() = delete;
@@ -14,14 +16,16 @@ public:
 	~RendererSystem();
 
 	SDL_Renderer* GetRenderer() const { return m_Renderer; }
-	SDL_Texture* LoadTexture(std::string FilePath);
 
-	void AddTexture(std::string FilePath);
-	void Update();
+	void CreateSprite(const std::string& FilePath);
+	void CreateSprite(const std::string& FilePath, int X, int Y);
+	void CreateSprite(const std::string& FilePath, int X, int Y, int SizeX, int SizeY);
+	void Update() const;
 	
 private:
-	void Blit(SDL_Texture* Texture, int X, int Y);
-	void Present();
-	void Clear();
+	SDL_Texture* LoadTexture(const std::string& FilePath) const;
+	void Blit(const Sprite& Sprite) const;
+	void Present() const;
+	void Clear() const;
 };
 

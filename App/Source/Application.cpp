@@ -26,19 +26,46 @@ Application::~Application()
 	SDL_Quit();
 }
 
-void Application::Run() const
+void Application::Start()
 {
-	m_RendererSystem->AddTexture("Floor1.png");
-	m_RendererSystem->AddTexture("Floor2.png");
-	m_RendererSystem->AddTexture("Floor3.png");
+	m_RendererSystem->CreateSprite("Floor1.png", 250, 400);
+	m_RendererSystem->CreateSprite("Floor2.png", 620, 250, 2, 2);
+	//m_RendererSystem->CreateSprite("Floor3.png", 500, 500, 3, 3);
 
 	m_EventSystem->Start();
+
+	m_lastDeltaTime = m_targetFrameDuration;
+}
+
+void Application::Run()
+{
+	Start();
 	
 	while (m_IsRunning)
 	{
+		FrameStart();
+		
 		m_EventSystem->Update();
 		m_RendererSystem->Update();
+
+		FrameEnd();
 	}
+}
+
+void Application::FrameStart()
+{
+	m_frameStart = SDL_GetTicks();
+}
+
+void Application::FrameEnd()
+{
+	m_frameEnd = SDL_GetTicks();
+		
+	m_frameCount++;
+	m_lastDeltaTime = m_frameEnd - m_frameStart;
+
+	if(m_lastDeltaTime < m_targetFrameDuration)
+		SDL_Delay(m_targetFrameDuration - m_lastDeltaTime);
 }
 
 void Application::Quit(const Event<WindowEventType>& Event)
