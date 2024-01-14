@@ -1,12 +1,14 @@
 #include <iostream>
 #include "Window.h"
 
+#include "Utils/Log.h"
+
 Window::Window(const char* Name, int Width, int Height):
 	m_Width{Width}, m_Height{Height}
 {
 	if (SDL_Init(SDL_INIT_VIDEO) < 0)
 	{
-		std::cout << "SDL could not be initialized: " << SDL_GetError() << std::endl;
+		LOG_ERROR("SDL could not be initialized: %s", SDL_GetError());
 		return;
 	}
 
@@ -16,7 +18,7 @@ Window::Window(const char* Name, int Width, int Height):
 									  SDL_WINDOW_SHOWN);
 
 	if (!m_Window)
-		std::cout << "Could not create a window." << std::endl;
+		LOG_ERROR("Could not create a window.");
 }
 
 Window::~Window()

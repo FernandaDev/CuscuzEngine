@@ -2,6 +2,7 @@
 
 #include <vector>
 #include <memory>
+#include <string>
 #include "Render/Sprite.h"
 #include "SDL.h"
 

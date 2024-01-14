@@ -1,6 +1,7 @@
-#include <iostream>
 
 #include "EventSystem.h"
+
+#include "Utils/Log.h"
 
 void EventSystem::Start()
 {
@@ -83,26 +84,26 @@ void EventSystem::RefreshKeyState()
 void EventSystem::OnKeyDown(const Event<KeyEventType>& Event)
 {
 	RefreshKeyState();
-	std::cout << Event.ToString() << std::endl; 
+	LOG_INFO(Event.ToString()); 
 }
 
 void EventSystem::OnKeyUp(const Event<KeyEventType>& Event)
 {
 	RefreshKeyState();
-	std::cout << Event.ToString() << std::endl; 
+	LOG_INFO(Event.ToString()); 
 }
 
 void EventSystem::OnMouseButtonDown(const Event<MouseEventType>& Event)
 {
-	std::cout << Event.ToString() << std::endl; 
+	LOG_INFO(Event.ToString()); 
 }
 
 void EventSystem::OnMouseButtonUp(const Event<MouseEventType>& Event)
 {
-	std::cout << Event.ToString() << std::endl; 
+	LOG_INFO(Event.ToString()); 
 }
 
 void EventSystem::OnMouseMoved(const Event<MouseEventType>& Event)
 {
-	std::cout << Event.ToString() << std::endl; 
+	LOG_INFO(Event.ToString()); 
 }

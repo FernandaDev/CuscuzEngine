@@ -1,9 +1,9 @@
-#include <iostream>
 #include <SDL.h>
 
 #include "Application.h"
 #include "Events/EventHandler.h"
 #include "Events/WindowEvents.h"
+#include "Utils/Log.h"
 
 enum
 {
@@ -17,6 +17,7 @@ Application::Application():
 	m_EventSystem{ new EventSystem() }
 {
 	ADD_WINDOW_EVENT_LISTENER(WindowEventType::Close, this, Application::Quit);
+	Log::Init();
 }
 
 Application::~Application()
@@ -27,7 +28,7 @@ Application::~Application()
 }
 
 void Application::Start()
-{
+{	
 	m_RendererSystem->CreateSprite("Floor1.png", 250, 400);
 	m_RendererSystem->CreateSprite("Floor2.png", 620, 250, 2, 2);
 	//m_RendererSystem->CreateSprite("Floor3.png", 500, 500, 3, 3);

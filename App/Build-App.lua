@@ -12,7 +12,8 @@ project "App"
       "Source",
       "Dependencies/SDL2/include",
       "Dependencies/SDL2_image/include",
-
+      
+      "../Vendor/Log/include",
 	  -- Include Core
 	  "../Game/Source"
    }
@@ -46,18 +47,18 @@ project "App"
        defines { "WINDOWS" }
 
    filter "configurations:Debug"
-       defines { "DEBUG" }
+       defines { "DEBUG", "_SILENCE_ALL_MS_EXT_DEPRECATION_WARNINGS" }
        runtime "Debug"
        symbols "On"
 
    filter "configurations:Release"
-       defines { "RELEASE" }
+       defines { "RELEASE", "_SILENCE_ALL_MS_EXT_DEPRECATION_WARNINGS" }
        runtime "Release"
        optimize "On"
        symbols "On"
 
    filter "configurations:Dist"
-       defines { "DIST" }
+       defines { "DIST", "_SILENCE_ALL_MS_EXT_DEPRECATION_WARNINGS" }
        runtime "Release"
        optimize "On"
        symbols "Off"

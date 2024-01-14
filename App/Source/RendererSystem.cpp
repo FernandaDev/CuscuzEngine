@@ -1,8 +1,9 @@
-#include <iostream>
+
+#include <SDL_image.h>
+#include "Utils/Log.h"
+#include "Window.h"
 
 #include "RendererSystem.h"
-#include "Window.h"
-#include "SDL_image.h"
 
 #define IMAGE_ROOT_PATH "Source/Assets/Images/"
 #define MAX_SPRITE_AMOUNT 24
@@ -13,13 +14,15 @@ RendererSystem::RendererSystem(Window* Window):
 	m_Renderer = SDL_CreateRenderer(Window->GetWindow(), -1, 0);
 
 	if (!m_Renderer)
-		std::cout << "Could not create a renderer." << std::endl;
+		LOG_ERROR("Could not create a renderer.");
 
 	SDL_SetRenderDrawColor(m_Renderer, 0xFF, 0xFF, 0xFF, 0xFF);
 	
 	IMG_Init(IMG_INIT_PNG | IMG_INIT_JPG);
 	
 	m_Sprites.reserve(MAX_SPRITE_AMOUNT);
+
+	LOG_INFO("RendererSystem initialized.");
 }
 
 RendererSystem::~RendererSystem()
@@ -42,7 +45,7 @@ void RendererSystem::CreateSprite(const std::string& FilePath, int X, int Y, int
 {
 	if (m_Sprites.size() >= MAX_SPRITE_AMOUNT)
 	{
-		std::cout << "Cannot load more textures!" << std::endl;
+		LOG_WARN("Cannot load more textures!");
 		return;
 	}
 
@@ -50,7 +53,7 @@ void RendererSystem::CreateSprite(const std::string& FilePath, int X, int Y, int
 
 	if (!newTexture)
 	{
-		std::cout << "Couldn't load the texture!" << std::endl;
+		LOG_ERROR("Couldn't load the texture!");
 		return;
 	}
 
@@ -67,9 +70,9 @@ void RendererSystem::Update() const
 
 	for (const auto& sprite : m_Sprites)
 	{
-		const int targetX = sprite->GetX() + 1;
-		
-		sprite->SetPosition(targetX, sprite->GetY()); // TEMP
+		// const int targetX = sprite->GetX() + 1;
+		//
+		// sprite->SetPosition(targetX, sprite->GetY()); // TEMP
 		Blit(*sprite);
 	}
 
