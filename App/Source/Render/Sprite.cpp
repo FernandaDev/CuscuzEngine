@@ -1,4 +1,5 @@
-﻿#include "Sprite.h"
+﻿#include "pch.h"
+#include "Sprite.h"
 
 
 Sprite::Sprite(SDL_Texture* Texture, int X, int Y, int SizeX, int SizeY):

@@ -1,8 +1,8 @@
+#include "pch.h"
+#include "SDL_image.h"
 
-#include <SDL_image.h>
 #include "Utils/Log.h"
 #include "Window.h"
-
 #include "RendererSystem.h"
 
 #define IMAGE_ROOT_PATH "Source/Assets/Images/"

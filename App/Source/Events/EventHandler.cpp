@@ -1,4 +1,6 @@
-﻿#include "EventHandler.h"
+﻿
+#include "pch.h"
+#include "EventHandler.h"
 
 std::unique_ptr<EventHandler> EventHandler::s_Instance = nullptr;
 

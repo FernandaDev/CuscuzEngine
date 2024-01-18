@@ -1,7 +1,5 @@
 ﻿#pragma once
 
-#include <memory>
-
 #include "EventDispatcher.h"
 #include "KeyEvents.h"
 #include "WindowEvents.h"

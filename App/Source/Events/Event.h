@@ -1,7 +1,6 @@
 #pragma once
 
-#include <string>
-#include <sstream>
+#include "pch.h"
 
 template<typename T>
 class Event 

@@ -1,4 +1,5 @@
-#include <SDL.h>
+#include "pch.h"
+#include "SDL.h"
 
 #include "Application.h"
 #include "Events/EventHandler.h"
