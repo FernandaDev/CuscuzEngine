@@ -1,4 +1,4 @@
-project "Game"
+project "GameCore"
    kind "StaticLib"
    language "C++"
    cppdialect "C++20"

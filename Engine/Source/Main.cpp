@@ -1,9 +1,9 @@
 #include "pch.h"
-#include "Application.h"
+#include "Engine.h"
 
 int main(int agrc, char* argv[])
 {
-	Application* app = new Application();
+	Engine* app = new Engine();
 	app->Run();
 	delete app;
 

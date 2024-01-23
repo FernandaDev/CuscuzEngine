@@ -5,7 +5,7 @@
 #include "Window.h"
 #include "RendererSystem.h"
 
-#define IMAGE_ROOT_PATH "Source/Assets/Images/"
+#define IMAGE_ROOT_PATH "Assets/Images/"
 #define MAX_SPRITE_AMOUNT 24
 
 RendererSystem::RendererSystem(Window* Window):
@@ -21,8 +21,6 @@ RendererSystem::RendererSystem(Window* Window):
 	IMG_Init(IMG_INIT_PNG | IMG_INIT_JPG);
 	
 	m_Sprites.reserve(MAX_SPRITE_AMOUNT);
-
-	LOG_INFO("RendererSystem initialized.");
 }
 
 RendererSystem::~RendererSystem()

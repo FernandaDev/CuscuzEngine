@@ -8,7 +8,7 @@
 
 constexpr Uint32 FramesPerSecond = 30;
 
-class Application 
+class Engine 
 {
 	Window* m_Window;
 	RendererSystem* m_RendererSystem;
@@ -24,8 +24,8 @@ class Application
 	Uint32 m_targetFrameDuration = 1000 / FramesPerSecond;
 
 public:
-	Application();
-	~Application();
+	Engine();
+	~Engine();
 	
 	void Run();
 	void Start();

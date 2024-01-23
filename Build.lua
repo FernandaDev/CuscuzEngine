@@ -2,7 +2,7 @@
 workspace "Game"
    architecture "x64"
    configurations { "Debug", "Release", "Dist" }
-   startproject "App"
+   startproject "Engine"
 
    -- Workspace-wide build options for MSVC
    filter "system:windows"
@@ -10,8 +10,8 @@ workspace "Game"
 
 OutputDir = "%{cfg.system}-%{cfg.architecture}/%{cfg.buildcfg}"
 
-group "Game"
-	include "Game/Build-Game.lua"
+group "GameCore"
+	include "GameCore/Build-GameCore.lua"
 group ""
 
-include "App/Build-App.lua"
+include "Engine/Build-Engine.lua"

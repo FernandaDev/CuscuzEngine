@@ -1,4 +1,4 @@
-project "App"
+project "Engine"
    kind "ConsoleApp"
    language "C++"
    cppdialect "C++20"
@@ -18,7 +18,7 @@ project "App"
       
       "../Vendor/Log/include",
 	  -- Include Core
-	  "../Game/Source"
+	  "../GameCore/Source"
    }
 
    libdirs
@@ -29,7 +29,7 @@ project "App"
 
    links
    {
-      "Game",
+      "GameCore",
       "SDL2.lib",
       "SDL2main.lib",
       "SDL2_image.lib",
