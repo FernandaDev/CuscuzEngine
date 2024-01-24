@@ -21,7 +21,6 @@ public:
 	void Update() const;
 	
 private:
-	SDL_Texture* LoadTexture(const std::string& FilePath) const;
 	void Blit(const Sprite& Sprite) const;
 	void Present() const;
 	void Clear() const;
