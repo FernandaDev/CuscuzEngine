@@ -3,7 +3,7 @@
 #include "SDL_image.h"
 #include "Utils/Log.h"
 
-#define IMAGE_ROOT_PATH "Assets/Images/"
+#define IMAGE_ROOT_PATH "../Assets/Images/"
 
 SDL_Texture& ResourceManager::GetTexture(SDL_Renderer* Renderer,  const std::string& Filepath)
 {

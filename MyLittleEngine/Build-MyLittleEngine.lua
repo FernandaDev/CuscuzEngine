@@ -8,7 +8,13 @@ project "MyLittleEngine"
    pchheader "pch.h"
    pchsource "Source/pch.cpp"
 
-   files { "Source/**.h", "Source/**.cpp" }
+   files 
+   {
+      "Source/**.h", 
+      "Source/**.cpp",
+      "Assets/**.png",
+      "Assets/**.jpeg",
+   }
 
    includedirs
    {
@@ -31,13 +37,6 @@ project "MyLittleEngine"
       "SDL2main.lib",
       "SDL2_image.lib",
    }
-
---    local scriptDir = path.getdirectory(_SCRIPT)
---    postbuildcommands 
---    {
---     '{COPY} ' .. path.join(scriptDir, 'SDL2.dll') .. ' "$(TargetDir)"',
---     '{COPY} ' .. path.join(scriptDir, 'SDL2_image.dll') .. ' "$(TargetDir)"'
---    }
 
    targetdir ("../Binaries/" .. OutputDir .. "/%{prj.name}")
    objdir ("../Binaries/Intermediates/" .. OutputDir .. "/%{prj.name}")
