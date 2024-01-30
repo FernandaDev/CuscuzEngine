@@ -1,16 +1,10 @@
 #include "pch.h"
 #include "EventSystem.h"
 
-#include "Utils/Log.h"
+#include <SDL_events.h>
 
-void EventSystem::Start()
-{
-	ADD_KEY_EVENT_LISTENER(KeyEventType::Down, this, EventSystem::OnKeyDown);
-	ADD_KEY_EVENT_LISTENER(KeyEventType::Up, this, EventSystem::OnKeyUp);
-	ADD_MOUSE_EVENT_LISTENER(MouseEventType::ButtonDown, this, EventSystem::OnMouseButtonDown);
-	ADD_MOUSE_EVENT_LISTENER(MouseEventType::ButtonUp, this, EventSystem::OnMouseButtonUp);
-	//ADD_MOUSE_EVENT_LISTENER(MouseEventType::Moved, this, EventSystem::OnMouseMoved);
-}
+#include "Events/EventHandler.h"
+#include "Events/WindowEvents.h"
 
 void EventSystem::Update()
 {
@@ -68,42 +62,4 @@ void EventSystem::Update()
 			break;
 		}
 	}
-}
-
-// do we want this here? we are probably going to create an input system class later on...
-bool EventSystem::IsKeyDown(const SDL_Scancode& Input) 
-{
-	return m_CurrentState[Input];
-}
-
-void EventSystem::RefreshKeyState()
-{
-	m_CurrentState = SDL_GetKeyboardState(NULL);
-}
-
-void EventSystem::OnKeyDown(const Event<KeyEventType>& Event)
-{
-	RefreshKeyState();
-	LOG_INFO(Event.ToString()); 
-}
-
-void EventSystem::OnKeyUp(const Event<KeyEventType>& Event)
-{
-	RefreshKeyState();
-	LOG_INFO(Event.ToString()); 
-}
-
-void EventSystem::OnMouseButtonDown(const Event<MouseEventType>& Event)
-{
-	LOG_INFO(Event.ToString()); 
-}
-
-void EventSystem::OnMouseButtonUp(const Event<MouseEventType>& Event)
-{
-	LOG_INFO(Event.ToString()); 
-}
-
-void EventSystem::OnMouseMoved(const Event<MouseEventType>& Event)
-{
-	LOG_INFO(Event.ToString()); 
 }

@@ -5,11 +5,17 @@ project "App"
    targetdir "Binaries/%{cfg.buildcfg}"
    staticruntime "off"  
 
-   files { "Source/**.h", "Source/**.cpp" }
+   files 
+   { 
+    "Source/**.h", 
+    "Source/**.cpp",
+    "Assets/**.png" 
+   }
 
    includedirs
    {
       "Source",
+      "Assets",
       "../GameCore/Source",
       "../MyLittleEngine/Source",
       "../MyLittleEngine/Dependencies/SDL2/include",
@@ -35,7 +41,7 @@ project "App"
 
    filter "system:windows"
        systemversion "latest"
-       defines { "WINDOWS" }
+       defines { "WINDOWS", "_SILENCE_STDEXT_ARR_ITERS_DEPRECATION_WARNING" }
 
    filter "configurations:Debug"
        defines { "DEBUG" }

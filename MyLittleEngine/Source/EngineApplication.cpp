@@ -30,8 +30,6 @@ EngineApplication::~EngineApplication()
 
 void EngineApplication::Start()
 {	
-	m_EventSystem->Start();
-
 	m_lastDeltaTime = m_targetFrameDuration;
 }
 

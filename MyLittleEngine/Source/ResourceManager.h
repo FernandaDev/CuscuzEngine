@@ -1,5 +1,7 @@
 ﻿#pragma once
+
 #include <SDL_render.h>
+#include "pch.h"
 
 #define TextureMap std::unordered_map<std::string, SDL_Texture*>
 
