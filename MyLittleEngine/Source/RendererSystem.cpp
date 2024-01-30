@@ -9,8 +9,7 @@
 
 #define MAX_SPRITE_AMOUNT 24
 
-RendererSystem::RendererSystem(Window* Window):
-	m_Renderer{nullptr}
+RendererSystem::RendererSystem(Window* Window)
 {
 	m_Renderer = SDL_CreateRenderer(Window->GetWindow(), -1, 0);
 
@@ -19,7 +18,10 @@ RendererSystem::RendererSystem(Window* Window):
 
 	SDL_SetRenderDrawColor(m_Renderer, 0xFF, 0xFF, 0xFF, 0xFF);
 	
-	IMG_Init(IMG_INIT_PNG | IMG_INIT_JPG);
+	if(IMG_Init(IMG_INIT_PNG | IMG_INIT_JPG) == 0)
+	{
+		LOG_ERROR("Couldn't load SDL image!");
+	}
 	
 	m_Sprites.reserve(MAX_SPRITE_AMOUNT);
 }
@@ -28,6 +30,8 @@ RendererSystem::~RendererSystem()
 {
 	if(m_Renderer)
 		SDL_DestroyRenderer(m_Renderer);
+
+	IMG_Quit();
 }
 
 void RendererSystem::CreateSprite(const std::string& FilePath)

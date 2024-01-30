@@ -2,8 +2,12 @@
 #include "ResourceManager.h"
 #include "SDL_image.h"
 #include "Utils/Log.h"
+#include <filesystem>
 
-#define IMAGE_ROOT_PATH "../Assets/Images/"
+void ResourceManager::SetRootResourcesPath(const std::string& RootPath)
+{
+    m_RootPath = std::filesystem::absolute(RootPath).string();
+}
 
 SDL_Texture& ResourceManager::GetTexture(SDL_Renderer* Renderer,  const std::string& Filepath)
 {
@@ -12,7 +16,7 @@ SDL_Texture& ResourceManager::GetTexture(SDL_Renderer* Renderer,  const std::str
     if(surfaceSearch != m_Textures.end())
         return *m_Textures[Filepath];
 
-    const std::string fullFilePath = IMAGE_ROOT_PATH + Filepath;
+    const std::string fullFilePath = m_RootPath + Filepath;
     
     SDL_Texture* newTexture = IMG_LoadTexture(Renderer, fullFilePath.c_str());
 

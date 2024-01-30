@@ -1,7 +1,7 @@
 #include "pch.h"
 #include "SDL.h"
 
-#include "Engine.h"
+#include "EngineApplication.h"
 #include "Events/EventHandler.h"
 #include "Events/WindowEvents.h"
 #include "Utils/Log.h"
@@ -12,30 +12,30 @@ enum
 	SCREEN_HEIGHT = 720
 };
 
-Engine::Engine():
+EngineApplication::EngineApplication():
 	m_Window{ new Window("Game", SCREEN_WIDTH, SCREEN_HEIGHT) },
 	m_RendererSystem { new RendererSystem {m_Window}},
 	m_EventSystem{ new EventSystem() }
 {
-	ADD_WINDOW_EVENT_LISTENER(WindowEventType::Close, this, Engine::Quit);
+	ADD_WINDOW_EVENT_LISTENER(WindowEventType::Close, this, EngineApplication::Quit);
 	Log::Init();
 }
 
-Engine::~Engine()
+EngineApplication::~EngineApplication()
 {
 	delete m_RendererSystem;
 	delete m_Window;
 	SDL_Quit();
 }
 
-void Engine::Start()
+void EngineApplication::Start()
 {	
 	m_EventSystem->Start();
 
 	m_lastDeltaTime = m_targetFrameDuration;
 }
 
-void Engine::Run()
+void EngineApplication::Run()
 {
 	Start();
 	
@@ -43,19 +43,24 @@ void Engine::Run()
 	{
 		FrameStart();
 		
-		m_EventSystem->Update();
-		m_RendererSystem->Update();
+		Update();
 
 		FrameEnd();
 	}
 }
 
-void Engine::FrameStart()
+void EngineApplication::Update()
+{
+	m_EventSystem->Update();
+	m_RendererSystem->Update();
+}
+
+void EngineApplication::FrameStart()
 {
 	m_frameStart = SDL_GetTicks();
 }
 
-void Engine::FrameEnd()
+void EngineApplication::FrameEnd()
 {
 	m_frameEnd = SDL_GetTicks();
 		
@@ -66,7 +71,7 @@ void Engine::FrameEnd()
 		SDL_Delay(m_targetFrameDuration - m_lastDeltaTime);
 }
 
-void Engine::Quit(const Event<WindowEventType>& Event)
+void EngineApplication::Quit(const Event<WindowEventType>& Event)
 {
 	m_IsRunning = false;
 }

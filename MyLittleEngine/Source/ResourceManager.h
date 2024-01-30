@@ -6,6 +6,7 @@
 class ResourceManager
 {
     TextureMap m_Textures;
+    std::string m_RootPath;
     
 public:
     static ResourceManager& Instance()
@@ -14,6 +15,8 @@ public:
         return *s_Instance;
     }
 
+    void SetRootResourcesPath(const std::string& RootPath);
+    
     SDL_Texture& GetTexture(SDL_Renderer* Renderer, const std::string& Filepath);
     
 private:

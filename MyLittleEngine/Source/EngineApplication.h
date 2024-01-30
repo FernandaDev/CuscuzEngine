@@ -8,11 +8,11 @@
 
 constexpr Uint32 FramesPerSecond = 30;
 
-class Engine 
+class EngineApplication 
 {
-	Window* m_Window;
-	RendererSystem* m_RendererSystem;
-	EventSystem* m_EventSystem;
+	// Window* m_Window;
+	// RendererSystem* m_RendererSystem;
+	// EventSystem* m_EventSystem;
 
 	bool m_IsRunning = true;
 
@@ -23,12 +23,19 @@ class Engine
 	Uint32 m_frameEnd = 0;
 	Uint32 m_targetFrameDuration = 1000 / FramesPerSecond;
 
+protected:
+	Window* m_Window;
+	RendererSystem* m_RendererSystem;
+	EventSystem* m_EventSystem;
+	
 public:
-	Engine();
-	~Engine();
+	EngineApplication();
+	virtual ~EngineApplication();
 	
 	void Run();
-	void Start();
+	
+	virtual void Start();
+	virtual void Update();
 
 	void FrameStart();
 	void FrameEnd();

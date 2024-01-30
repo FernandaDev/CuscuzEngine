@@ -1,13 +1,13 @@
 #pragma once
 
-#include <vector>
+#include "pch.h"
 #include "Render/Sprite.h"
 #include "SDL.h"
 
 class RendererSystem
 {
-	SDL_Renderer* m_Renderer;
-	std::vector<std::shared_ptr<Sprite>> m_Sprites;
+ 	SDL_Renderer* m_Renderer;
+ 	std::vector<std::shared_ptr<Sprite>> m_Sprites;
 
 public:
 	RendererSystem() = delete;

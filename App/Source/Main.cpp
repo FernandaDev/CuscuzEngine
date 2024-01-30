@@ -1,13 +1,16 @@
 
 #include <iostream>
-#include "Engine.h"
-
+#include "Application.h"
 
 int main(int agrc, char* argv[])
 {
-	Engine* app = new Engine();
-	app->Run();
-	delete app;
+	auto* app = new Application();
 
+	app->Run();
+	
+	delete app;
+	
 	return 0;
 }
+
+
