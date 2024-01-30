@@ -1,5 +1,5 @@
-project "Engine"
-   kind "ConsoleApp"
+project "MyLittleEngine"
+   kind "StaticLib"
    language "C++"
    cppdialect "C++20"
    targetdir "Binaries/%{cfg.buildcfg}"
@@ -17,8 +17,6 @@ project "Engine"
       "Dependencies/SDL2_image/include",
       
       "../Vendor/Log/include",
-	  -- Include Core
-	  "../GameCore/Source"
    }
 
    libdirs
@@ -29,18 +27,17 @@ project "Engine"
 
    links
    {
-      "GameCore",
       "SDL2.lib",
       "SDL2main.lib",
       "SDL2_image.lib",
    }
 
-   local scriptDir = path.getdirectory(_SCRIPT)
-   postbuildcommands 
-   {
-    '{COPY} ' .. path.join(scriptDir, 'SDL2.dll') .. ' "$(TargetDir)"',
-    '{COPY} ' .. path.join(scriptDir, 'SDL2_image.dll') .. ' "$(TargetDir)"'
-   }
+--    local scriptDir = path.getdirectory(_SCRIPT)
+--    postbuildcommands 
+--    {
+--     '{COPY} ' .. path.join(scriptDir, 'SDL2.dll') .. ' "$(TargetDir)"',
+--     '{COPY} ' .. path.join(scriptDir, 'SDL2_image.dll') .. ' "$(TargetDir)"'
+--    }
 
    targetdir ("../Binaries/" .. OutputDir .. "/%{prj.name}")
    objdir ("../Binaries/Intermediates/" .. OutputDir .. "/%{prj.name}")

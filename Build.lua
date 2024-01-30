@@ -2,7 +2,7 @@
 workspace "Game"
    architecture "x64"
    configurations { "Debug", "Release", "Dist" }
-   startproject "Engine"
+   startproject "MyLittleEngine"
 
    -- Workspace-wide build options for MSVC
    filter "system:windows"
@@ -10,8 +10,9 @@ workspace "Game"
 
 OutputDir = "%{cfg.system}-%{cfg.architecture}/%{cfg.buildcfg}"
 
-group "GameCore"
-	include "GameCore/Build-GameCore.lua"
-group ""
+IncludeDir = {}
+IncludeDir["SDL2"] = "%{wks.location}/MyLittleEngine/Vendor/SDL2/include"
 
-include "Engine/Build-Engine.lua"
+include "GameCore/Build-GameCore.lua"
+
+include "MyLittleEngine/Build-MyLittleEngine.lua"
