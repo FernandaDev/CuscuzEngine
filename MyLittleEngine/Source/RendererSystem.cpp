@@ -5,7 +5,8 @@
 #include "Window.h"
 #include "RendererSystem.h"
 
-#define IMAGE_ROOT_PATH "Assets/Images/"
+#include "ResourceManager.h"
+
 #define MAX_SPRITE_AMOUNT 24
 
 RendererSystem::RendererSystem(Window* Window):
@@ -47,14 +48,8 @@ void RendererSystem::CreateSprite(const std::string& FilePath, int X, int Y, int
 		return;
 	}
 
-	SDL_Texture* newTexture = LoadTexture(FilePath);
-
-	if (!newTexture)
-	{
-		LOG_ERROR("Couldn't load the texture!");
-		return;
-	}
-
+	SDL_Texture& newTexture = ResourceManager::Instance().GetTexture(m_Renderer, FilePath);
+	
 	m_Sprites.emplace_back(new Sprite{newTexture, X, Y, SizeX, SizeY});
 }
 
@@ -79,16 +74,10 @@ void RendererSystem::Update() const
 
 //PRIVATE
 
-SDL_Texture* RendererSystem::LoadTexture(const std::string& FilePath) const
-{
-	const std::string filePath = IMAGE_ROOT_PATH + FilePath;
-	return IMG_LoadTexture(m_Renderer, filePath.c_str());
-}
-
 void RendererSystem::Blit(const Sprite& Sprite) const
 {
 	const SDL_Rect dest = Sprite.GetRect();	
-	SDL_RenderCopy(m_Renderer, Sprite.GetTexture(), NULL, &dest);
+	SDL_RenderCopy(m_Renderer, &Sprite.GetTexture(), NULL, &dest);
 }
 
 void RendererSystem::Clear() const

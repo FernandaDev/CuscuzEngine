@@ -30,10 +30,6 @@ Engine::~Engine()
 
 void Engine::Start()
 {	
-	m_RendererSystem->CreateSprite("Floor1.png", 250, 400);
-	m_RendererSystem->CreateSprite("Floor2.png", 620, 250, 2, 2);
-	//m_RendererSystem->CreateSprite("Floor3.png", 500, 500, 3, 3);
-
 	m_EventSystem->Start();
 
 	m_lastDeltaTime = m_targetFrameDuration;
