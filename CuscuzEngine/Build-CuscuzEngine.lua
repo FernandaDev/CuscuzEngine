@@ -1,4 +1,4 @@
-project "MyLittleEngine"
+project "CuscuzEngine"
    kind "StaticLib"
    language "C++"
    cppdialect "C++20"
@@ -21,8 +21,9 @@ project "MyLittleEngine"
       "Source",
       "Dependencies/SDL2/include",
       "Dependencies/SDL2_image/include",
+      "Vendor/ImGui",
       
-      "../Vendor/Log/include",
+      "%{IncludeDir.SPD_Log}",
    }
 
    libdirs
@@ -33,6 +34,7 @@ project "MyLittleEngine"
 
    links
    {
+      "ImGui",
       "SDL2.lib",
       "SDL2main.lib",
       "SDL2_image.lib",
@@ -43,21 +45,21 @@ project "MyLittleEngine"
 
    filter "system:windows"
        systemversion "latest"
-       defines { "WINDOWS" }
+       defines { "WINDOWS", "_SILENCE_ALL_MS_EXT_DEPRECATION_WARNINGS" }
 
    filter "configurations:Debug"
-       defines { "DEBUG", "_SILENCE_ALL_MS_EXT_DEPRECATION_WARNINGS" }
+       defines { "DEBUG" }
        runtime "Debug"
        symbols "On"
 
    filter "configurations:Release"
-       defines { "RELEASE", "_SILENCE_ALL_MS_EXT_DEPRECATION_WARNINGS" }
+       defines { "RELEASE" }
        runtime "Release"
        optimize "On"
        symbols "On"
 
    filter "configurations:Dist"
-       defines { "DIST", "_SILENCE_ALL_MS_EXT_DEPRECATION_WARNINGS" }
+       defines { "DIST" }
        runtime "Release"
        optimize "On"
        symbols "Off"

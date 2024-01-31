@@ -17,8 +17,11 @@ project "App"
       "Source",
       "Assets",
       "../GameCore/Source",
-      "../MyLittleEngine/Source",
-      "../MyLittleEngine/Dependencies/SDL2/include",
+      "../CuscuzEngine/Source",
+
+      "%{IncludeDir.SDL2}",
+      "%{IncludeDir.SDL2_image}",
+      "%{IncludeDir.ImGui}",
 
       "../Vendor/Log/include",
    }
@@ -27,7 +30,7 @@ project "App"
 
    links
    {
-      "MyLittleEngine",
+      "CuscuzEngine",
       "GameCore",
    }
 

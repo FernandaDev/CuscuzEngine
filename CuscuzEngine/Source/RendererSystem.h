@@ -20,10 +20,10 @@ public:
 	void CreateSprite(const std::string& FilePath, int X, int Y);
 	void CreateSprite(const std::string& FilePath, int X, int Y, int SizeX, int SizeY);
 	void Update() const;
+	void Render() const;
 	
 private:
 	void Blit(const Sprite& Sprite) const;
-	void Present() const;
 	void Clear() const;
 };
 

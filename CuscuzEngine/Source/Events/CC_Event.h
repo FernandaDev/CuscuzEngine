@@ -3,12 +3,14 @@
 #include "pch.h"
 
 template<typename T>
-class Event 
+class CC_Event 
 {
 public:
-	Event() = default;
-	Event(T Type, const char* Name = "") : m_Type{Type}, m_Name{Name} {}
-	virtual ~Event() = default;
+	CC_Event() = default;
+	CC_Event(T Type, const char* Name) :
+	m_Type{Type}, m_Name{Name}
+	{}
+	virtual ~CC_Event() = default;
 
 	const T& GetType() const { return m_Type; }
 	virtual std::string ToString() const = 0;

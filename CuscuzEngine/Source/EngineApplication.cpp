@@ -15,16 +15,20 @@ enum
 EngineApplication::EngineApplication():
 	m_Window{ new Window("Game", SCREEN_WIDTH, SCREEN_HEIGHT) },
 	m_RendererSystem { new RendererSystem {m_Window}},
-	m_EventSystem{ new EventSystem() }
+	m_EventSystem{ new EventSystem() },
+	m_ImGuiLayer{ new ImGuiLayer(*m_Window, m_RendererSystem->GetRenderer()) }
 {
-	ADD_WINDOW_EVENT_LISTENER(WindowEventType::Close, this, EngineApplication::Quit);
+	ADD_WINDOW_EVENT_LISTENER(CC_WindowEventType::Close, this, EngineApplication::Quit);
 	Log::Init();
 }
 
 EngineApplication::~EngineApplication()
 {
-	delete m_RendererSystem;
 	delete m_Window;
+	delete m_RendererSystem;
+	delete m_EventSystem;
+	delete m_ImGuiLayer;
+	
 	SDL_Quit();
 }
 
@@ -42,6 +46,7 @@ void EngineApplication::Run()
 		FrameStart();
 		
 		Update();
+		Render();
 
 		FrameEnd();
 	}
@@ -51,6 +56,14 @@ void EngineApplication::Update()
 {
 	m_EventSystem->Update();
 	m_RendererSystem->Update();
+	m_ImGuiLayer->Update();
+}
+
+
+void EngineApplication::Render()
+{
+	m_ImGuiLayer->Render();
+	m_RendererSystem->Render();
 }
 
 void EngineApplication::FrameStart()
@@ -69,7 +82,8 @@ void EngineApplication::FrameEnd()
 		SDL_Delay(m_targetFrameDuration - m_lastDeltaTime);
 }
 
-void EngineApplication::Quit(const Event<WindowEventType>& Event)
+void EngineApplication::Quit(const CC_Event<CC_WindowEventType>& Event)
 {
 	m_IsRunning = false;
 }
+

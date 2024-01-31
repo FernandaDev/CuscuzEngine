@@ -1,21 +1,21 @@
 ﻿#pragma once
 
-#include "Event.h"
+#include "CC_Event.h"
 
-enum class KeyEventType
+enum class CC_KeyEventType
 {
     Down,
     Up
 };
 
-class KeyDownEvent : public Event<KeyEventType>
+class CC_KeyDownEvent : public CC_Event<CC_KeyEventType>
 {
     int m_KeyCode;
     
 public:
-    KeyDownEvent(int KeyCode) :
-    Event(KeyEventType::Down, "KeyDownEvent"), m_KeyCode(KeyCode){}
-    ~KeyDownEvent() override = default;
+    CC_KeyDownEvent(int KeyCode) :
+    CC_Event(CC_KeyEventType::Down, "KeyDownEvent"), m_KeyCode(KeyCode){}
+    ~CC_KeyDownEvent() override = default;
 
     int GetKeyCode() const { return m_KeyCode; }
 
@@ -27,14 +27,14 @@ public:
     }
 };
 
-class KeyUpEvent : public Event<KeyEventType>
+class CC_KeyUpEvent : public CC_Event<CC_KeyEventType>
 {
     int m_KeyCode;
     
 public:
-    KeyUpEvent(int KeyCode) :
-    Event(KeyEventType::Up, "KeyUpEvent"), m_KeyCode(KeyCode){}
-    ~KeyUpEvent() override = default;
+    CC_KeyUpEvent(int KeyCode) :
+    CC_Event(CC_KeyEventType::Up, "KeyUpEvent"), m_KeyCode(KeyCode){}
+    ~CC_KeyUpEvent() override = default;
 
     int GetKeyCode() const { return m_KeyCode; }
 

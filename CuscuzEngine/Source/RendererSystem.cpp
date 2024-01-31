@@ -67,13 +67,13 @@ void RendererSystem::Update() const
 
 	for (const auto& sprite : m_Sprites)
 	{
-		// const int targetX = sprite->GetX() + 1;
-		//
-		// sprite->SetPosition(targetX, sprite->GetY()); // TEMP
 		Blit(*sprite);
 	}
+}
 
-	Present();
+void RendererSystem::Render() const
+{
+	SDL_RenderPresent(m_Renderer);
 }
 
 //PRIVATE
@@ -88,9 +88,3 @@ void RendererSystem::Clear() const
 {
 	SDL_RenderClear(m_Renderer);
 }
-
-void RendererSystem::Present() const
-{
-	SDL_RenderPresent(m_Renderer);
-}
-

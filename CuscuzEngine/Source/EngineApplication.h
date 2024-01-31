@@ -3,17 +3,14 @@
 #include "Window.h"
 #include "RendererSystem.h"
 #include "EventSystem.h"
-#include "Events/Event.h"
+#include "Events/CC_Event.h"
 #include "Events/WindowEvents.h"
+#include "GUI/ImGuiLayer.h"
 
 constexpr Uint32 FramesPerSecond = 30;
 
 class EngineApplication 
 {
-	// Window* m_Window;
-	// RendererSystem* m_RendererSystem;
-	// EventSystem* m_EventSystem;
-
 	bool m_IsRunning = true;
 
 	int m_frameCount = 0;
@@ -27,6 +24,7 @@ protected:
 	Window* m_Window;
 	RendererSystem* m_RendererSystem;
 	EventSystem* m_EventSystem;
+	ImGuiLayer* m_ImGuiLayer;
 	
 public:
 	EngineApplication();
@@ -37,8 +35,12 @@ public:
 	virtual void Start();
 	virtual void Update();
 
+
 	void FrameStart();
 	void FrameEnd();
 	
-	void Quit(const Event<WindowEventType>& Event);
+	void Quit(const CC_Event<CC_WindowEventType>& Event);
+
+private:
+	void Render();
 };

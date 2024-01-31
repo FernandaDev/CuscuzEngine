@@ -1,22 +1,22 @@
 ﻿#pragma once
 
-#include "Event.h"
+#include "CC_Event.h"
 
-enum class WindowEventType
+enum class CC_WindowEventType
 {
     Resize,
     Close
 };
 
-class WindowResizeEvent : public Event<WindowEventType>
+class CC_WindowResizeEvent : public CC_Event<CC_WindowEventType>
 {
     int m_Width, m_Height;
     
 public:
-    WindowResizeEvent(int Width, int Height) :
-    Event(WindowEventType::Resize, "WindowResizeEvent"),
+    CC_WindowResizeEvent(int Width, int Height) :
+    CC_Event(CC_WindowEventType::Resize, "WindowResizeEvent"),
     m_Width(Width), m_Height(Height) { }
-    ~WindowResizeEvent() override = default;
+    ~CC_WindowResizeEvent() override = default;
 
     int GetWidth() const { return m_Width; }
     int GetHeight() const { return m_Height; }
@@ -29,11 +29,11 @@ public:
     }
 };
 
-class WindowCloseEvent : public Event<WindowEventType>
+class CC_WindowCloseEvent : public CC_Event<CC_WindowEventType>
 {
 public:
-    WindowCloseEvent() : Event(WindowEventType::Close, "WindowCloseEvent"){ }
-    ~WindowCloseEvent() override = default;
+    CC_WindowCloseEvent() : CC_Event(CC_WindowEventType::Close, "WindowCloseEvent"){ }
+    ~CC_WindowCloseEvent() override = default;
 
     std::string ToString() const override { return m_Name; }
 };
