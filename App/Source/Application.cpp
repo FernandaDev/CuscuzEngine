@@ -10,23 +10,36 @@ void Application::Start()
     m_RendererSystem->CreateSprite("Floor2.png", 600, 230);
     m_RendererSystem->CreateSprite("Floor3.png", 420,  300, 2 , 2);
     
-    // ADD_KEY_EVENT_LISTENER(KeyEventType::Down, this, EventSystem::OnKeyDown);
-    // ADD_KEY_EVENT_LISTENER(KeyEventType::Up, this, EventSystem::OnKeyUp);
-    // ADD_MOUSE_EVENT_LISTENER(MouseEventType::ButtonDown, this, EventSystem::OnMouseButtonDown);
-    // ADD_MOUSE_EVENT_LISTENER(MouseEventType::ButtonUp, this, EventSystem::OnMouseButtonUp);
+    SUBSCRIBE_KEY_EVENT(CC_KeyEventType::Down, this, Application::OnKeyDown);
 }
+
+static bool subscribed = false;
 
 void Application::Update()
 {
     EngineApplication::Update();
 
-    if(Input::IsKeyPressed(MLE_SCANCODE_SPACE))
+    if(Input::IsKeyPressed(CC_KeyCode::Alpha2))
     {
-        LOG_INFO("Hi!!!");
+        LOG_INFO("Unsubscribed from event...");
+        UNSUBSCRIBE_KEY_EVENT(this, Application::OnKeyDown);
+        subscribed = false;
     }
 
-    if(Input::IsMousePressed(2))
+    if(Input::IsKeyPressed(CC_KeyCode::Alpha1) && !subscribed)
     {
-        LOG_INFO("Hey!!!");
+        LOG_INFO("Subscribed on event...");
+        SUBSCRIBE_KEY_EVENT(CC_KeyEventType::Down, this, Application::OnKeyDown);
+        subscribed = true;
+    }
+}
+
+void Application::OnKeyDown(const CC_Event<CC_KeyEventType>& Event)
+{
+    auto e = Event.ToType<CC_KeyDownEvent>();
+
+    if(e.GetKeyCode() == CC_KeyCode::Space)
+    {
+        LOG_INFO(Event.ToString());
     }
 }

@@ -18,7 +18,7 @@ EngineApplication::EngineApplication():
 	m_EventSystem{ new EventSystem() },
 	m_ImGuiLayer{ new ImGuiLayer(*m_Window, m_RendererSystem->GetRenderer()) }
 {
-	ADD_WINDOW_EVENT_LISTENER(CC_WindowEventType::Close, this, EngineApplication::Quit);
+	SUBSCRIBE_WINDOW_EVENT(CC_WindowEventType::Close, this, EngineApplication::Quit);
 	Log::Init();
 }
 

@@ -12,6 +12,22 @@ public:
 	{}
 	virtual ~CC_Event() = default;
 
+	CC_Event(const CC_Event& other) :
+	m_Type{other.m_Type}, m_Name{other.m_Name}, m_Handled(other.m_Handled)
+	{}
+	
+	CC_Event& operator=(const CC_Event& other)
+	{
+		if(this != &other)
+		{
+			m_Type = other.m_Type;
+			m_Name = other.m_Name;
+			m_Handled = other.m_Handled;
+		}
+
+		return *this;
+	}
+
 	const T& GetType() const { return m_Type; }
 	virtual std::string ToString() const = 0;
 

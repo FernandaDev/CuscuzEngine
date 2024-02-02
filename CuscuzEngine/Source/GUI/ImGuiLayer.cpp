@@ -23,7 +23,7 @@ m_Renderer(*Renderer)
 	m_ShowAnotherWindow = false;
 	m_ClearColor = ImVec4(0.45f, 0.55f, 0.60f, 1.00f);
 
-	ADD_SDL_EVENT_LISTENER(this, ImGuiLayer::OnSDLEvent);
+	SUBSCRIBE_SDL_EVENT(this, ImGuiLayer::OnSDLEvent);
 }
 
 ImGuiLayer::~ImGuiLayer()

@@ -30,13 +30,13 @@ void EventSystem::Update()
 			break;
 		case SDL_KEYUP:
 			{
-				CC_KeyUpEvent keyUpEvent(event.key.keysym.sym);
+				CC_KeyUpEvent keyUpEvent(event.key.keysym.scancode);
 				SEND_KEY_EVENT(keyUpEvent);
 			}
 			break;
 		case SDL_KEYDOWN:
 			{
-				CC_KeyDownEvent keyDownEvent(event.key.keysym.sym);
+				CC_KeyDownEvent keyDownEvent(event.key.keysym.scancode);
 				SEND_KEY_EVENT(keyDownEvent);
 			}
 			break;

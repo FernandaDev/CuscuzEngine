@@ -24,10 +24,15 @@ public:
     EventDispatcher<SDL_Event>& GetSDLEventDispatcher() { return m_SDLEventDispatcher; }
 };
 
-#define ADD_WINDOW_EVENT_LISTENER(EventType,  Arg, Func) EventHandler::GetInstance()->GetWindowDispatcher().AddListener(EventType, std::bind(&Func, Arg, std::placeholders::_1))
-#define ADD_KEY_EVENT_LISTENER(EventType, Arg,  Func) EventHandler::GetInstance()->GetKeyDispatcher().AddListener(EventType, std::bind(&Func, Arg, std::placeholders::_1))
-#define ADD_MOUSE_EVENT_LISTENER(EventType, Arg, Func) EventHandler::GetInstance()->GetMouseDispatcher().AddListener(EventType, std::bind(&Func, Arg, std::placeholders::_1))
-#define ADD_SDL_EVENT_LISTENER(Arg, Func) EventHandler::GetInstance()->GetSDLEventDispatcher().AddListener(std::bind(&Func, Arg, std::placeholders::_1))
+#define SUBSCRIBE_WINDOW_EVENT(EventType,  Arg, Func) EventHandler::GetInstance()->GetWindowDispatcher().AddListener(EventType, std::bind(&Func, Arg, std::placeholders::_1))
+#define SUBSCRIBE_KEY_EVENT(EventType, Arg,  Func) EventHandler::GetInstance()->GetKeyDispatcher().AddListener(EventType, std::bind(&Func, Arg, std::placeholders::_1))
+#define SUBSCRIBE_MOUSE_EVENT(EventType, Arg, Func) EventHandler::GetInstance()->GetMouseDispatcher().AddListener(EventType, std::bind(&Func, Arg, std::placeholders::_1))
+#define SUBSCRIBE_SDL_EVENT(Arg, Func) EventHandler::GetInstance()->GetSDLEventDispatcher().AddListener(std::bind(&Func, Arg, std::placeholders::_1))
+
+#define UNSUBSCRIBE_WINDOW_EVENT(Arg, Func) EventHandler::GetInstance()->GetWindowDispatcher().RemoveListener(std::bind(&Func, Arg, std::placeholders::_1))
+#define UNSUBSCRIBE_KEY_EVENT(Arg,  Func) EventHandler::GetInstance()->GetKeyDispatcher().RemoveListener(std::bind(&Func, Arg, std::placeholders::_1))
+#define UNSUBSCRIBE_MOUSE_EVENT(Arg, Func) EventHandler::GetInstance()->GetMouseDispatcher().RemoveListener(std::bind(&Func, Arg, std::placeholders::_1))
+#define UNSUBSCRIBE_SDL_EVENT(Arg, Func) EventHandler::GetInstance()->GetSDLEventDispatcher().RemoveListener(std::bind(&Func, Arg, std::placeholders::_1))
 
 #define SEND_WINDOW_EVENT(_event) EventHandler::GetInstance()->GetWindowDispatcher().SendEvent(_event)
 #define SEND_KEY_EVENT(_event) EventHandler::GetInstance()->GetKeyDispatcher().SendEvent(_event)
