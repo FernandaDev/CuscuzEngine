@@ -6,7 +6,8 @@ enum class CC_MouseEventType
 {
     Moved,
     ButtonDown,
-    ButtonUp
+    ButtonUp,
+    Scroll,
 };
 
 class CC_MouseMovedEvent : public CC_Event<CC_MouseEventType>
@@ -63,6 +64,27 @@ public:
     {
         std::stringstream ss;
         ss << m_Name << ": " << m_Button;
+        return ss.str();
+    }
+};
+
+class CC_MouseScrollEvent : public CC_Event<CC_MouseEventType>
+{
+    float m_X, m_Y;
+    
+public:
+    CC_MouseScrollEvent(float X, float Y)
+        : CC_Event(CC_MouseEventType::Scroll, "MouseScrollEvent"), m_X(X), m_Y(Y)
+    {}
+    ~CC_MouseScrollEvent() override = default;
+
+    float GetX() const { return m_X; }
+    float GetY() const { return m_Y; }
+    
+    std::string ToString() const override
+    {
+        std::stringstream ss;
+        ss << m_Name << ": (" << m_X << "," << m_Y << ")";
         return ss.str();
     }
 };

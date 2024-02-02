@@ -58,6 +58,12 @@ void EventSystem::Update()
 				SEND_MOUSE_EVENT(mouseMovedEvent);
 			}
 			break;
+		case SDL_MOUSEWHEEL:
+			{
+				CC_MouseScrollEvent mouseScrollEvent(event.wheel.preciseX, event.wheel.preciseY);
+				SEND_MOUSE_EVENT(mouseScrollEvent);
+				break;
+			}
 		default:
 			break;
 		}
