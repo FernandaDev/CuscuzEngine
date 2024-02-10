@@ -83,7 +83,7 @@ void EngineApplication::FrameEnd()
 {
 	m_frameEnd = SDL_GetTicks();
 		
-	m_frameCount++;
+	//m_frameCount++;
 	m_lastDeltaTime = m_frameEnd - m_frameStart;
 
 	if(m_lastDeltaTime < m_targetFrameDuration)
@@ -94,6 +94,3 @@ void EngineApplication::Quit(const CC_Event<CC_WindowEventType>& Event)
 {
 	m_IsRunning = false;
 }
-
-
-

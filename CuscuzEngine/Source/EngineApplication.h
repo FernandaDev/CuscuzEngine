@@ -13,9 +13,8 @@ class EngineApplication
 {
 	bool m_IsRunning = true;
 
-	int m_frameCount = 0;
+	//int m_frameCount = 0;
 
-	Uint32 m_lastDeltaTime = 0;
 	Uint32 m_frameStart = 0;
 	Uint32 m_frameEnd = 0;
 	Uint32 m_targetFrameDuration = 1000 / FramesPerSecond;
@@ -25,6 +24,8 @@ protected:
 	RendererSystem* CC_RendererSystem;
 	EventSystem* CC_EventSystem;
 	ImGuiLayer* CC_ImGuiLayer;
+
+	Uint32 m_lastDeltaTime = 0;
 	
 public:
 	EngineApplication();
@@ -34,7 +35,6 @@ public:
 	
 	virtual void Start();
 	virtual void Update();
-
 
 	void FrameStart();
 	void FrameEnd();
