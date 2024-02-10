@@ -4,6 +4,7 @@
 #include "EngineApplication.h"
 
 #include "ResourceManager.h"
+#include "Core/Time.h"
 #include "Events/EventHandler.h"
 #include "Events/WindowEvents.h"
 #include "Utils/Log.h"
@@ -37,9 +38,7 @@ EngineApplication::~EngineApplication()
 }
 
 void EngineApplication::Start()
-{	
-	m_lastDeltaTime = m_targetFrameDuration;
-}
+{}
 
 void EngineApplication::Run()
 {
@@ -47,13 +46,13 @@ void EngineApplication::Run()
 	
 	while (m_IsRunning)
 	{
-		FrameStart();
+		Time::Instance().Update();
 
+		LOG_INFO("Delta time: {0}", Time::Instance().DeltaTime());
+		
 		ProcessInput();
 		Update();
 		Render();
-
-		FrameEnd();
 	}
 }
 
@@ -72,22 +71,6 @@ void EngineApplication::Render() const
 {
 	CC_ImGuiLayer->Render();
 	CC_RendererSystem->Render();
-}
-
-void EngineApplication::FrameStart()
-{
-	m_frameStart = SDL_GetTicks();
-}
-
-void EngineApplication::FrameEnd()
-{
-	m_frameEnd = SDL_GetTicks();
-		
-	//m_frameCount++;
-	m_lastDeltaTime = m_frameEnd - m_frameStart;
-
-	if(m_lastDeltaTime < m_targetFrameDuration)
-		SDL_Delay(m_targetFrameDuration - m_lastDeltaTime);
 }
 
 void EngineApplication::Quit(const CC_Event<CC_WindowEventType>& Event)

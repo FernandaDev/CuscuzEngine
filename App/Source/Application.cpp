@@ -1,6 +1,8 @@
 ﻿#include <MLE.h>
 #include "Application.h"
 
+#include "Core/Time.h"
+
 void Application::Start()
 {
     EngineApplication::Start();
@@ -18,5 +20,5 @@ void Application::Update()
     EngineApplication::Update();
 
     if(m_Game->IsRunning())
-        m_Game->UpdateGame(static_cast<float>(m_lastDeltaTime));
+        m_Game->UpdateGame(Time::Instance().DeltaTime());
 }

@@ -18,9 +18,9 @@ void Game::StartGame()
     Actor* actorC = new Actor(m_World, "ActorC");
 }
 
-void Game::UpdateGame(float DeltaTime) // delta time needs to be fixed
+void Game::UpdateGame(float DeltaTime) const
 {
-    m_World->Update(DeltaTime);
+    //m_World->Update(DeltaTime);
 }
 
 void Game::ShutdownGame()
