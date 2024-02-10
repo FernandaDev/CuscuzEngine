@@ -1,10 +1,10 @@
 ﻿#pragma once
 
-#include "SDL.h"
+#include "Render/Texture.h"
 
 class Sprite
 {
-    SDL_Texture& m_Texture;
+    std::weak_ptr<Texture> m_Texture;
 
     int m_x;
     int m_y;
@@ -15,8 +15,8 @@ class Sprite
     
 public:
     Sprite() = delete;
-    Sprite(SDL_Texture& Texture, int X, int Y, int SizeX = 1, int SizeY = 1);
-    ~Sprite() = default;
+    Sprite(std::weak_ptr<Texture> Texture, int X, int Y, int SizeX = 1, int SizeY = 1);
+    ~Sprite();
 
     void SetPosition(int X, int Y);
     void SetSize(int X, int Y);
@@ -28,9 +28,11 @@ public:
     int GetWidth() const { return m_OriginalWidth * m_SizeX; }
     int GetHeight() const { return m_OriginalHeight * m_SizeY; }
 
-    SDL_Texture& GetTexture() const { return m_Texture; }
-    SDL_Rect GetRect() const
+    Texture* GetTexture() const
     {
-        return SDL_Rect{m_x, m_y, m_OriginalWidth * m_SizeX, m_OriginalHeight * m_SizeY};
+        if (const auto sharedTexture = m_Texture.lock())
+            return sharedTexture.get();
+
+        return nullptr;
     }
 };

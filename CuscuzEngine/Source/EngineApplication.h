@@ -21,10 +21,10 @@ class EngineApplication
 	Uint32 m_targetFrameDuration = 1000 / FramesPerSecond;
 
 protected:
-	Window* m_Window;
-	RendererSystem* m_RendererSystem;
-	EventSystem* m_EventSystem;
-	ImGuiLayer* m_ImGuiLayer;
+	Window* CC_Window;
+	RendererSystem* CC_RendererSystem;
+	EventSystem* CC_EventSystem;
+	ImGuiLayer* CC_ImGuiLayer;
 	
 public:
 	EngineApplication();
@@ -42,5 +42,6 @@ public:
 	void Quit(const CC_Event<CC_WindowEventType>& Event);
 
 private:
-	void Render();
+	void ProcessInput() const;
+	void Render() const;
 };

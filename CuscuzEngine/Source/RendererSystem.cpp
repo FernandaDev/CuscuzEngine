@@ -30,7 +30,9 @@ RendererSystem::~RendererSystem()
 {
 	if(m_Renderer)
 		SDL_DestroyRenderer(m_Renderer);
-
+	
+	m_Sprites.clear();
+	
 	IMG_Quit();
 }
 
@@ -52,9 +54,9 @@ void RendererSystem::CreateSprite(const std::string& FilePath, int X, int Y, int
 		return;
 	}
 
-	SDL_Texture& newTexture = ResourceManager::Instance().GetTexture(m_Renderer, FilePath);
+	std::weak_ptr<Texture> newTexture = ResourceManager::Instance().GetTexture(m_Renderer, FilePath);
 	
-	m_Sprites.emplace_back(new Sprite{newTexture, X, Y, SizeX, SizeY});
+	m_Sprites.emplace_back(std::make_shared<Sprite>(newTexture, X, Y, SizeX, SizeY));
 }
 
 // Note: somewhere else, the sprites X and Y are going to be set.
@@ -65,7 +67,7 @@ void RendererSystem::Update() const
 	if (m_Sprites.empty())
 		return;
 
-	for (const auto& sprite : m_Sprites)
+	for (const std::shared_ptr<Sprite>& sprite : m_Sprites)
 	{
 		Blit(*sprite);
 	}
@@ -80,8 +82,15 @@ void RendererSystem::Render() const
 
 void RendererSystem::Blit(const Sprite& Sprite) const
 {
-	const SDL_Rect dest = Sprite.GetRect();	
-	SDL_RenderCopy(m_Renderer, &Sprite.GetTexture(), NULL, &dest);
+	const SDL_Rect dest{Sprite.GetX(), Sprite.GetY(),
+						Sprite.GetWidth(), Sprite.GetHeight()};
+
+	const Texture* texture = Sprite.GetTexture();
+
+	if(!texture)
+		return;
+	
+	SDL_RenderCopy(m_Renderer, texture->GetSDLPtr(), NULL, &dest);
 }
 
 void RendererSystem::Clear() const

@@ -6,9 +6,9 @@ void Application::Start()
     EngineApplication::Start();
     ResourceManager::Instance().SetRootResourcesPath("../App/Assets/Images/");
     
-    m_RendererSystem->CreateSprite("Floor1.png", 250, 400);
-    m_RendererSystem->CreateSprite("Floor2.png", 600, 230);
-    m_RendererSystem->CreateSprite("Floor3.png", 420,  300, 2 , 2);
+    CC_RendererSystem->CreateSprite("Floor1.png", 250, 400);
+    CC_RendererSystem->CreateSprite("Floor2.png", 600, 230);
+    CC_RendererSystem->CreateSprite("Floor3.png", 420,  300, 2 , 2);
     
     SUBSCRIBE_KEY_EVENT(CC_KeyEventType::Down, this, Application::OnKeyDown);
 }

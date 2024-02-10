@@ -3,27 +3,29 @@
 #include <SDL_render.h>
 #include "pch.h"
 
-#define TextureMap std::unordered_map<std::string, SDL_Texture*>
+#include "Render/Texture.h"
 
 class ResourceManager
 {
-    TextureMap m_Textures;
+    std::unordered_map<std::string, std::shared_ptr<Texture>> m_Textures;
     std::string m_RootPath;
     
 public:
     static ResourceManager& Instance()
     {
-        static ResourceManager* s_Instance = new ResourceManager();
+        static auto* s_Instance = new ResourceManager();
         return *s_Instance;
     }
 
     void SetRootResourcesPath(const std::string& RootPath);
     
-    SDL_Texture& GetTexture(SDL_Renderer* Renderer, const std::string& Filepath);
+    std::weak_ptr<Texture> GetTexture(SDL_Renderer* Renderer, const std::string& Filepath);
+
+    void UnloadResources();
     
 private:
     ResourceManager() = default;
-    ~ResourceManager();
+    ~ResourceManager() = default;
     ResourceManager(ResourceManager const&){}
     ResourceManager operator=(ResourceManager const&){return *this;}
 };
