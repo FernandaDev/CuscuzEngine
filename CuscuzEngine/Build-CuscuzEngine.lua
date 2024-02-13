@@ -12,8 +12,8 @@ project "CuscuzEngine"
    {
       "Source/**.h", 
       "Source/**.cpp",
-      "Assets/**.png",
-      "Assets/**.jpeg",
+      "%{IncludeDir.glm}/**.hpp",
+      "%{IncludeDir.glm}/**.inl",
    }
 
    includedirs
@@ -24,6 +24,7 @@ project "CuscuzEngine"
       "Vendor/ImGui",
       
       "%{IncludeDir.SPD_Log}",
+      "%{IncludeDir.glm}",
    }
 
    libdirs

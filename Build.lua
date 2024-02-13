@@ -13,6 +13,7 @@ Engine_DLLs = "../CuscuzEngine/Dependencies/DLL/"
 
 IncludeDir = {}
 IncludeDir["SDL2"] = "%{wks.location}/CuscuzEngine/Dependencies/SDL2/include"
+IncludeDir["glm"] = "%{wks.location}/CuscuzEngine/Dependencies/glm"
 IncludeDir["SDL2_image"] = "%{wks.location}/CuscuzEngine/Dependencies/SDL2_image/include"
 IncludeDir["SPD_Log"] = "%{wks.location}/Vendor/Log/include"
 IncludeDir["ImGui"] = "%{wks.location}/CuscuzEngine/Vendor/ImGui"

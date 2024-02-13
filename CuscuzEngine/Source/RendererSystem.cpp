@@ -56,7 +56,7 @@ std::shared_ptr<Sprite> RendererSystem::CreateSprite(const std::string& FilePath
 
 	std::weak_ptr<Texture> newTexture = ResourceManager::Instance().GetTexture(m_Renderer, FilePath);
 
-	auto newSprite = std::make_shared<Sprite>(newTexture, X, Y, SizeX, SizeY);
+	auto newSprite = std::make_shared<Sprite>(newTexture, glm::vec2(X, Y), glm::vec2(SizeX, SizeY));
 	m_Sprites.emplace_back(newSprite);
 
 	return newSprite;
@@ -85,7 +85,9 @@ void RendererSystem::Render() const
 
 void RendererSystem::Blit(const Sprite& Sprite) const
 {
-	const SDL_Rect dest{Sprite.GetX(), Sprite.GetY(),
+	auto spritePosition = Sprite.GetPosition();
+	
+	const SDL_Rect dest{(int)spritePosition.x, (int)spritePosition.y,
 						Sprite.GetWidth(), Sprite.GetHeight()};
 
 	const Texture* texture = Sprite.GetTexture();

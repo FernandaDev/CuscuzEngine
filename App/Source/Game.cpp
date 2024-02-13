@@ -15,7 +15,7 @@ void Game::StartGame()
 {
     m_World = new World();
     m_GameIsRunning = true;
-
+    
     Actor* actorA = new Actor(m_World, "ActorA");
     auto sc1 = actorA->AddComponent<SpriteComponent>(new SpriteComponent());
     

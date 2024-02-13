@@ -9,7 +9,8 @@ project "App"
    { 
     "Source/**.h", 
     "Source/**.cpp",
-    "Assets/**.png" 
+    "%{IncludeDir.glm}/**.hpp",
+    "%{IncludeDir.glm}/**.inl",
    }
 
    includedirs
@@ -22,6 +23,7 @@ project "App"
       "%{IncludeDir.SDL2}",
       "%{IncludeDir.SDL2_image}",
       "%{IncludeDir.ImGui}",
+      "%{IncludeDir.glm}",
 
       "../Vendor/Log/include",
    }

@@ -1,4 +1,6 @@
 ﻿#pragma once
+
+#include "vec2.hpp"
 #include "Utils/Log.h"
 #include "World/Component.h"
 
@@ -17,7 +19,7 @@ private:
     //ID?
     std::string m_name;
     State m_State;
-    float m_X, m_Y; //TODO substitute for a vec2 later
+    glm::vec2 m_Position;
     float m_Scale;
     float m_Rotation;
     std::vector<Component*> m_Components;
@@ -26,8 +28,8 @@ private:
 public:
     Actor(World* World, std::string Name);
     Actor(const Actor& other):
-    m_name(other.m_name), m_State(other.m_State),m_X(other.m_X),
-    m_Y(other.m_Y), m_Scale(other.m_Scale), m_Rotation(other.m_Rotation),
+    m_name(other.m_name), m_State(other.m_State), m_Position(other.m_Position)
+    , m_Scale(other.m_Scale), m_Rotation(other.m_Rotation),
     m_Components(other.m_Components), m_World(other.m_World)
     { }
     Actor& operator=(const Actor& other)
@@ -36,8 +38,7 @@ public:
         {
             m_name = other.m_name;
             m_State = other.m_State;
-            m_X = other.m_X;
-            m_Y = other.m_Y;
+            /*m_Position = other.m_Position;*/
             m_Scale = other.m_Scale;
             m_Rotation = other.m_Rotation;
             m_Components = other.m_Components;
