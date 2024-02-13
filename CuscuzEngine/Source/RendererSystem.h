@@ -16,9 +16,9 @@ public:
 
 	SDL_Renderer* GetRenderer() const { return m_Renderer; }
 
-	void CreateSprite(const std::string& FilePath);
-	void CreateSprite(const std::string& FilePath, int X, int Y);
-	void CreateSprite(const std::string& FilePath, int X, int Y, int SizeX, int SizeY);
+	std::shared_ptr<Sprite> CreateSprite(const std::string& FilePath);
+	std::shared_ptr<Sprite> CreateSprite(const std::string& FilePath, int X, int Y);
+	std::shared_ptr<Sprite> CreateSprite(const std::string& FilePath, int X, int Y, float SizeX, float SizeY);
 	void Update() const;
 	void Render() const;
 	

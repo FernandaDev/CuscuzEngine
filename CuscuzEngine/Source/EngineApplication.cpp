@@ -48,8 +48,6 @@ void EngineApplication::Run()
 	{
 		Time::Instance().Update();
 
-		LOG_INFO("Delta time: {0}", Time::Instance().DeltaTime());
-		
 		ProcessInput();
 		Update();
 		Render();

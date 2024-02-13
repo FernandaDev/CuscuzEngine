@@ -36,27 +36,30 @@ RendererSystem::~RendererSystem()
 	IMG_Quit();
 }
 
-void RendererSystem::CreateSprite(const std::string& FilePath)
+std::shared_ptr<Sprite> RendererSystem::CreateSprite(const std::string& FilePath)
 {
-	CreateSprite(FilePath, 0, 0);
+	return CreateSprite(FilePath, 0, 0);
 }
 
-void RendererSystem::CreateSprite(const std::string& FilePath, int X, int Y)
+std::shared_ptr<Sprite> RendererSystem::CreateSprite(const std::string& FilePath, int X, int Y)
 {
-	CreateSprite(FilePath, X, Y, 1, 1);
+	return CreateSprite(FilePath, X, Y, 1, 1);
 }
 
-void RendererSystem::CreateSprite(const std::string& FilePath, int X, int Y, int SizeX, int SizeY)
+std::shared_ptr<Sprite> RendererSystem::CreateSprite(const std::string& FilePath, int X, int Y, float SizeX, float SizeY)
 {
 	if (m_Sprites.size() >= MAX_SPRITE_AMOUNT)
 	{
 		LOG_WARN("Cannot load more textures!");
-		return;
+		return nullptr;
 	}
 
 	std::weak_ptr<Texture> newTexture = ResourceManager::Instance().GetTexture(m_Renderer, FilePath);
-	
-	m_Sprites.emplace_back(std::make_shared<Sprite>(newTexture, X, Y, SizeX, SizeY));
+
+	auto newSprite = std::make_shared<Sprite>(newTexture, X, Y, SizeX, SizeY);
+	m_Sprites.emplace_back(newSprite);
+
+	return newSprite;
 }
 
 // Note: somewhere else, the sprites X and Y are going to be set.

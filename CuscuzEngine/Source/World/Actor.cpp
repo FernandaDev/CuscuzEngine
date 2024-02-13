@@ -3,7 +3,6 @@
 
 #include "Component.h"
 #include "World.h"
-#include "Utils/Log.h"
 
 Actor::Actor(World* World, std::string Name) : m_name(Name)
 {
@@ -17,14 +16,30 @@ Actor::~Actor()
     // Remove it self from the world's list
     LOG_INFO("Actor being removed!");
     m_World->RemoveActor(this);
+
+    for (const Component* component : m_Components)
+        delete component;
+
+    m_Components.clear();
 }
 
 void Actor::Update(float DeltaTime)
-{
-    LOG_INFO("Actor: {0}", m_name);
-    
+{    
     UpdateComponents(DeltaTime);
     //UpdateActor(DeltaTime);
+}
+
+void Actor::RemoveComponent(Component* Component)
+{
+    const auto it = std::find(m_Components.begin(), m_Components.end(), Component);
+    if(it == m_Components.end())
+    {
+        LOG_WARN("Trying to remove an invalid component!");
+        return;
+    }
+
+    LOG_INFO("Removed Component");
+    m_Components.erase(it);
 }
 
 void Actor::UpdateComponents(float DeltaTime) const
@@ -32,6 +47,6 @@ void Actor::UpdateComponents(float DeltaTime) const
     if(m_Components.empty())
         return;
     
-    for (Component* component : m_Components)
+    for (const auto& component : m_Components)
         component->Update(DeltaTime);
 }

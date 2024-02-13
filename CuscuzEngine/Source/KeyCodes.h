@@ -237,7 +237,7 @@ enum CC_KeyCode
     KP_0 = 98,
     KP_Period = 99,
     NonUsBackslash = 100,
-    Application = 101,
+    ApplicationKey = 101,
     Power = 102,
     KP_Equals = 103,
     F13 = 104,

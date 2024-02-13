@@ -12,16 +12,7 @@ constexpr Uint32 FramesPerSecond = 30;
 class EngineApplication 
 {
 	bool m_IsRunning = true;
-	// float m_LastFrameTime = 0;
 
-protected:
-	Window* CC_Window;
-	RendererSystem* CC_RendererSystem;
-	EventSystem* CC_EventSystem;
-	ImGuiLayer* CC_ImGuiLayer;
-
-	// float m_DeltaTime = 0;
-	
 public:
 	EngineApplication();
 	virtual ~EngineApplication();
@@ -32,6 +23,11 @@ public:
 	virtual void Update();
 	
 	void Quit(const CC_Event<CC_WindowEventType>& Event);
+
+	Window* CC_Window;
+	RendererSystem* CC_RendererSystem;
+	EventSystem* CC_EventSystem;
+	ImGuiLayer* CC_ImGuiLayer;
 
 private:
 	void ProcessInput() const;

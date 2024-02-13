@@ -1,14 +1,19 @@
 ﻿#pragma once
 
-class World;
+#include "World/World.h"
+
+class Application;
 
 class Game
 {
-    bool m_GameIsRunning = false;
+    bool m_GameIsRunning;
     World* m_World;
+    Application* m_App;
     
 public:
-    Game() = default;
+    Game(Application* App) :
+    m_GameIsRunning(false), m_World(nullptr), m_App(App)
+    {}
     ~Game();
     
     void StartGame();

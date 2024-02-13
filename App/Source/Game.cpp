@@ -1,7 +1,10 @@
-﻿#include "Game.h"
+﻿#include <CC_Engine.h>
+#include "Game.h"
 
+#include "Application.h"
 #include "Utils/Log.h"
-#include "World/World.h"
+#include "World/Components/SpriteComponent.h"
+#include "World/Actor.h"
 
 Game::~Game()
 {
@@ -14,13 +17,15 @@ void Game::StartGame()
     m_GameIsRunning = true;
 
     Actor* actorA = new Actor(m_World, "ActorA");
-    Actor* actorB = new Actor(m_World, "ActorB");
-    Actor* actorC = new Actor(m_World, "ActorC");
+    auto sc1 = actorA->AddComponent<SpriteComponent>(new SpriteComponent());
+    
+    const auto sprite1 = m_App->CC_RendererSystem->CreateSprite("Floor1.png", 250, 400);
+    sc1.SetSprite(sprite1);
 }
 
 void Game::UpdateGame(float DeltaTime) const
 {
-    //m_World->Update(DeltaTime);
+    m_World->Update(DeltaTime);
 }
 
 void Game::ShutdownGame()

@@ -8,14 +8,16 @@ class Sprite
 
     int m_x;
     int m_y;
-    int m_SizeX;
-    int m_SizeY;
-    int m_OriginalWidth;
-    int m_OriginalHeight;
+    float m_SizeX;
+    float m_SizeY;
+    int m_PixelsWidth;
+    int m_PixelsHeight;
+
+    //Vec2 m_Pivot;
     
 public:
     Sprite() = delete;
-    Sprite(std::weak_ptr<Texture> Texture, int X, int Y, int SizeX = 1, int SizeY = 1);
+    Sprite(std::weak_ptr<Texture> Texture, int X, int Y, float SizeX = 1, float SizeY = 1);
     ~Sprite();
 
     void SetPosition(int X, int Y);
@@ -23,10 +25,10 @@ public:
     
     int GetX() const { return m_x; }
     int GetY() const { return m_y; }
-    int GetSizeX() const { return m_SizeX; }
-    int GetSizeY() const { return m_SizeY; }
-    int GetWidth() const { return m_OriginalWidth * m_SizeX; }
-    int GetHeight() const { return m_OriginalHeight * m_SizeY; }
+    float GetSizeX() const { return m_SizeX; }
+    float GetSizeY() const { return m_SizeY; }
+    int GetWidth() const { return m_PixelsWidth * m_SizeX; }
+    int GetHeight() const { return m_PixelsHeight * m_SizeY; }
 
     Texture* GetTexture() const
     {
