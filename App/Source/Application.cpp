@@ -1,12 +1,15 @@
 ﻿#include <CC_Engine.h>
+#include <Core/EntryPoint.h>
 
 #include "Application.h"
 #include "Core/Time.h"
 
+EngineApplication* CreateApplication() { return new Application(); }
+
 void Application::Start()
 {
     EngineApplication::Start();
-    ResourceManager::Instance().SetRootResourcesPath("../App/Assets/Images/");
+    ResourceManager::Get().SetRootResourcesPath("../App/Assets/Images/");
 
     m_Game->StartGame();
 }

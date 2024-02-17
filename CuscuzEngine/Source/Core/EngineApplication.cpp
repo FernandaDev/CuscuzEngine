@@ -15,6 +15,8 @@ enum
 	SCREEN_HEIGHT = 720
 };
 
+EngineApplication* EngineApplication::s_Instance = nullptr;
+
 EngineApplication::EngineApplication():
 	CC_Window{ new Window("Game", SCREEN_WIDTH, SCREEN_HEIGHT) },
 	CC_RendererSystem { new RendererSystem {CC_Window}},
@@ -22,6 +24,7 @@ EngineApplication::EngineApplication():
 	CC_ImGuiLayer{ new ImGuiLayer(*CC_Window, CC_RendererSystem->GetRenderer()) }
 {
 	SUBSCRIBE_WINDOW_EVENT(CC_WindowEventType::Close, this, EngineApplication::Quit);
+	s_Instance = this;
 	Log::Init();
 }
 
@@ -32,7 +35,7 @@ EngineApplication::~EngineApplication()
 	delete CC_EventSystem;
 	delete CC_ImGuiLayer;
 
-	ResourceManager::Instance().UnloadResources();
+	ResourceManager::Get().UnloadResources();
 	
 	SDL_Quit();
 }

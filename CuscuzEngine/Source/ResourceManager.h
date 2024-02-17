@@ -1,17 +1,18 @@
 ﻿#pragma once
 
 #include <SDL_render.h>
-#include "pch.h"
+#include "Render/Sprite.h"
 
-#include "Render/Texture.h"
+class Texture;
 
 class ResourceManager
 {
-    std::unordered_map<std::string, std::shared_ptr<Texture>> m_Textures;
     std::string m_RootPath;
-    
+    std::unordered_map<std::string, std::shared_ptr<Texture>> m_Textures;
+    std::vector<std::shared_ptr<Sprite>> m_Sprites;
+
 public:
-    static ResourceManager& Instance()
+    static ResourceManager& Get()
     {
         static auto* s_Instance = new ResourceManager();
         return *s_Instance;
@@ -21,6 +22,8 @@ public:
     
     std::weak_ptr<Texture> GetTexture(SDL_Renderer* Renderer, const std::string& Filepath);
 
+    std::weak_ptr<Sprite> CreateSprite(const std::string& FilePath, SDL_Renderer* Renderer);
+    
     void UnloadResources();
     
 private:

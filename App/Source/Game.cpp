@@ -16,11 +16,16 @@ void Game::StartGame()
     m_World = new World();
     m_GameIsRunning = true;
     
-    Actor* actorA = new Actor(m_World, "ActorA");
-    auto sc1 = actorA->AddComponent<SpriteComponent>(new SpriteComponent());
+    Actor* actorA = new Actor(m_World, "ActorA", glm::vec2(230, 400));
+
+    //the sprite component is only created by the renderer system
+    const auto spriteComponent = new SpriteComponent(glm::vec2(1,1), 10);
+    actorA->AddComponent<SpriteComponent>(spriteComponent);
+
+    const auto renderer = Application::Get().CC_RendererSystem->GetRenderer();
     
-    const auto sprite1 = m_App->CC_RendererSystem->CreateSprite("Floor1.png", 250, 400);
-    sc1.SetSprite(sprite1);
+    const auto sprite = ResourceManager::Get().CreateSprite("Floor1.png", renderer);
+    spriteComponent->SetSprite(sprite);
 }
 
 void Game::UpdateGame(float DeltaTime) const

@@ -23,5 +23,5 @@ public:
        LOG_INFO("Destroyed texture!");
    }
 
-    SDL_Texture* GetSDLPtr() const { return m_Texture; }
+    SDL_Texture* SDLPtr() const { return m_Texture; }
 };

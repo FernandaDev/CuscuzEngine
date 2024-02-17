@@ -1,6 +1,6 @@
 ﻿#pragma once
 
-#include "EngineApplication.h"
+#include "Core/EngineApplication.h"
 #include "Game.h"
 
 class Application : public EngineApplication

@@ -1,7 +1,8 @@
 ﻿#include "pch.h"
+
 #include "ResourceManager.h"
 #include "Utils/Log.h"
-#include <filesystem>
+#include "Render/Texture.h"
 
 void ResourceManager::SetRootResourcesPath(const std::string& RootPath)
 {
@@ -34,4 +35,15 @@ std::weak_ptr<Texture> ResourceManager::GetTexture(SDL_Renderer* Renderer,  cons
 void ResourceManager::UnloadResources()
 {
     m_Textures.clear();
+    m_Sprites.clear();
+}
+
+std::weak_ptr<Sprite> ResourceManager::CreateSprite(const std::string& FilePath, SDL_Renderer* Renderer)
+{
+    std::weak_ptr<Texture> newTexture = GetTexture(Renderer, FilePath);
+
+    auto newSprite = std::make_shared<Sprite>(newTexture);
+    m_Sprites.emplace_back(newSprite);
+
+    return newSprite;
 }

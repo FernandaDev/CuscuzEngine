@@ -16,6 +16,8 @@ class EngineApplication
 public:
 	EngineApplication();
 	virtual ~EngineApplication();
+
+	static EngineApplication& Get() { return *s_Instance;}
 	
 	void Run();
 	
@@ -32,4 +34,7 @@ public:
 private:
 	void ProcessInput() const;
 	void Render() const;
+
+	static EngineApplication* s_Instance;
+	friend int ::main(int argc, char* argv[]);
 };

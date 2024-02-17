@@ -2,12 +2,12 @@
 #include "SDL_image.h"
 
 #include "Utils/Log.h"
-#include "Window.h"
+#include "Core/Window.h"
 #include "RendererSystem.h"
 
 #include "ResourceManager.h"
-
-#define MAX_SPRITE_AMOUNT 24
+#include "Events/EventHandler.h"
+#include "World/Components/SpriteComponent.h"
 
 RendererSystem::RendererSystem(Window* Window)
 {
@@ -22,80 +22,56 @@ RendererSystem::RendererSystem(Window* Window)
 	{
 		LOG_ERROR("Couldn't load SDL image!");
 	}
-	
-	m_Sprites.reserve(MAX_SPRITE_AMOUNT);
 }
 
 RendererSystem::~RendererSystem()
-{
+{	
 	if(m_Renderer)
 		SDL_DestroyRenderer(m_Renderer);
 	
-	m_Sprites.clear();
-	
 	IMG_Quit();
+
+	m_SpriteComponents.clear();
 }
 
-std::shared_ptr<Sprite> RendererSystem::CreateSprite(const std::string& FilePath)
+void RendererSystem::AddSpriteComponent(SpriteComponent* NewSpriteComponent)
 {
-	return CreateSprite(FilePath, 0, 0);
-}
+	const int drawOrder = NewSpriteComponent->GetDrawOrder();
+	auto it = m_SpriteComponents.begin();
 
-std::shared_ptr<Sprite> RendererSystem::CreateSprite(const std::string& FilePath, int X, int Y)
-{
-	return CreateSprite(FilePath, X, Y, 1, 1);
-}
-
-std::shared_ptr<Sprite> RendererSystem::CreateSprite(const std::string& FilePath, int X, int Y, float SizeX, float SizeY)
-{
-	if (m_Sprites.size() >= MAX_SPRITE_AMOUNT)
+	for( ; it != m_SpriteComponents.end(); ++it)
 	{
-		LOG_WARN("Cannot load more textures!");
-		return nullptr;
+		if(const auto sprite = it->lock())
+			if(drawOrder < sprite->GetDrawOrder())
+				break;
 	}
 
-	std::weak_ptr<Texture> newTexture = ResourceManager::Instance().GetTexture(m_Renderer, FilePath);
-
-	auto newSprite = std::make_shared<Sprite>(newTexture, glm::vec2(X, Y), glm::vec2(SizeX, SizeY));
-	m_Sprites.emplace_back(newSprite);
-
-	return newSprite;
+	const std::shared_ptr<SpriteComponent> sc {NewSpriteComponent};
+	m_SpriteComponents.insert(it, sc);
 }
 
-// Note: somewhere else, the sprites X and Y are going to be set.
+void RendererSystem::RemoveSpriteComponent(SpriteComponent* SpriteComponent)
+{
+	//TODO
+}
+
 void RendererSystem::Update() const
 {
 	Clear();
 
-	if (m_Sprites.empty())
+	if (m_SpriteComponents.empty())
 		return;
-
-	for (const std::shared_ptr<Sprite>& sprite : m_Sprites)
+	
+	for (const auto& spriteComponent : m_SpriteComponents)
 	{
-		Blit(*sprite);
+		if(const auto sprite = spriteComponent.lock())
+			sprite->Draw(m_Renderer);
 	}
 }
 
 void RendererSystem::Render() const
 {
 	SDL_RenderPresent(m_Renderer);
-}
-
-//PRIVATE
-
-void RendererSystem::Blit(const Sprite& Sprite) const
-{
-	auto spritePosition = Sprite.GetPosition();
-	
-	const SDL_Rect dest{(int)spritePosition.x, (int)spritePosition.y,
-						Sprite.GetWidth(), Sprite.GetHeight()};
-
-	const Texture* texture = Sprite.GetTexture();
-
-	if(!texture)
-		return;
-	
-	SDL_RenderCopy(m_Renderer, texture->GetSDLPtr(), NULL, &dest);
 }
 
 void RendererSystem::Clear() const

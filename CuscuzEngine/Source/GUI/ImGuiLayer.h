@@ -1,7 +1,7 @@
 ﻿#pragma once
 
 #include "imgui.h"
-#include "Window.h"
+#include "Core/Window.h"
 #include "SDL.h"
 #include "Events/CC_Event.h"
 #include "Events/MouseEvents.h"
