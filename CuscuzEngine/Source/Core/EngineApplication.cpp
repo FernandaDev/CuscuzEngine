@@ -41,7 +41,9 @@ EngineApplication::~EngineApplication()
 }
 
 void EngineApplication::Start()
-{}
+{
+	CC_ImGuiLayer->Start();
+}
 
 void EngineApplication::Run()
 {

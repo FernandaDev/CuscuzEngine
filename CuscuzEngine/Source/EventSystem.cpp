@@ -68,6 +68,6 @@ void EventSystem::Update()
 			break;
 		}
 
-		SEND_SDL_EVENT(event);
+		m_SDLEventDelegate.Broadcast(event);
 	}
 }

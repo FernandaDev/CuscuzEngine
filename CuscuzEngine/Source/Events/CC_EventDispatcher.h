@@ -42,29 +42,3 @@ public:
         }
     }
 };
-
-template <typename T>
-class EventDispatcher
-{
-    using MyEvent = std::function<void(const T&)>;
-    std::vector<MyEvent> m_Listeners;
-
-public:
-    void AddListener(const MyEvent& Func)
-    {
-        m_Listeners.push_back(Func);
-    }
-
-    void RemoveListener(const MyEvent& Func)
-    {
-        m_Listeners.erase(std::remove(m_Listeners.begin(), m_Listeners.end(), Func), m_Listeners.end());
-    }
-
-    void SendEvent(const T& Event)
-    {
-        for (const auto& Listener : m_Listeners)
-        {
-            Listener(Event);
-        }
-    }
-};
