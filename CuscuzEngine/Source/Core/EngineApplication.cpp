@@ -17,11 +17,10 @@ enum
 
 EngineApplication* EngineApplication::s_Instance = nullptr;
 
-EngineApplication::EngineApplication():
+EngineApplication::EngineApplication() :
 	CC_Window{ new Window("Game", SCREEN_WIDTH, SCREEN_HEIGHT) },
 	CC_RendererSystem { new RendererSystem {CC_Window}},
-	CC_EventSystem{ new EventSystem() },
-	CC_ImGuiLayer{ new ImGuiLayer(*CC_Window, CC_RendererSystem->GetRenderer()) }
+	CC_EventSystem{ new EventSystem() }
 {
 	SUBSCRIBE_WINDOW_EVENT(CC_WindowEventType::Close, this, EngineApplication::Quit);
 	s_Instance = this;
@@ -33,7 +32,6 @@ EngineApplication::~EngineApplication()
 	delete CC_Window;
 	delete CC_RendererSystem;
 	delete CC_EventSystem;
-	delete CC_ImGuiLayer;
 
 	ResourceManager::Get().UnloadResources();
 	
@@ -42,7 +40,6 @@ EngineApplication::~EngineApplication()
 
 void EngineApplication::Start()
 {
-	CC_ImGuiLayer->Start();
 }
 
 void EngineApplication::Run()
@@ -67,12 +64,10 @@ void EngineApplication::ProcessInput() const
 void EngineApplication::Update()
 {
 	CC_RendererSystem->Update();
-	CC_ImGuiLayer->Update();
 }
 
 void EngineApplication::Render() const 
 {
-	CC_ImGuiLayer->Render();
 	CC_RendererSystem->Render();
 }
 

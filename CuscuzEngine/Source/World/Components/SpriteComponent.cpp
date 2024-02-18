@@ -5,11 +5,10 @@
 
 #include "../../../../App/Source/Application.h"
 #include "detail/func_trigonometric.inl"
-#include "Events/EventHandler.h"
 #include "Render/Sprite.h"
 
-SpriteComponent::SpriteComponent(glm::vec2 Size, int DrawOrder, SDL_BlendMode BlendMode) :
-m_Size(Size), m_DrawOrder(DrawOrder), m_BlendMode(BlendMode), m_Color(0,0,0,1)
+SpriteComponent::SpriteComponent(int DrawOrder, SDL_BlendMode BlendMode) :
+m_DrawOrder(DrawOrder), m_BlendMode(BlendMode), m_Color(0,0,0,1)
 {}
 
 SpriteComponent::~SpriteComponent()
@@ -38,11 +37,6 @@ void SpriteComponent::Draw(SDL_Renderer* Renderer)
 void SpriteComponent::SetSprite(std::weak_ptr<Sprite> NewSprite)
 {
     m_Sprite = std::move(NewSprite);
-}
-
-void SpriteComponent::SetSize(int X, int Y)
-{
-    m_Size = glm::vec2(X,Y);
 }
 
 void SpriteComponent::SetDrawOrder(int DrawOrder)

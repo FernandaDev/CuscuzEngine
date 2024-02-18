@@ -1,6 +1,9 @@
 ﻿#include "pch.h"
 #include "World.h"
 
+#include "Components/SpriteComponent.h"
+#include "Core/EngineApplication.h"
+
 void World::Update(float DeltaTime)
 {
     m_UpdatingActors = true;
@@ -23,12 +26,14 @@ void World::Update(float DeltaTime)
 
 void World::AddActor(Actor* NewActor)
 {
+    NewActor->OnComponentAddedDelegated().Add(this, &World::OnActorComponentAdded);
+    
     (m_UpdatingActors ? m_PendingActors : m_ActiveActors).emplace_back(NewActor);
 }
 
 void World::RemoveActor(Actor* Actor)
 {
-    //TODO
+    //TODO remove from the event
 }
 
 void World::HandleDeadActors()
@@ -48,4 +53,15 @@ void World::HandleDeadActors()
     // {
     //     delete deadActor;
     // }
+}
+
+
+void World::OnActorComponentAdded(std::shared_ptr<Component> NewComponent)
+{
+    const auto spriteComponent = std::dynamic_pointer_cast<SpriteComponent>(NewComponent);
+    if (!spriteComponent)
+        return;
+
+    // Is this the world's responsibility? The world handles all the actors, so I've decided to leave it here for now...
+    EngineApplication::Get().CC_RendererSystem->AddSpriteComponent(spriteComponent);
 }

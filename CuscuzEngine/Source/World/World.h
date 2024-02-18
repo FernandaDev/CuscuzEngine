@@ -8,7 +8,7 @@ class World
     std::vector<std::shared_ptr<Actor>> m_ActiveActors;
     std::vector<std::shared_ptr<Actor>> m_PendingActors;
     bool m_UpdatingActors = false;
-    
+
 public:
     World() = default;
     ~World() = default;
@@ -17,6 +17,11 @@ public:
     void AddActor(Actor* Actor);
     void RemoveActor(Actor* Actor);
 
+    std::vector<std::shared_ptr<Actor>> GetAllActors() const
+    { return m_ActiveActors; }
+
 private:
     void HandleDeadActors();
+
+    void OnActorComponentAdded(std::shared_ptr<Component> NewComponent);
 };

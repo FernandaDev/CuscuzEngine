@@ -5,7 +5,6 @@
 #include "EventSystem.h"
 #include "Events/CC_Event.h"
 #include "Events/WindowEvents.h"
-#include "GUI/ImGuiLayer.h"
 
 constexpr Uint32 FramesPerSecond = 30;
 
@@ -29,11 +28,11 @@ public:
 	Window* CC_Window;
 	RendererSystem* CC_RendererSystem;
 	EventSystem* CC_EventSystem;
-	ImGuiLayer* CC_ImGuiLayer;
 
+protected:
+	virtual void Render() const;
 private:
 	void ProcessInput() const;
-	void Render() const;
 
 	static EngineApplication* s_Instance;
 	friend int ::main(int argc, char* argv[]);

@@ -6,7 +6,6 @@
 #include "RendererSystem.h"
 
 #include "ResourceManager.h"
-#include "Events/EventHandler.h"
 #include "World/Components/SpriteComponent.h"
 
 RendererSystem::RendererSystem(Window* Window)
@@ -34,7 +33,7 @@ RendererSystem::~RendererSystem()
 	m_SpriteComponents.clear();
 }
 
-void RendererSystem::AddSpriteComponent(SpriteComponent* NewSpriteComponent)
+void RendererSystem::AddSpriteComponent(std::shared_ptr<SpriteComponent> NewSpriteComponent)
 {
 	const int drawOrder = NewSpriteComponent->GetDrawOrder();
 	auto it = m_SpriteComponents.begin();
@@ -46,11 +45,10 @@ void RendererSystem::AddSpriteComponent(SpriteComponent* NewSpriteComponent)
 				break;
 	}
 
-	const std::shared_ptr<SpriteComponent> sc {NewSpriteComponent};
-	m_SpriteComponents.insert(it, sc);
+	m_SpriteComponents.insert(it, NewSpriteComponent);
 }
 
-void RendererSystem::RemoveSpriteComponent(SpriteComponent* SpriteComponent)
+void RendererSystem::RemoveSpriteComponent(std::shared_ptr<SpriteComponent> SpriteComponent)
 {
 	//TODO
 }

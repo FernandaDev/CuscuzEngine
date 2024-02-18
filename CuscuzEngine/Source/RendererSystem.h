@@ -18,8 +18,8 @@ public:
 
 	SDL_Renderer* GetRenderer() const { return m_Renderer; }
 
-	void AddSpriteComponent(SpriteComponent* SpriteComponent);
-	void RemoveSpriteComponent(SpriteComponent* SpriteComponent);
+	void AddSpriteComponent(std::shared_ptr<SpriteComponent> SpriteComponent);
+	void RemoveSpriteComponent(std::shared_ptr<SpriteComponent> SpriteComponent);
 
 	void Update() const;
 	void Render() const;

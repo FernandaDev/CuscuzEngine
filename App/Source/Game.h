@@ -9,6 +9,8 @@ class Game
     bool m_GameIsRunning;
     World* m_World;
     Application* m_App;
+
+    friend class AppImGuiLayer;
     
 public:
     Game(Application* App) :

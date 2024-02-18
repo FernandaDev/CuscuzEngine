@@ -1,15 +1,14 @@
 ﻿#include "pch.h"
-#include "ImGuiLayer.h"
-
+#include "AppImGuiLayer.h"
 #include "EventSystem.h"
 #include "imgui.h"
-#include "imgui_impl_sdl.h"
-#include "imgui_impl_sdlrenderer.h"
+#include "GUI/imgui_impl_sdl.h"
+#include "GUI/imgui_impl_sdlrenderer.h"
 #include "Core/EngineApplication.h"
 #include "Utils/Log.h"
 
-ImGuiLayer::ImGuiLayer(const Window& Window, SDL_Renderer* Renderer):
-    m_Renderer(*Renderer)
+AppImGuiLayer::AppImGuiLayer(const Window& Window, SDL_Renderer* Renderer) :
+m_Renderer(Renderer)
 {
     IMGUI_CHECKVERSION();
     ImGui::CreateContext();
@@ -20,40 +19,76 @@ ImGuiLayer::ImGuiLayer(const Window& Window, SDL_Renderer* Renderer):
     ImGui_ImplSDLRenderer_Init(Renderer);
 }
 
-ImGuiLayer::~ImGuiLayer()
+AppImGuiLayer::~AppImGuiLayer()
 {
     ImGui_ImplSDLRenderer_Shutdown();
     ImGui_ImplSDL2_Shutdown();
     ImGui::DestroyContext();
 }
 
-void ImGuiLayer::Start()
+void AppImGuiLayer::Start(const std::weak_ptr<Game>& Game)
 {
+    m_Game = Game;
+    m_ShowMainWindow = true;
     EngineApplication::Get().CC_EventSystem->GetSDLEventDelegate()
-                            .Add(this, &ImGuiLayer::OnSDLEvent);
+                            .Add(this, &AppImGuiLayer::OnSDLEvent);
 }
 
-void ImGuiLayer::Update()
+void AppImGuiLayer::Update()
 {
     ImGui_ImplSDLRenderer_NewFrame();
     ImGui_ImplSDL2_NewFrame();
     ImGui::NewFrame();
+    
+    if(m_ShowMainWindow)
+        ShowMainWindow();
 }
 
-void ImGuiLayer::Render()
+void AppImGuiLayer::ShowMainWindow()
+{
+    ImGui::Begin("World", &m_ShowMainWindow);
+
+    const bool showingActors = ImGui::CollapsingHeader("Actors");
+    {
+        const std::shared_ptr<Game> game = m_Game.lock();
+        if(game && showingActors)
+        {
+            const auto allActors = game->m_World->GetAllActors();
+    
+            for(const auto& actor : allActors)
+            {
+                ImGui::BeginGroup();
+            
+                ImGui::Text(actor->GetName().c_str());
+                ImGui::Text("Position: ");
+                ImGui::SameLine();
+                ImGui::Text("X: %f ", actor->GetPosition().x);
+                ImGui::SameLine();
+                ImGui::Text("Y: %f ", actor->GetPosition().y);
+
+                ImGui::Text("Rotation: %f", actor->GetRotation());
+                ImGui::Text("Scale: %f", actor->GetScale());
+            
+                ImGui::EndGroup();
+                ImGui::Separator();
+            }
+        }
+    }
+    ImGui::End();
+}
+
+void AppImGuiLayer::Render()
 {
     const ImGuiIO io = ImGui::GetIO();
-
     ImGui::Render();
-    SDL_RenderSetScale(&m_Renderer, io.DisplayFramebufferScale.x, io.DisplayFramebufferScale.y);
+    SDL_RenderSetScale(m_Renderer, io.DisplayFramebufferScale.x, io.DisplayFramebufferScale.y);
     ImGui_ImplSDLRenderer_RenderDrawData(ImGui::GetDrawData());
 }
 
-void ImGuiLayer::OnSDLEvent(const SDL_Event& Event)
+void AppImGuiLayer::OnSDLEvent(const SDL_Event& Event)
 {
     ImGui_ImplSDL2_ProcessEvent(&Event);
 }
-
 
 #if 0 //example code
 bool ShowDemoWindow = true;
@@ -101,3 +136,4 @@ static void ExampleCode()
     }
 }
 #endif
+

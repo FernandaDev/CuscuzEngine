@@ -3,6 +3,9 @@
 #include "vec2.hpp"
 #include "Utils/Log.h"
 #include "Component.h"
+#include "Events/EventDefinitions.h"
+
+DECLARE_EVENT(OnComponentAdded, std::shared_ptr<Component>)
 
 class World;
 
@@ -24,6 +27,7 @@ private:
     float m_Rotation;
     std::vector<std::shared_ptr<Component>> m_Components;
     World* m_World; // shared pointer?
+    OnComponentAdded m_OnComponentAddedDelegate;
     
 public:
     Actor(World* World, std::string Name, glm::vec2 Position,
@@ -62,6 +66,8 @@ public:
     const glm::vec2& GetPosition() const { return m_Position; }
     float GetScale() const { return m_Scale; }
     float GetRotation() const { return m_Rotation; }
+
+    OnComponentAdded& OnComponentAddedDelegated() { return m_OnComponentAddedDelegate; }
     
     //World& GetWorld() const { return *m_World; } DO WE NEED THIS?
 
@@ -78,6 +84,6 @@ T& Actor::AddComponent(T* NewComponent)
     m_Components.emplace_back(NewComponent);
     LOG_INFO("Added Component");
     NewComponent->SetOwner(this);
-    //THROW AN EVENT ONADDCOMPONENT
+    m_OnComponentAddedDelegate.Broadcast(m_Components.back());
     return *NewComponent;
 }
