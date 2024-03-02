@@ -6,6 +6,11 @@
 #include "GUI/imgui_impl_sdlrenderer.h"
 #include "Core/EngineApplication.h"
 #include "Utils/Log.h"
+#include "Game.h"
+#include "Components/Animation2DComponent.h"
+#include "Components/SpriteComponent.h"
+#include "World/Actor.h"
+#include "World/World.h"
 
 AppImGuiLayer::AppImGuiLayer(const Window& Window, SDL_Renderer* Renderer) :
 m_Renderer(Renderer)
@@ -26,7 +31,7 @@ AppImGuiLayer::~AppImGuiLayer()
     ImGui::DestroyContext();
 }
 
-void AppImGuiLayer::Start(const std::weak_ptr<Game>& Game)
+void AppImGuiLayer::Start(const std::shared_ptr<Game>& Game)
 {
     m_Game = Game;
     m_ShowMainWindow = true;
@@ -47,34 +52,109 @@ void AppImGuiLayer::Update()
 void AppImGuiLayer::ShowMainWindow()
 {
     ImGui::Begin("World", &m_ShowMainWindow);
-
-    const bool showingActors = ImGui::CollapsingHeader("Actors");
-    {
-        const std::shared_ptr<Game> game = m_Game.lock();
-        if(game && showingActors)
-        {
-            const auto allActors = game->m_World->GetAllActors();
     
-            for(const auto& actor : allActors)
-            {
-                ImGui::BeginGroup();
-            
-                ImGui::Text(actor->GetName().c_str());
-                ImGui::Text("Position: ");
-                ImGui::SameLine();
-                ImGui::Text("X: %f ", actor->GetPosition().x);
-                ImGui::SameLine();
-                ImGui::Text("Y: %f ", actor->GetPosition().y);
+    const std::shared_ptr<Game> game = m_Game.lock();
 
-                ImGui::Text("Rotation: %f", actor->GetRotation());
-                ImGui::Text("Scale: %f", actor->GetScale());
-            
-                ImGui::EndGroup();
-                ImGui::Separator();
-            }
-        }
-    }
+     {
+         const bool showingActorCreation = ImGui::CollapsingHeader("Actor Creation");
+         ActorCreation(game, showingActorCreation);
+     }
+    
+     {
+         const bool showingActors = ImGui::CollapsingHeader("Actors List");
+         ShowAllActors(game, showingActors);
+     }
+    
     ImGui::End();
+}
+
+void AppImGuiLayer::ActorCreation(const std::shared_ptr<Game>& Game, bool Showing) const
+{
+    if(!Game || !Showing)
+        return;
+    
+    ImGui::BeginGroup();
+
+    static glm::i32vec2 pos(0,0);
+    ImGui::InputInt2("Position", &pos.x);
+
+
+    static std::vector<Component*> components;
+    ImGui::Spacing();
+    ImGui::Text("SpriteComponent");
+    ImGui::SameLine();
+    if(ImGui::Button("Add"))
+        components.emplace_back(new SpriteComponent());
+    ImGui::Text("Animation2DComponent");
+    ImGui::SameLine();
+    if(ImGui::Button("Add2"))
+        components.emplace_back(new Animation2DComponent(1));
+
+    ImGui::BeginListBox("Components List", ImVec2(200, 50));
+    if(!components.empty())
+    {
+        for (const auto& component : components)
+            ImGui::Text(component->GetName().data());
+    }
+    ImGui::EndListBox();
+    
+    if(ImGui::Button("Create Actor"))
+    {
+        const auto newName = "Actor" + std::to_string(Game->m_World->GetActorsCount());
+        const auto newActor = Game->CreateNewActor(newName, pos.x, pos.y);
+
+        for (const auto& c : components)
+            newActor->AddComponent(c);
+    }
+
+    ImGui::EndGroup();
+}
+
+void AppImGuiLayer::ShowAllActors(const std::shared_ptr<Game>& Game, bool Showing) const
+{
+    if(!Game || !Showing)
+        return;
+    
+    const auto allActors = Game->m_World->GetAllActors();
+
+    for (size_t i = 0; i < allActors.size(); ++i)
+    {
+        if(const auto actor = allActors[i].get())
+            ShowActor(actor, static_cast<int>(i));
+    }
+}
+
+void AppImGuiLayer::ShowActor(Actor* TheActor, int Index) const
+{
+    ImGui::BeginGroup();
+            
+    ImGui::Text(TheActor->GetName().c_str());
+    ImGui::SameLine();
+    if(ImGui::Button("Destroy"))
+        TheActor->Destroy();
+
+    ImGui::Spacing();
+    ImGui::TextColored(ImVec4(0.f,.5f,1.f,1.f),"Components");
+    const auto name = std::to_string(Index);
+    ImGui::BeginListBox(name.c_str(), ImVec2(200, 50));
+    for (const auto& component : TheActor->m_Components)
+    {
+         ImGui::Text(component->GetName().data());
+    }
+    ImGui::EndListBox();
+    ImGui::Spacing();
+    
+    ImGui::Text("Position: ");
+    ImGui::SameLine();
+    ImGui::Text("X: %f ", TheActor->GetPosition().x);
+    ImGui::SameLine();
+    ImGui::Text("Y: %f ", TheActor->GetPosition().y);
+
+    ImGui::Text("Rotation: %f", TheActor->GetRotation());
+    ImGui::Text("Scale: %f", TheActor->GetScale());
+            
+    ImGui::EndGroup();
+    ImGui::Separator();
 }
 
 void AppImGuiLayer::Render()

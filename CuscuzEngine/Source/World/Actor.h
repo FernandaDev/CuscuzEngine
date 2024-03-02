@@ -5,9 +5,9 @@
 #include "Component.h"
 #include "Events/EventDefinitions.h"
 
-DECLARE_EVENT(OnComponentAdded, std::shared_ptr<Component>)
-
 class World;
+
+DECLARE_EVENT(OnComponentAdded, std::shared_ptr<Component>)
 
 class Actor
 {
@@ -26,11 +26,13 @@ private:
     float m_Scale;
     float m_Rotation;
     std::vector<std::shared_ptr<Component>> m_Components;
-    World* m_World; // shared pointer?
+    std::weak_ptr<World> m_World;
     OnComponentAdded m_OnComponentAddedDelegate;
+
+    friend class AppImGuiLayer;
     
 public:
-    Actor(World* World, std::string Name, glm::vec2 Position,
+    Actor(std::shared_ptr<World> World, std::string Name, glm::vec2 Position,
         float Scale = 1.f, float Rotation = 0);
     Actor(const Actor& other):
     m_Name(other.m_Name), m_State(other.m_State), m_Position(other.m_Position)
@@ -68,12 +70,14 @@ public:
     float GetRotation() const { return m_Rotation; }
 
     OnComponentAdded& OnComponentAddedDelegated() { return m_OnComponentAddedDelegate; }
+
+    void Destroy();
     
     //World& GetWorld() const { return *m_World; } DO WE NEED THIS?
 
 protected:
     void UpdateComponents(float DeltaTime) const;
-    //virtual void UpdateActor(float DeltaTime);
+    virtual void UpdateActor(float DeltaTime){}
 };
 
 template <typename T>

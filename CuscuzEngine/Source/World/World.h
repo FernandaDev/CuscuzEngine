@@ -1,5 +1,7 @@
 ﻿#pragma once
-#include "Actor.h"
+
+class Actor;
+class Component;
 
 // The world is going to be created as soon as the game starts. All the game state and entities is
 // going to be stored in there.
@@ -15,7 +17,9 @@ public:
 
     void Update(float DeltaTime);
     void AddActor(Actor* Actor);
-    void RemoveActor(Actor* Actor);
+    void RemoveActor(Actor* ActorToRemove);
+
+    size_t GetActorsCount() const { return m_ActiveActors.size(); }
 
     std::vector<std::shared_ptr<Actor>> GetAllActors() const
     { return m_ActiveActors; }

@@ -1,9 +1,10 @@
 ﻿#pragma once
 
-#include "Game.h"
 #include "SDL.h"
 
+class Game;
 class Window;
+class Actor;
 
 class AppImGuiLayer
 {
@@ -16,7 +17,7 @@ public:
     AppImGuiLayer(const Window& Window, SDL_Renderer* Renderer);
     ~AppImGuiLayer();
     
-    void Start(const std::weak_ptr<Game>& Game);
+    void Start(const std::shared_ptr<Game>& Game);
     void Update();
     void Render();
 
@@ -24,4 +25,8 @@ private:
     void OnSDLEvent(const SDL_Event& Event);
 
     void ShowMainWindow();
+
+    void ActorCreation(const std::shared_ptr<Game>& Game, bool Showing) const;
+    void ShowAllActors(const std::shared_ptr<Game>& Game, bool Showing) const;
+    void ShowActor(Actor* TheActor, int Index) const ;
 };

@@ -21,7 +21,7 @@ public:
 	void AddSpriteComponent(std::shared_ptr<SpriteComponent> SpriteComponent);
 	void RemoveSpriteComponent(std::shared_ptr<SpriteComponent> SpriteComponent);
 
-	void Update() const;
+	void Update();
 	void Render() const;
 	
 private:

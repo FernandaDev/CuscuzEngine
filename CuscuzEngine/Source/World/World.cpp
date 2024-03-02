@@ -3,6 +3,7 @@
 
 #include "Components/SpriteComponent.h"
 #include "Core/EngineApplication.h"
+#include "Actor.h"
 
 void World::Update(float DeltaTime)
 {
@@ -31,28 +32,25 @@ void World::AddActor(Actor* NewActor)
     (m_UpdatingActors ? m_PendingActors : m_ActiveActors).emplace_back(NewActor);
 }
 
-void World::RemoveActor(Actor* Actor)
+void World::RemoveActor(Actor* ActorToRemove)
 {
-    //TODO remove from the event
+    ActorToRemove->OnComponentAddedDelegated().Remove(this);
 }
 
 void World::HandleDeadActors()
 {
-    //TODO
-    // std::vector<Actor*> deadActor; // fixed array?
-    //
-    // for (Actor* actor : m_ActiveActors)
-    // {
-    //     if(actor->GetState() == Actor::Dead)
-    //     {
-    //         deadActor.emplace_back(actor);
-    //     }
-    // }
-    //
-    // for (Actor* deadActor : deadActor)
-    // {
-    //     delete deadActor;
-    // }
+    auto iter = m_ActiveActors.begin();
+    while (iter != m_ActiveActors.end())
+    {
+        if ((*iter)->GetState() == Actor::Dead)
+        {
+            iter = m_ActiveActors.erase(iter);
+        }
+        else
+        {
+            ++iter;
+        }
+    }
 }
 
 
