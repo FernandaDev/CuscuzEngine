@@ -21,10 +21,11 @@ project "CuscuzEngine"
       "Source",
       "Dependencies/SDL2/include",
       "Dependencies/SDL2_image/include",
-      "Vendor/ImGui",
       
+      "%{IncludeDir.ImGui}",
       "%{IncludeDir.SPD_Log}",
       "%{IncludeDir.glm}",
+      "%{IncludeDir.yaml}"
    }
 
    libdirs
@@ -36,6 +37,7 @@ project "CuscuzEngine"
    links
    {
       "ImGui",
+      "yaml-cpp",
       "SDL2.lib",
       "SDL2main.lib",
       "SDL2_image.lib",

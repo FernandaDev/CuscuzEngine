@@ -17,8 +17,10 @@ IncludeDir["glm"] = "%{wks.location}/CuscuzEngine/Dependencies/glm"
 IncludeDir["SDL2_image"] = "%{wks.location}/CuscuzEngine/Dependencies/SDL2_image/include"
 IncludeDir["SPD_Log"] = "%{wks.location}/Vendor/Log/include"
 IncludeDir["ImGui"] = "%{wks.location}/CuscuzEngine/Vendor/ImGui"
+IncludeDir["yaml"] = "%{wks.location}/CuscuzEngine/Vendor/yaml/include/yaml-cpp"
 
 include "CuscuzEngine/Vendor/ImGui"
+include "CuscuzEngine/Vendor/yaml"
 
 include "GameCore/Build-GameCore.lua"
 include "CuscuzEngine/Build-CuscuzEngine.lua"
