@@ -1,6 +1,8 @@
 #pragma once
 
 #include "SDL.h"
+#include "Events/CC_Event.h"
+#include "Events/WindowEvents.h"
 
 class Window
 {
@@ -14,8 +16,12 @@ public:
 	Window(const char* Name, int Width, int Height);
 	~Window();
 
-	const int GetWidth() const { return m_Width; }
-	const int GetHeight() const { return m_Height; }
+	int GetWidth() const { return m_Width; }
+	int GetHeight() const { return m_Height; }
 	SDL_Window* GetWindow() const { return m_Window; }
+
+private:
+	void OnWindowResized(const CC_Event<CC_WindowEventType>& Event);
+	
 };
 

@@ -1,6 +1,7 @@
 #include "pch.h"
 #include "Window.h"
 
+#include "Events/EventHandler.h"
 #include "Utils/Log.h"
 
 Window::Window(const char* Name, int Width, int Height):
@@ -19,10 +20,22 @@ Window::Window(const char* Name, int Width, int Height):
 
 	if (!m_Window)
 		LOG_ERROR("Could not create a window.");
+
+	SUBSCRIBE_WINDOW_EVENT(CC_WindowEventType::Resize, this , Window::OnWindowResized);
 }
 
 Window::~Window()
 {
+	UNSUBSCRIBE_WINDOW_EVENT(this, Window::OnWindowResized);
+	
 	if(m_Window)
 		SDL_DestroyWindow(m_Window);
+}
+
+void Window::OnWindowResized(const CC_Event<CC_WindowEventType>& Event)
+{
+	const auto resizeEvent = Event.ToType<CC_WindowResizeEvent>();
+
+	m_Height = resizeEvent.GetHeight();
+	m_Width = resizeEvent.GetWidth();
 }

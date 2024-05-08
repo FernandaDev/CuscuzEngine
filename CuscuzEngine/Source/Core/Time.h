@@ -34,8 +34,8 @@ public:
         m_LastFrameTime = time;
     }
     
-    float DeltaTime() { return m_DeltaTime; }
-    float TimeScale() { return m_TimeScale; }
+    float DeltaTime() const { return m_DeltaTime; }
+    float TimeScale() const { return m_TimeScale; }
     void SetTimeScale(float NewTimeScale) { m_TimeScale = NewTimeScale; }
     void LimitTimeFrame(bool Limit) { m_LimitFrameRate = Limit; }
 

@@ -29,6 +29,8 @@ EngineApplication::EngineApplication() :
 
 EngineApplication::~EngineApplication()
 {
+	UNSUBSCRIBE_WINDOW_EVENT(this, EngineApplication::Quit);
+
 	delete CC_Window;
 	delete CC_RendererSystem;
 	delete CC_EventSystem;

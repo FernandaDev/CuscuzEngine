@@ -22,8 +22,6 @@ public:
 	
 	virtual void Start();
 	virtual void Update();
-	
-	void Quit(const CC_Event<CC_WindowEventType>& Event);
 
 	Window* CC_Window;
 	RendererSystem* CC_RendererSystem;
@@ -32,6 +30,7 @@ public:
 protected:
 	virtual void Render() const;
 private:
+	void Quit(const CC_Event<CC_WindowEventType>& Event);
 	void ProcessInput() const;
 
 	static EngineApplication* s_Instance;
