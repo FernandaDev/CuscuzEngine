@@ -30,7 +30,7 @@ public:
     std::string_view GetName() const { return m_Name; }
     void SetOwner(Actor* OwnerActor);
     virtual void Update(float DeltaTime);
-    //virtual void OnAdded() {}
-    //virtual void OnRemoved() {}
+    virtual void OnAdded() {}
+    virtual void OnRemoved() {}
     int GetUpdateOrder() const { return m_UpdateOrder; }
 };

@@ -40,7 +40,8 @@ void Actor::RemoveComponent(Component* ComponentToRemove)
         LOG_WARN("Trying to remove an invalid component!");
         return;
     }
-    
+
+    ComponentToRemove->OnRemoved();
     LOG_INFO("Removed Component");
     m_Components.erase(it);
 }

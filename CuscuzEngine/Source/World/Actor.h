@@ -7,7 +7,7 @@
 
 class World;
 
-DECLARE_EVENT(OnComponentAdded, std::shared_ptr<Component>)
+DECLARE_EVENT(OnComponentAdded, const std::shared_ptr<Component>&)
 
 class Actor
 {
@@ -69,7 +69,7 @@ public:
     float GetScale() const { return m_Scale; }
     float GetRotation() const { return m_Rotation; }
 
-    OnComponentAdded& OnComponentAddedDelegated() { return m_OnComponentAddedDelegate; }
+    OnComponentAdded& GetOnComponentAddedDelegate() { return m_OnComponentAddedDelegate; }
 
     void Destroy();
     
@@ -88,6 +88,7 @@ T& Actor::AddComponent(T* NewComponent)
     m_Components.emplace_back(NewComponent);
     LOG_INFO("Added Component");
     NewComponent->SetOwner(this);
+    NewComponent->OnAdded();
     m_OnComponentAddedDelegate.Broadcast(m_Components.back());
     return *NewComponent;
 }

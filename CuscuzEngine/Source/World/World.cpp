@@ -27,14 +27,14 @@ void World::Update(float DeltaTime)
 
 void World::AddActor(Actor* NewActor)
 {
-    NewActor->OnComponentAddedDelegated().Add(this, &World::OnActorComponentAdded);
+    NewActor->GetOnComponentAddedDelegate().Add(this, &World::OnActorComponentAdded);
     
     (m_UpdatingActors ? m_PendingActors : m_ActiveActors).emplace_back(NewActor);
 }
 
 void World::RemoveActor(Actor* ActorToRemove)
 {
-    ActorToRemove->OnComponentAddedDelegated().Remove(this);
+    ActorToRemove->GetOnComponentAddedDelegate().Remove(this);
 }
 
 void World::HandleDeadActors()
@@ -53,8 +53,7 @@ void World::HandleDeadActors()
     }
 }
 
-
-void World::OnActorComponentAdded(std::shared_ptr<Component> NewComponent)
+void World::OnActorComponentAdded(const std::shared_ptr<Component>& NewComponent)
 {
     const auto spriteComponent = std::dynamic_pointer_cast<SpriteComponent>(NewComponent);
     if (!spriteComponent)

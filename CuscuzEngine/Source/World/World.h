@@ -27,5 +27,5 @@ public:
 private:
     void HandleDeadActors();
 
-    void OnActorComponentAdded(std::shared_ptr<Component> NewComponent);
+    void OnActorComponentAdded(const std::shared_ptr<Component>& NewComponent);
 };
