@@ -4,12 +4,13 @@
 #include "Render/Sprite.h"
 #include "SDL.h"
 
+class IRender;
 class SpriteComponent;
 
 class RendererSystem
 {
  	SDL_Renderer* m_Renderer;
-	std::vector<std::weak_ptr<SpriteComponent>> m_SpriteComponents;
+	std::vector<std::weak_ptr<IRender>> m_RenderComponents;
 
 public:
 	RendererSystem() = delete;
@@ -18,8 +19,8 @@ public:
 
 	SDL_Renderer* GetRenderer() const { return m_Renderer; }
 
-	void AddSpriteComponent(std::shared_ptr<SpriteComponent> SpriteComponent);
-	void RemoveSpriteComponent(std::shared_ptr<SpriteComponent> SpriteComponent);
+	void AddRenderComponent(std::shared_ptr<IRender> SpriteComponent);
+	void RemoveRenderComponent(std::shared_ptr<IRender> RenderComponent);
 
 	void Update();
 	void Render() const;

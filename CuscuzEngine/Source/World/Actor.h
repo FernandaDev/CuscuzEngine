@@ -78,6 +78,11 @@ public:
 protected:
     void UpdateComponents(float DeltaTime) const;
     virtual void UpdateActor(float DeltaTime){}
+    void OnComponentAdded();
+
+private:
+    void TryRenderComponent(std::shared_ptr<Component> Component);
+    void TryRemoveRenderComponent();
 };
 
 template <typename T>
@@ -88,7 +93,6 @@ T& Actor::AddComponent(T* NewComponent)
     m_Components.emplace_back(NewComponent);
     LOG_INFO("Added Component");
     NewComponent->SetOwner(this);
-    NewComponent->OnAdded();
-    m_OnComponentAddedDelegate.Broadcast(m_Components.back());
+    OnComponentAdded();
     return *NewComponent;
 }

@@ -30,48 +30,47 @@ RendererSystem::~RendererSystem()
 
     IMG_Quit();
 
-    m_SpriteComponents.clear();
+    m_RenderComponents.clear();
 }
 
-void RendererSystem::AddSpriteComponent(std::shared_ptr<SpriteComponent> NewSpriteComponent)
+void RendererSystem::AddRenderComponent(std::shared_ptr<IRender> NewRenderComponent)
 {
-    const int drawOrder = NewSpriteComponent->GetDrawOrder();
-    auto it = m_SpriteComponents.begin();
+    const int drawOrder = NewRenderComponent->GetDrawOrder();
+    auto it = m_RenderComponents.begin();
 
-    for (; it != m_SpriteComponents.end(); ++it)
+    for (; it != m_RenderComponents.end(); ++it)
     {
         if (const auto sprite = it->lock())
             if (drawOrder < sprite->GetDrawOrder())
                 break;
     }
 
-    m_SpriteComponents.insert(it, NewSpriteComponent);
+    m_RenderComponents.insert(it, NewRenderComponent);
 }
 
-// They are weak pointer, so we could just clean them up on update?
-void RendererSystem::RemoveSpriteComponent(std::shared_ptr<SpriteComponent> SpriteComponent)
+void RendererSystem::RemoveRenderComponent(std::shared_ptr<IRender> RenderComponent)
 {
-    auto it = std::remove_if(m_SpriteComponents.begin(), m_SpriteComponents.end(),
-                           [SpriteComponent](const auto& spriteComponent)
+    auto it = std::remove_if(m_RenderComponents.begin(), m_RenderComponents.end(),
+                           [RenderComponent](const auto& spriteComponent)
                            {
                                if (const auto sprite = spriteComponent.lock())
-                                   return sprite.get() == SpriteComponent.get();
+                                   return sprite.get() == RenderComponent.get();
                                return false;
                            });
     
-    if(it != m_SpriteComponents.end())
-        m_SpriteComponents.erase(it);
+    if(it != m_RenderComponents.end())
+        m_RenderComponents.erase(it);
 }
 
 void RendererSystem::Update()
 {
     Clear();
 
-    if (m_SpriteComponents.empty())
+    if (m_RenderComponents.empty())
         return;
 
-    auto it = m_SpriteComponents.begin();
-    while (it != m_SpriteComponents.end())
+    auto it = m_RenderComponents.begin();
+    while (it != m_RenderComponents.end())
     {
         if (const auto& sprite = it->lock())
         {
@@ -80,7 +79,7 @@ void RendererSystem::Update()
         }
         else
         {
-            it = m_SpriteComponents.erase(it);
+            it = m_RenderComponents.erase(it);
         }
     }
 }

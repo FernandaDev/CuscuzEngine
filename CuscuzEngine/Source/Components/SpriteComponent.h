@@ -4,11 +4,12 @@
 
 #include "vec2.hpp"
 #include "vec4.hpp"
+#include "Render/IRender.h"
 #include "World/Component.h"
 
 class Sprite;
 
-class SpriteComponent : public Component
+class SpriteComponent : public Component, public IRender
 {
 protected:
     int m_DrawOrder;
@@ -20,13 +21,13 @@ public:
     SpriteComponent(int DrawOrder = 0, SDL_BlendMode BlendMode = SDL_BLENDMODE_NONE);
     ~SpriteComponent() override = default;
 
-    virtual void Draw(SDL_Renderer* Renderer);
+    void Draw(SDL_Renderer* Renderer) override;
     void SetSprite(std::weak_ptr<Sprite> NewSprite);
 
     void SetDrawOrder(int DrawOrder);
     void SetBlendMode(SDL_BlendMode BlendMode);
 
-    int GetDrawOrder() const { return m_DrawOrder; }
+    int GetDrawOrder() const override { return m_DrawOrder; }
     int GetTexHeight() const;
     int GetTextWidth() const;
 protected:

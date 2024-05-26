@@ -2,6 +2,8 @@
 #include "Actor.h"
 
 #include "World.h"
+#include "Core/EngineApplication.h"
+#include "Components/SpriteComponent.h"
 
 Actor::Actor(std::shared_ptr<World> World, std::string Name, glm::vec2 Position, float Scale, float Rotation) :
  m_Name(std::move(Name)), m_State(Active), m_Position(Position), m_Scale(Scale), m_Rotation(Rotation),
@@ -49,6 +51,8 @@ void Actor::RemoveComponent(Component* ComponentToRemove)
 void Actor::Destroy()
 {
     m_State = Dead;
+
+    TryRemoveRenderComponent();
 }
 
 void Actor::UpdateComponents(float DeltaTime) const
@@ -58,4 +62,34 @@ void Actor::UpdateComponents(float DeltaTime) const
     
     for (const auto& component : m_Components)
         component->Update(DeltaTime);
+}
+
+void Actor::OnComponentAdded()
+{
+    const auto latestComponent = m_Components.back();
+
+    m_OnComponentAddedDelegate.Broadcast(latestComponent);
+    
+    TryRenderComponent(latestComponent);
+}
+
+void Actor::TryRenderComponent(std::shared_ptr<Component> Component)
+{
+    const auto renderComponent = std::dynamic_pointer_cast<IRender>(Component);
+    if (!renderComponent)
+        return;
+    
+    EngineApplication::Get().CC_RendererSystem->AddRenderComponent(renderComponent);
+}
+
+void Actor::TryRemoveRenderComponent()
+{
+    for (const auto& component : m_Components)
+    {
+        const auto renderComponent = std::dynamic_pointer_cast<IRender>(component);
+        if (!renderComponent)
+            continue;
+    
+        EngineApplication::Get().CC_RendererSystem->RemoveRenderComponent(renderComponent);
+    }
 }
