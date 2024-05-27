@@ -4,6 +4,7 @@
 #include "Utils/Log.h"
 #include "Component.h"
 #include "Events/EventDefinitions.h"
+#include "Utils/Math.h"
 
 class World;
 
@@ -18,7 +19,7 @@ public:
         Paused,
         Dead
     };
-private:
+protected:
     //ID?
     std::string m_Name;
     State m_State;
@@ -30,7 +31,7 @@ private:
     OnComponentAdded m_OnComponentAddedDelegate;
 
     friend class AppImGuiLayer;
-    
+
 public:
     Actor(std::shared_ptr<World> World, std::string Name, glm::vec2 Position,
         float Scale = 1.f, float Rotation = 0);
@@ -57,10 +58,10 @@ public:
     virtual ~Actor();
 
     void Update(float DeltaTime);
+    void Destroy();
 
     template<typename T>
     T& AddComponent(T* Component);
-    
     void RemoveComponent(Component* Component);
 
     const std::string& GetName() const { return m_Name; }
@@ -68,11 +69,12 @@ public:
     const glm::vec2& GetPosition() const { return m_Position; }
     float GetScale() const { return m_Scale; }
     float GetRotation() const { return m_Rotation; }
+    const glm::vec2& GetForward() const { return glm::vec2(Math::Cos(m_Rotation), -Math::Sin(m_Rotation)); }
+
+    void SetPosition(const glm::vec2& NewPosition) { m_Position = NewPosition; }
+    void SetRotation(float NewRotation) { m_Rotation = NewRotation; }
 
     OnComponentAdded& GetOnComponentAddedDelegate() { return m_OnComponentAddedDelegate; }
-
-    void Destroy();
-    
     //World& GetWorld() const { return *m_World; } DO WE NEED THIS?
 
 protected:
