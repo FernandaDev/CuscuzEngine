@@ -1,6 +1,8 @@
 ﻿#pragma once
 
-namespace Math
+//#include <glm.hpp>
+
+namespace CC_Math
 {
     const float Pi = 3.1415926535f;
     const float TwoPi = Pi * 2.0f;
@@ -93,5 +95,10 @@ namespace Math
     inline float Fmod(float numer, float denom)
     {
         return fmod(numer, denom);
+    }
+
+    inline float LengthSq(float x, float y)
+    {
+        return x * x + y * y;
     }
 }

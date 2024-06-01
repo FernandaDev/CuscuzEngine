@@ -69,7 +69,7 @@ public:
     const glm::vec2& GetPosition() const { return m_Position; }
     float GetScale() const { return m_Scale; }
     float GetRotation() const { return m_Rotation; }
-    const glm::vec2& GetForward() const { return glm::vec2(Math::Cos(m_Rotation), -Math::Sin(m_Rotation)); }
+    glm::vec2 GetForward() const { return {CC_Math::Cos(m_Rotation), -CC_Math::Sin(m_Rotation)}; }
 
     void SetPosition(const glm::vec2& NewPosition) { m_Position = NewPosition; }
     void SetRotation(float NewRotation) { m_Rotation = NewRotation; }

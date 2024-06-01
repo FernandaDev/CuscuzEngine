@@ -14,14 +14,14 @@ void Simple2DMovementComponent::Update(float DeltaTime)
 {
     Component::Update(DeltaTime);
 
-    if(!Math::NearZero(m_ForwardSpeed))
+    if(!CC_Math::NearZero(m_ForwardSpeed))
     {
         glm::vec2 position = m_OwnerActor->GetPosition();
         position += m_OwnerActor->GetForward() * m_ForwardSpeed * DeltaTime;
         m_OwnerActor->SetPosition(position);
     }
     
-    if(!Math::NearZero(m_AngularSpeed))
+    if(!CC_Math::NearZero(m_AngularSpeed))
     {
         float rotation = m_OwnerActor->GetRotation();
         rotation += m_AngularSpeed * DeltaTime;
