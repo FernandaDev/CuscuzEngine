@@ -5,20 +5,17 @@
 #include "Core/EngineApplication.h"
 #include "Components/SpriteComponent.h"
 
-Actor::Actor(std::shared_ptr<World> World, std::string Name, glm::vec2 Position, float Scale, float Rotation) :
+Actor::Actor(World* World, std::string Name, glm::vec2 Position, float Scale, float Rotation) :
  m_Name(std::move(Name)), m_State(Active), m_Position(Position), m_Scale(Scale), m_Rotation(Rotation),
 m_World(World)
 {
-    if(const auto world = m_World.lock())
-        world->AddActor(this);
+    if(m_World)
+        m_World->AddActor(this);
 }
 
 Actor::~Actor()
 {
     LOG_INFO("Actor being removed!");
-
-    if(const auto world = m_World.lock())
-        world->RemoveActor(this);
     
     m_Components.clear();
 }

@@ -28,10 +28,6 @@ void World::AddActor(Actor* NewActor)
     (m_UpdatingActors ? m_PendingActors : m_ActiveActors).emplace_back(NewActor);
 }
 
-void World::RemoveActor(Actor* ActorToRemove)
-{
-}
-
 void World::HandleDeadActors()
 {
     auto iter = m_ActiveActors.begin();
@@ -46,4 +42,17 @@ void World::HandleDeadActors()
             ++iter;
         }
     }
+}
+
+void World::ResetWorld()
+{
+    for (const auto& actor : m_ActiveActors)
+        actor->Destroy();
+
+    for (auto& pendingActor : m_PendingActors)
+        pendingActor.reset();
+
+    m_PendingActors.clear();
+    
+    HandleDeadActors();
 }

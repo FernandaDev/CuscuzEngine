@@ -17,7 +17,8 @@ public:
 
     void Update(float DeltaTime);
     void AddActor(Actor* Actor);
-    void RemoveActor(Actor* ActorToRemove);
+
+    void ResetWorld();
 
     size_t GetActorsCount() const { return m_ActiveActors.size(); }
 
@@ -26,6 +27,4 @@ public:
 
 private:
     void HandleDeadActors();
-
-    void OnActorComponentAdded(const std::shared_ptr<Component>& NewComponent);
 };

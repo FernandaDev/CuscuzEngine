@@ -20,17 +20,41 @@ EngineApplication* EngineApplication::s_Instance = nullptr;
 EngineApplication::EngineApplication() :
 	CC_Window{ new Window("Game", SCREEN_WIDTH, SCREEN_HEIGHT) },
 	CC_RendererSystem { new RendererSystem {CC_Window}},
-	CC_EventSystem{ new EventSystem() }
+	CC_EventSystem{ new EventSystem() },	
+	m_ImGuiLayer{*CC_Window, CC_RendererSystem->GetRenderer()}
+{
+	Init();	
+}
+
+EngineApplication::EngineApplication(CC_Game* Game) :
+	CC_Window{ new Window("Game", SCREEN_WIDTH, SCREEN_HEIGHT) },
+	CC_RendererSystem { new RendererSystem {CC_Window}},
+	CC_EventSystem{ new EventSystem() },
+	m_Game(Game),
+	m_ImGuiLayer{*CC_Window, CC_RendererSystem->GetRenderer()}
+{
+	Init();
+}
+
+void EngineApplication::Init()
 {
 	SUBSCRIBE_WINDOW_EVENT(CC_WindowEventType::Close, this, EngineApplication::Quit);
 	s_Instance = this;
 	Log::Init();
+
+	ResourceManager::Get().SetRootResourcesPath("../App/Assets/Images/");
+	m_ImGuiLayer.Init();
 }
 
 EngineApplication::~EngineApplication()
 {
 	UNSUBSCRIBE_WINDOW_EVENT(this, EngineApplication::Quit);
 
+	if(m_Game->IsRunning())
+		m_Game->ShutdownGame();
+
+	delete m_Game;
+	
 	delete CC_Window;
 	delete CC_RendererSystem;
 	delete CC_EventSystem;
@@ -65,13 +89,20 @@ void EngineApplication::ProcessInput() const
 
 void EngineApplication::Update()
 {
+	if(m_Game->IsRunning())
+		m_Game->UpdateGame(Time::Instance().DeltaTime());
+
 	CC_RendererSystem->Update();
+
+	m_ImGuiLayer.Update();
 }
 
-void EngineApplication::Render() const 
+void EngineApplication::Render() 
 {
+	m_ImGuiLayer.Render();
 	CC_RendererSystem->Render();
 }
+
 
 void EngineApplication::Quit(const CC_Event<CC_WindowEventType>& Event)
 {

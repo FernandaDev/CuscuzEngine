@@ -3,7 +3,7 @@
 #include "Input.h"
 #include "KeyCodes.h"
 
-Hero::Hero(std::shared_ptr<World> World, std::string Name, glm::vec2 Position) :
+Hero::Hero(World* World, std::string Name, glm::vec2 Position) :
 Actor(World, Name, Position)
 {}
 

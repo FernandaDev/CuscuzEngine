@@ -27,13 +27,13 @@ protected:
     float m_Scale;
     float m_Rotation;
     std::vector<std::shared_ptr<Component>> m_Components;
-    std::weak_ptr<World> m_World;
+    World* m_World;
     OnComponentAdded m_OnComponentAddedDelegate;
 
     friend class AppImGuiLayer;
 
 public:
-    Actor(std::shared_ptr<World> World, std::string Name, glm::vec2 Position,
+    Actor(World* World, std::string Name, glm::vec2 Position,
         float Scale = 1.f, float Rotation = 0);
     Actor(const Actor& other):
     m_Name(other.m_Name), m_State(other.m_State), m_Position(other.m_Position)

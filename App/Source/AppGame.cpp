@@ -1,29 +1,18 @@
 ﻿#include <CC_Engine.h>
-#include "Game.h"
+#include "AppGame.h"
 
 #include "Utils/Log.h"
 #include "Application.h"
 #include "Hero.h"
-#include "World/World.h"
 #include "World/Actor.h"
 #include "Components/SpriteComponent.h"
 #include "Components/Animation2DComponent.h"
 #include "Components/Simple2DMovementComponent.h"
 
-
-Game::Game(Application* App):
-m_GameIsRunning(false), m_World(new World), m_App(App)
-{}
-
-Game::~Game()
+void AppGame::OnGameBegin()
 {
-    ShutdownGame();
-}
+    CC_Game::OnGameBegin();
 
-void Game::StartGame()
-{
-    m_GameIsRunning = true;
-    
     const auto renderer = Application::Get().CC_RendererSystem->GetRenderer();
 
     Actor* actorA = CreateNewActor("ActorA", 230, 400);
@@ -37,7 +26,7 @@ void Game::StartGame()
     const auto sprite = ResourceManager::Get().CreateSprite("player_tilesheet.png", renderer);
     animationComponent->SetSprite(sprite);
     
-    Hero* hero = new Hero(m_World, "hero", glm::vec2(200,200));
+    Hero* hero = new Hero(&m_World, "hero", glm::vec2(200,200));
     
     const auto spriteComponent2 = new SpriteComponent( 10);
     hero->AddComponent<SpriteComponent>(spriteComponent2);
@@ -46,18 +35,17 @@ void Game::StartGame()
     spriteComponent2->SetSprite(sprite2);
 }
 
-void Game::UpdateGame(float DeltaTime)
+void AppGame::OnGameEnd()
 {
-   m_World->Update(DeltaTime);
+    CC_Game::OnGameEnd();
 }
 
-void Game::ShutdownGame()
+void AppGame::UpdateGame(float DeltaTime)
 {
-    LOG_INFO("The game is shutting down...");
-    m_GameIsRunning = false;
+    CC_Game::UpdateGame(DeltaTime);
 }
 
-Actor* Game::CreateNewActor(const std::string& Name, int x, int y) const
+Actor* AppGame::CreateNewActor(const std::string& Name, int x, int y)
 {
-    return new Actor(m_World, Name, glm::vec2(x,y));
+    return new Actor(&m_World, Name, glm::vec2(x,y));
 }
