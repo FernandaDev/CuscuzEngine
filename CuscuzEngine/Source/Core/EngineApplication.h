@@ -6,7 +6,8 @@
 #include "Events/CC_Event.h"
 #include "Events/WindowEvents.h"
 #include "CC_Game.h"
-#include "GUI/CC_ImGuiLayer.h"
+#include "GUI/ImGuiLayer.h"
+#include "Layers/LayerStack.h"
 
 constexpr Uint32 FramesPerSecond = 30;
 
@@ -22,7 +23,8 @@ protected:
 	
 private:
 	static EngineApplication* s_Instance;
-	CC_ImGuiLayer m_ImGuiLayer;
+	//CC_ImGuiLayer m_ImGuiLayer;
+	LayerStack m_LayerStack;
 	
 	bool m_IsRunning = true;
 
@@ -36,7 +38,11 @@ public:
 	void Run();
 	
 	virtual void Start();
-	virtual void Update();
+
+	//void OnEvent(Event event);
+	
+	void PushLayer(Layer* layer);
+	void PushOverlay(Layer* layer);
 
 protected:
 	virtual void Render();
@@ -46,5 +52,5 @@ private:
 	void ProcessInput() const;
 
 	friend int ::main(int argc, char* argv[]);
-	friend class CC_ImGuiLayer;
+	friend class ImGuiLayer;
 };

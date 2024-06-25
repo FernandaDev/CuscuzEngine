@@ -3,21 +3,23 @@
 #include "SDL.h"
 #include "Events/CC_Event.h"
 #include "Events/KeyEvents.h"
+#include "Layers/Layer.h"
 
 class Actor;
 class Window;
 class CC_Game;
 
-class CC_ImGuiLayer
+class ImGuiLayer : public Layer
 {
     bool m_ShowMainWindow;
     
 public:
-    CC_ImGuiLayer(const Window& Window, SDL_Renderer* Renderer);
-    ~CC_ImGuiLayer();
+    ImGuiLayer(const Window& Window, SDL_Renderer* Renderer);
+    ~ImGuiLayer() override;
 
-    void Init();
-    void Update();
+    void OnAttach() override;
+    void OnUpdate() override;
+    
     void Render();
 
 private:

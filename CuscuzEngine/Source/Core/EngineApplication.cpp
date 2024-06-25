@@ -7,6 +7,8 @@
 #include "Core/Time.h"
 #include "Events/EventHandler.h"
 #include "Events/WindowEvents.h"
+#include "Layers/GameLayer.h"
+#include "Layers/Layer.h"
 #include "Utils/Log.h"
 
 enum
@@ -20,8 +22,7 @@ EngineApplication* EngineApplication::s_Instance = nullptr;
 EngineApplication::EngineApplication() :
 	CC_Window{ new Window("Game", SCREEN_WIDTH, SCREEN_HEIGHT) },
 	CC_RendererSystem { new RendererSystem {CC_Window}},
-	CC_EventSystem{ new EventSystem() },	
-	m_ImGuiLayer{*CC_Window, CC_RendererSystem->GetRenderer()}
+	CC_EventSystem{ new EventSystem() }	
 {
 	Init();	
 }
@@ -30,8 +31,7 @@ EngineApplication::EngineApplication(CC_Game* Game) :
 	CC_Window{ new Window("Game", SCREEN_WIDTH, SCREEN_HEIGHT) },
 	CC_RendererSystem { new RendererSystem {CC_Window}},
 	CC_EventSystem{ new EventSystem() },
-	m_Game(Game),
-	m_ImGuiLayer{*CC_Window, CC_RendererSystem->GetRenderer()}
+	m_Game(Game)
 {
 	Init();
 }
@@ -43,7 +43,9 @@ void EngineApplication::Init()
 	Log::Init();
 
 	ResourceManager::Get().SetRootResourcesPath("../App/Assets/Images/");
-	m_ImGuiLayer.Init();
+
+	PushLayer(new ImGuiLayer(*CC_Window, CC_RendererSystem->GetRenderer()));
+	PushLayer(new GameLayer(m_Game));
 }
 
 EngineApplication::~EngineApplication()
@@ -65,8 +67,7 @@ EngineApplication::~EngineApplication()
 }
 
 void EngineApplication::Start()
-{
-}
+{}
 
 void EngineApplication::Run()
 {
@@ -77,34 +78,46 @@ void EngineApplication::Run()
 		Time::Instance().Update();
 
 		ProcessInput();
-		Update();
+		
+		for (Layer* layer : m_LayerStack)
+			layer->OnUpdate();
+
 		Render();
 	}
 }
 
-void EngineApplication::ProcessInput() const
+void EngineApplication::ProcessInput() const // should we have an input layer?
 {
 	CC_EventSystem->Update();
 }
 
-void EngineApplication::Update()
-{
-	if(m_Game->IsRunning())
-		m_Game->UpdateGame(Time::Instance().DeltaTime());
-
-	CC_RendererSystem->Update();
-
-	m_ImGuiLayer.Update();
-}
-
 void EngineApplication::Render() 
 {
-	m_ImGuiLayer.Render();
+	CC_RendererSystem->Update();
 	CC_RendererSystem->Render();
 }
 
+void EngineApplication::PushLayer(Layer* layer)
+{
+	m_LayerStack.PushLayer(layer);
+}
+
+void EngineApplication::PushOverlay(Layer* layer)
+{
+	m_LayerStack.PushOverlay(layer);
+}
 
 void EngineApplication::Quit(const CC_Event<CC_WindowEventType>& Event)
 {
 	m_IsRunning = false;
 }
+
+// void EngineApplication::OnEvent()
+// {
+// 	for (auto it = m_LayerStack.end(); it != m_LayerStack.begin(); )
+// 	{
+// 		(*--it)->OnEvent(event);
+// 		if(e.Handled)
+// 			break;
+// 	}
+// }

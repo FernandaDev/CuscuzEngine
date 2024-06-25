@@ -7,7 +7,7 @@ class Actor;
 class CC_Game
 {
     bool m_GameIsPaused;
-    friend class CC_ImGuiLayer;
+    friend class ImGuiLayer;
 
 protected:
     bool m_GameIsRunning;

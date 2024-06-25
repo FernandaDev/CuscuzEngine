@@ -1,5 +1,4 @@
 ﻿#include "pch.h"
-#include "CC_ImGuiLayer.h"
 #include "EventSystem.h"
 #include "imgui.h"
 #include "Input.h"
@@ -9,13 +8,13 @@
 #include "Core/EngineApplication.h"
 #include "Utils/Log.h"
 #include "../Core/CC_Game.h"
-#include "Components/Animation2DComponent.h"
 #include "Components/SpriteComponent.h"
 #include "Events/EventHandler.h"
-#include "World/Actor.h"
 #include "World/World.h"
+#include "ImGuiLayer.h"
 
-CC_ImGuiLayer::CC_ImGuiLayer(const Window& Window, SDL_Renderer* Renderer)
+ImGuiLayer::ImGuiLayer(const Window& Window, SDL_Renderer* Renderer) :
+Layer("ImGui Layer"), m_ShowMainWindow(true)
 {
     IMGUI_CHECKVERSION();
     ImGui::CreateContext();
@@ -26,25 +25,41 @@ CC_ImGuiLayer::CC_ImGuiLayer(const Window& Window, SDL_Renderer* Renderer)
     ImGui_ImplSDLRenderer_Init(Renderer);
 }
 
-CC_ImGuiLayer::~CC_ImGuiLayer()
+ImGuiLayer::~ImGuiLayer()
 {
     ImGui_ImplSDLRenderer_Shutdown();
     ImGui_ImplSDL2_Shutdown();
     ImGui::DestroyContext();
 
-    UNSUBSCRIBE_KEY_EVENT(this, CC_ImGuiLayer::ToggleMainWindow);
+    UNSUBSCRIBE_KEY_EVENT(this, ImGuiLayer::ToggleMainWindow);
 }
 
-void CC_ImGuiLayer::Init()
+void ImGuiLayer::OnAttach()
 {
+    Layer::OnAttach();
+    
     m_ShowMainWindow = true;
     EngineApplication::Get().CC_EventSystem->GetSDLEventDelegate()
-                            .Add(this, &CC_ImGuiLayer::OnSDLEvent);
+                            .Add(this, &ImGuiLayer::OnSDLEvent);
 
-    SUBSCRIBE_KEY_EVENT(CC_KeyEventType::Down, this, CC_ImGuiLayer::ToggleMainWindow);
+    SUBSCRIBE_KEY_EVENT(CC_KeyEventType::Down, this, ImGuiLayer::ToggleMainWindow);
 }
 
-void CC_ImGuiLayer::ToggleMainWindow(const CC_Event<CC_KeyEventType>& Event)
+void ImGuiLayer::OnUpdate()
+{
+    Layer::OnUpdate();
+
+    ImGui_ImplSDLRenderer_NewFrame();
+    ImGui_ImplSDL2_NewFrame();
+    ImGui::NewFrame();
+    
+    if(m_ShowMainWindow)
+        ShowMainWindow();
+
+    Render();
+}
+
+void ImGuiLayer::ToggleMainWindow(const CC_Event<CC_KeyEventType>& Event)
 {
     const auto keyDown = Event.ToType<CC_KeyDownEvent>();
 
@@ -52,17 +67,7 @@ void CC_ImGuiLayer::ToggleMainWindow(const CC_Event<CC_KeyEventType>& Event)
         m_ShowMainWindow = !m_ShowMainWindow;
 }
 
-void CC_ImGuiLayer::Update()
-{
-    ImGui_ImplSDLRenderer_NewFrame();
-    ImGui_ImplSDL2_NewFrame();
-    ImGui::NewFrame();
-    
-    if(m_ShowMainWindow)
-        ShowMainWindow();
-}
-
-void CC_ImGuiLayer::Render()
+void ImGuiLayer::Render()
 {
     const ImGuiIO io = ImGui::GetIO();
     ImGui::Render();
@@ -71,12 +76,12 @@ void CC_ImGuiLayer::Render()
     ImGui_ImplSDLRenderer_RenderDrawData(ImGui::GetDrawData());
 }
 
-void CC_ImGuiLayer::OnSDLEvent(const SDL_Event& Event)
+void ImGuiLayer::OnSDLEvent(const SDL_Event& Event)
 {
     ImGui_ImplSDL2_ProcessEvent(&Event);
 }
 
-void CC_ImGuiLayer::ShowMainWindow()
+void ImGuiLayer::ShowMainWindow()
 {
     ImGui::Begin("Game", &m_ShowMainWindow);
 
@@ -103,14 +108,14 @@ void CC_ImGuiLayer::ShowMainWindow()
     ImGui::End();
 }
 
-void CC_ImGuiLayer::ActorCreation(CC_Game* Game, bool Showing) const
+void ImGuiLayer::ActorCreation(CC_Game* Game, bool Showing) const
 {
 }
 
-void CC_ImGuiLayer::ShowAllActors(CC_Game* Game, bool Showing) const
+void ImGuiLayer::ShowAllActors(CC_Game* Game, bool Showing) const
 {
 }
 
-void CC_ImGuiLayer::ShowActor(Actor* TheActor, int Index) const
+void ImGuiLayer::ShowActor(Actor* TheActor, int Index) const
 {
 }
