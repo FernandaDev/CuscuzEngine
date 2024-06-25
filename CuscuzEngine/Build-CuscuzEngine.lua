@@ -12,8 +12,8 @@ project "CuscuzEngine"
    {
       "Source/**.h", 
       "Source/**.cpp",
-      "%{IncludeDir.glm}/**.hpp",
-      "%{IncludeDir.glm}/**.inl",
+      "%{includedir.glm}/**.hpp",
+      "%{includedir.glm}/**.inl",
    }
 
    includedirs
@@ -22,10 +22,10 @@ project "CuscuzEngine"
       "Dependencies/SDL2/include",
       "Dependencies/SDL2_image/include",
       
-      "%{IncludeDir.ImGui}",
-      "%{IncludeDir.SPD_Log}",
-      "%{IncludeDir.glm}",
-      "%{IncludeDir.yaml}"
+      "%{includedir.ImGui}",
+      "%{includedir.SPD_Log}",
+      "%{includedir.glm}",
+      "%{includedir.yaml}"
    }
 
    libdirs
@@ -43,8 +43,8 @@ project "CuscuzEngine"
       "SDL2_image.lib",
    }
 
-   targetdir ("../Binaries/" .. OutputDir .. "/%{prj.name}")
-   objdir ("../Binaries/Intermediates/" .. OutputDir .. "/%{prj.name}")
+   targetdir ("../Binaries/" .. outputdir .. "/%{prj.name}")
+   objdir ("../Binaries/Intermediates/" .. outputdir .. "/%{prj.name}")
 
    filter "system:windows"
        systemversion "latest"

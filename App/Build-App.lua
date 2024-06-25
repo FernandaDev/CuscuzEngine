@@ -9,8 +9,8 @@ project "App"
    { 
     "Source/**.h", 
     "Source/**.cpp",
-    "%{IncludeDir.glm}/**.hpp",
-    "%{IncludeDir.glm}/**.inl",
+    "%{includedir.glm}/**.hpp",
+    "%{includedir.glm}/**.inl",
    }
 
    includedirs
@@ -20,10 +20,10 @@ project "App"
       "../GameCore/Source",
       "../CuscuzEngine/Source",
 
-      "%{IncludeDir.SDL2}",
-      "%{IncludeDir.SDL2_image}",
-      "%{IncludeDir.ImGui}",
-      "%{IncludeDir.glm}",
+      "%{includedir.SDL2}",
+      "%{includedir.SDL2_image}",
+      "%{includedir.ImGui}",
+      "%{includedir.glm}",
 
       "../Vendor/Log/include",
    }
@@ -33,16 +33,15 @@ project "App"
    links
    {
       "CuscuzEngine",
-      "GameCore",
    }
 
    postbuildcommands 
    {
-      '{COPYDIR} "' .. Engine_DLLs .. '" "$(TargetDir)"'
+      '{COPYDIR} "' .. engine_dlls .. '" "$(TargetDir)"'
    }
 
-   targetdir ("../Binaries/" .. OutputDir .. "/%{prj.name}")
-   objdir ("../Binaries/Intermediates/" .. OutputDir .. "/%{prj.name}")
+   targetdir ("../Binaries/" .. outputdir .. "/%{prj.name}")
+   objdir ("../Binaries/Intermediates/" .. outputdir .. "/%{prj.name}")
 
    filter "system:windows"
        systemversion "latest"
