@@ -9,7 +9,6 @@ public:
     ~Application() override = default;
 
     void Start() override;
-    void Update() override;
 protected:
     void Render() override;
 };

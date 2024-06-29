@@ -14,21 +14,21 @@ class ImGuiLayer : public Layer
     bool m_ShowMainWindow;
     
 public:
-    ImGuiLayer(const Window& Window, SDL_Renderer* Renderer);
+    ImGuiLayer(const Window& window, SDL_Renderer* renderer);
     ~ImGuiLayer() override;
 
     void OnAttach() override;
     void OnUpdate() override;
+    void OnEvent(CC_Event& event) override;
     
-    void Render();
+    //void Render();
 
 private:
-    void OnSDLEvent(const SDL_Event& Event);
+    bool OnSDLEvent(const class CC_SDLEvent& event);
+    bool ToggleMainWindow(const CC_KeyDownEvent& event);
 
     void ShowMainWindow();
-    void ToggleMainWindow(const CC_Event<CC_KeyEventType>& Event);
-
-    void ActorCreation(CC_Game* Game, bool Showing) const;
-    void ShowAllActors(CC_Game* Game, bool Showing) const;
-    void ShowActor(Actor* TheActor, int Index) const ;
+    void ActorCreation(CC_Game* game, bool showing) const;
+    void ShowAllActors(CC_Game* game, bool showing) const;
+    void ShowActor(Actor* theActor, int index) const ;
 };

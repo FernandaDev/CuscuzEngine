@@ -11,4 +11,5 @@ public:
     GameLayer(CC_Game* Game);
 
     void OnUpdate() override;
+    void OnEvent(CC_Event& event) override;
 };

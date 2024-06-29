@@ -11,3 +11,7 @@
 #include <unordered_map>
 
 #include <filesystem>
+
+#define BIT(x) (1 << x)
+
+#define BIND_FUNCTION(Instance, Func) std::bind(&Func, Instance, std::placeholders::_1)

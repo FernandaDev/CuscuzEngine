@@ -27,31 +27,30 @@ EngineApplication::EngineApplication() :
 	Init();	
 }
 
-EngineApplication::EngineApplication(CC_Game* Game) :
+EngineApplication::EngineApplication(CC_Game* game) :
 	CC_Window{ new Window("Game", SCREEN_WIDTH, SCREEN_HEIGHT) },
 	CC_RendererSystem { new RendererSystem {CC_Window}},
 	CC_EventSystem{ new EventSystem() },
-	m_Game(Game)
+	m_Game(game)
 {
 	Init();
 }
 
 void EngineApplication::Init()
 {
-	SUBSCRIBE_WINDOW_EVENT(CC_WindowEventType::Close, this, EngineApplication::Quit);
 	s_Instance = this;
 	Log::Init();
 
 	ResourceManager::Get().SetRootResourcesPath("../App/Assets/Images/");
 
-	PushLayer(new ImGuiLayer(*CC_Window, CC_RendererSystem->GetRenderer()));
+	CC_EventSystem->SetEventCallback(BIND_FUNCTION(this, EngineApplication::OnEvent));
+	
 	PushLayer(new GameLayer(m_Game));
+	PushOverlay(new ImGuiLayer(*CC_Window, CC_RendererSystem->GetRenderer()));
 }
 
 EngineApplication::~EngineApplication()
 {
-	UNSUBSCRIBE_WINDOW_EVENT(this, EngineApplication::Quit);
-
 	if(m_Game->IsRunning())
 		m_Game->ShutdownGame();
 
@@ -68,6 +67,22 @@ EngineApplication::~EngineApplication()
 
 void EngineApplication::Start()
 {}
+
+void EngineApplication::OnEvent(CC_Event& event)
+{
+	//LOG_INFO(event.ToString());
+	
+	CC_EventSingleDispatcher windowCloseDispatcher(event);
+	windowCloseDispatcher.Dispatch<CC_WindowCloseEvent>(BIND_FUNCTION(this, EngineApplication::Quit));
+	CC_Window->OnEvent(event);
+	
+	for (auto it = m_LayerStack.end(); it != m_LayerStack.begin();)
+	{
+		(*--it)->OnEvent(event);
+		if(event.Handled())
+			break;
+	}
+}
 
 void EngineApplication::Run()
 {
@@ -86,7 +101,7 @@ void EngineApplication::Run()
 	}
 }
 
-void EngineApplication::ProcessInput() const // should we have an input layer?
+void EngineApplication::ProcessInput() const
 {
 	CC_EventSystem->Update();
 }
@@ -100,24 +115,18 @@ void EngineApplication::Render()
 void EngineApplication::PushLayer(Layer* layer)
 {
 	m_LayerStack.PushLayer(layer);
+	layer->OnAttach();
 }
 
 void EngineApplication::PushOverlay(Layer* layer)
 {
 	m_LayerStack.PushOverlay(layer);
+	layer->OnAttach();
 }
 
-void EngineApplication::Quit(const CC_Event<CC_WindowEventType>& Event)
+bool EngineApplication::Quit(CC_WindowCloseEvent& event)
 {
+	LOG_WARN("Quitting the engine...");
 	m_IsRunning = false;
+	return true;
 }
-
-// void EngineApplication::OnEvent()
-// {
-// 	for (auto it = m_LayerStack.end(); it != m_LayerStack.begin(); )
-// 	{
-// 		(*--it)->OnEvent(event);
-// 		if(e.Handled)
-// 			break;
-// 	}
-// }

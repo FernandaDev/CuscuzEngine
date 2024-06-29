@@ -30,7 +30,7 @@ private:
 
 public:
 	EngineApplication();
-	EngineApplication(CC_Game* Game);
+	EngineApplication(CC_Game* game);
 	virtual ~EngineApplication();
 
 	static EngineApplication& Get() { return *s_Instance;}
@@ -39,7 +39,7 @@ public:
 	
 	virtual void Start();
 
-	//void OnEvent(Event event);
+	void OnEvent(CC_Event& event);
 	
 	void PushLayer(Layer* layer);
 	void PushOverlay(Layer* layer);
@@ -48,7 +48,8 @@ protected:
 	virtual void Render();
 private:
 	void Init();
-	void Quit(const CC_Event<CC_WindowEventType>& Event);
+	bool Quit(CC_WindowCloseEvent& event);
+	
 	void ProcessInput() const;
 
 	friend int ::main(int argc, char* argv[]);

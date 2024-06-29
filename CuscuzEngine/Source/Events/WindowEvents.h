@@ -2,53 +2,46 @@
 
 #include "CC_Event.h"
 
-enum class CC_WindowEventType
-{
-    Resize,
-    Close
-};
+class CC_WindowResizeEvent : public CC_Event
+ {
+     int m_Width, m_Height;
+     
+ public:
+     CC_WindowResizeEvent(int Width, int Height) : m_Width(Width), m_Height(Height) {}
+     ~CC_WindowResizeEvent() override = default;
 
-class CC_WindowResizeEvent : public CC_Event<CC_WindowEventType>
-{
-    int m_Width, m_Height;
-    
-public:
-    CC_WindowResizeEvent(int Width, int Height) :
-    CC_Event(CC_WindowEventType::Resize, "WindowResizeEvent"),
-    m_Width(Width), m_Height(Height) { }
-    ~CC_WindowResizeEvent() override = default;
+     int GetWidth() const { return m_Width; }
+     int GetHeight() const { return m_Height; }
 
-    CC_WindowResizeEvent(const CC_WindowResizeEvent& other) :
-            CC_Event(other), m_Width(other.m_Width), m_Height(other.m_Height){}
+     static CC_EventType GetStaticType() { return CC_EventType::WindowResize; }
+     CC_EventType GetEventType() const override { return GetStaticType(); }
+     const char* GetName() const override { return "WindowResize"; }
 
-    CC_WindowResizeEvent& operator=(const CC_WindowResizeEvent& other)
-    {
-        if(this != &other)
-        {
-            CC_Event::operator=(other);
-            m_Width = other.m_Width;
-            m_Height = other.m_Height;
-        }
-        
-        return *this;
-    }
-    
-    int GetWidth() const { return m_Width; }
-    int GetHeight() const { return m_Height; }
+     int GetCategoryFlags() const override
+     {
+         return EventCategory::EventCategoryApplication;
+     }
 
-    std::string ToString() const override
-    {
-        std::stringstream ss;
-        ss << m_Name << ": (" << m_Width << "," << m_Height << ")";
-        return ss.str();
-    }
-};
+     std::string ToString() const override
+     {
+         std::stringstream ss;
+         ss << "WindowResizeEvent: (" << m_Width << "," << m_Height << ")";
+         return ss.str();
+     }
+ };
 
-class CC_WindowCloseEvent : public CC_Event<CC_WindowEventType>
-{
-public:
-    CC_WindowCloseEvent() : CC_Event(CC_WindowEventType::Close, "WindowCloseEvent"){ }
-    ~CC_WindowCloseEvent() override = default;
+ class CC_WindowCloseEvent : public CC_Event
+ {
+ public:
+     CC_WindowCloseEvent() = default;
+     ~CC_WindowCloseEvent() override = default;
 
-    std::string ToString() const override { return m_Name; }
-};
+     static CC_EventType GetStaticType() { return CC_EventType::WindowClose; }
+     CC_EventType GetEventType() const override { return GetStaticType(); }
+     const char* GetName() const override { return "WindowClose"; }
+
+     int GetCategoryFlags() const override
+     { return EventCategory::EventCategoryApplication; }
+     
+     std::string ToString() const override { return "WindowCloseEvent"; }
+ };

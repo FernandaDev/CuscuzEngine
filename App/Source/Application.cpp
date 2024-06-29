@@ -17,14 +17,6 @@ void Application::Start()
     EngineApplication::Start();
 }
 
-void Application::Update()
-{
-    EngineApplication::Update();
-    
-    // if(m_Game->IsRunning())
-    //     m_Game->UpdateGame(Time::Instance().DeltaTime());
-}
-
 void Application::Render()
 {
     EngineApplication::Render();

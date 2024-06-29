@@ -1,6 +1,6 @@
 ﻿#pragma once
 
-//class CC_Event;
+class CC_Event;
 
 class Layer
 {
@@ -15,7 +15,7 @@ public:
     virtual void OnAttach(){}
     virtual void OnDetach(){}
     virtual  void OnUpdate(){}
-    //virtual void OnEvent(CC_Event& event){}
+    virtual void OnEvent(CC_Event& event){}
 
     inline const std::string& GetName() const { return m_DebugName; }
 };

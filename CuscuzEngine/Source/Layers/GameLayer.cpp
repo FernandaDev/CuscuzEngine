@@ -10,6 +10,12 @@ m_Game(Game)
 void GameLayer::OnUpdate()
 {
     Layer::OnUpdate();
+    
     if(m_Game->IsRunning())
         m_Game->UpdateGame(Time::Instance().DeltaTime());
+}
+
+void GameLayer::OnEvent(CC_Event& event)
+{
+    Layer::OnEvent(event);
 }

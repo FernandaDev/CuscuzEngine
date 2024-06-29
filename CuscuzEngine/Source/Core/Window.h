@@ -2,7 +2,6 @@
 
 #include "SDL.h"
 #include "Events/CC_Event.h"
-#include "Events/WindowEvents.h"
 
 class Window
 {
@@ -20,8 +19,9 @@ public:
 	int GetHeight() const { return m_Height; }
 	SDL_Window* GetWindow() const { return m_Window; }
 
+	void OnEvent(CC_Event& event);
+
 private:
-	void OnWindowResized(const CC_Event<CC_WindowEventType>& Event);
-	
+	bool OnWindowResized(const class CC_WindowResizeEvent& event);
 };
 

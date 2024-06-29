@@ -2,42 +2,44 @@
 
 #include "pch.h"
 
-template<typename T>
+enum class CC_EventType
+{
+	None = 0,
+	WindowClose, WindowResize, //WindowFocus, WindowLostFocus, WindowMoved,
+	KeyDown, KeyUp,
+	MouseButtonDown, MouseButtonUp, MouseMoved, MouseScrolled,
+	SDLEvent
+};
+
+enum EventCategory
+{
+	None = 0,
+	EventCategoryApplication = BIT(0),
+	EventCategoryInput       = BIT(1),
+	EventCategoryKeyboard    = BIT(2),
+	EventCategoryMouse       = BIT(3),
+	EventCategoryMouseButton = BIT(4),
+    
+};
+
 class CC_Event 
 {
-public:
-	CC_Event() = default;
-	CC_Event(T Type, const char* Name) :
-	m_Type{Type}, m_Name{Name}
-	{}
-	virtual ~CC_Event() = default;
-
-	CC_Event(const CC_Event& other) :
-	m_Type{other.m_Type}, m_Name{other.m_Name}, m_Handled(other.m_Handled)
-	{}
+friend class CC_EventSingleDispatcher;
 	
-	CC_Event& operator=(const CC_Event& other)
-	{
-		if(this != &other)
-		{
-			m_Type = other.m_Type;
-			m_Name = other.m_Name;
-			m_Handled = other.m_Handled;
-		}
+protected:
+	virtual ~CC_Event() = default;
+	bool m_Handled = false;
+	
+public:
+	virtual CC_EventType GetEventType() const = 0;
+	virtual const char* GetName() const = 0;
+	virtual int GetCategoryFlags() const = 0;
+	virtual std::string ToString() const { return GetName(); }
 
-		return *this;
+	inline bool IsInCategory(EventCategory Category)
+	{
+		return GetCategoryFlags() & Category;
 	}
 
-	const T& GetType() const { return m_Type; }
-	virtual std::string ToString() const = 0;
-
-	template<typename EventType>
-	EventType ToType() const { return static_cast<const EventType&>(*this); }
-
 	bool Handled() const { return m_Handled; }
-
-protected:
-	T m_Type;
-	std::string m_Name;
-	bool m_Handled = false;
 };

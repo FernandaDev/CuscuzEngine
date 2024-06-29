@@ -2,10 +2,10 @@
 
 #include "CC_Event.h"
 
-template <typename EventType>
+template <typename EventType> //TODO Review this
 class CC_EventDispatcher
 {
-    using EventFunc = std::function<void(const CC_Event<EventType>&)>;
+    using EventFunc = std::function<void(CC_Event&)>;
     std::unordered_map<EventType, std::vector<EventFunc>> m_Listeners;
 
 public:
@@ -30,15 +30,43 @@ public:
         }
     }
 
-    void SendEvent(const CC_Event<EventType>& Event)
+    void SendEvent(const CC_Event& Event)
     {
-        if (m_Listeners.find(Event.GetType()) == m_Listeners.end())
+        if (m_Listeners.find(Event.GetEventType()) == m_Listeners.end())
             return;
 
-        for (auto&& Listener : m_Listeners.at(Event.GetType()))
+        for (auto&& Listener : m_Listeners.at(Event.GetEventType()))
         {
             if (!Event.Handled())
                 Listener(Event);
         }
     }
 };
+
+class CC_EventSingleDispatcher
+{
+    template<typename T>
+    using EventFunction = std::function<bool(T&)>;
+    CC_Event& m_Event;
+    
+public:
+    CC_EventSingleDispatcher(CC_Event& event)
+    : m_Event(event){}
+    
+    template<typename T>
+    bool Dispatch(EventFunction<T> func)
+    {
+        if(m_Event.GetEventType() == T::GetStaticType())
+        {
+            m_Event.m_Handled = func(*(T*)&m_Event);
+            return true;
+        }
+        
+        return false;
+    }
+};
+
+inline std::ostream& operator<<(std::ostream& os, const CC_Event& event)
+{
+    return os << event.ToString();
+}
