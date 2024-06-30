@@ -18,17 +18,17 @@ public:
     ~ImGuiLayer() override;
 
     void OnAttach() override;
-    void OnUpdate() override;
+    void OnDetach() override;
+    void OnImGuiRender() override;
     void OnEvent(CC_Event& event) override;
-    
-    //void Render();
+
+    void Begin();
+    void End();
 
 private:
     bool OnSDLEvent(const class CC_SDLEvent& event);
     bool ToggleMainWindow(const CC_KeyDownEvent& event);
 
     void ShowMainWindow();
-    void ActorCreation(CC_Game* game, bool showing) const;
-    void ShowAllActors(CC_Game* game, bool showing) const;
-    void ShowActor(Actor* theActor, int index) const ;
+
 };

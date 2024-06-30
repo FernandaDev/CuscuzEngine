@@ -16,4 +16,6 @@ public:
 
 private:
     Actor* CreateNewActor(const std::string& Name, int x, int y);
+
+    friend class AppGameLayer;
 };

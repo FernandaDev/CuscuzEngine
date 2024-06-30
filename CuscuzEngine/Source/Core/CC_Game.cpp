@@ -29,5 +29,6 @@ void CC_Game::ShutdownGame()
 {
     m_World.ResetWorld();
     m_GameIsRunning = false;
+    m_GameIsPaused = false;
     OnGameEnd();
 }

@@ -27,4 +27,6 @@ public:
 
 private:
     void PauseGame();
+
+    friend class EngineAppLayer;
 };

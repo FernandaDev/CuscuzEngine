@@ -7,7 +7,7 @@
 #include "Core/Time.h"
 #include "Events/EventHandler.h"
 #include "Events/WindowEvents.h"
-#include "Layers/GameLayer.h"
+#include "Layers/EngineAppLayer.h"
 #include "Layers/Layer.h"
 #include "Utils/Log.h"
 
@@ -24,7 +24,7 @@ EngineApplication::EngineApplication() :
 	CC_RendererSystem { new RendererSystem {CC_Window}},
 	CC_EventSystem{ new EventSystem() }	
 {
-	Init();	
+	Init();
 }
 
 EngineApplication::EngineApplication(CC_Game* game) :
@@ -44,9 +44,6 @@ void EngineApplication::Init()
 	ResourceManager::Get().SetRootResourcesPath("../App/Assets/Images/");
 
 	CC_EventSystem->SetEventCallback(BIND_FUNCTION(this, EngineApplication::OnEvent));
-	
-	PushLayer(new GameLayer(m_Game));
-	PushOverlay(new ImGuiLayer(*CC_Window, CC_RendererSystem->GetRenderer()));
 }
 
 EngineApplication::~EngineApplication()
@@ -66,14 +63,17 @@ EngineApplication::~EngineApplication()
 }
 
 void EngineApplication::Start()
-{}
+{
+	PushLayer(new EngineAppLayer(CC_EventSystem, CC_RendererSystem, m_Game));
+	
+	m_ImGuiLayer = new ImGuiLayer(*CC_Window, CC_RendererSystem->GetRenderer());
+	PushOverlay(m_ImGuiLayer);	
+}
 
 void EngineApplication::OnEvent(CC_Event& event)
 {
-	//LOG_INFO(event.ToString());
-	
-	CC_EventSingleDispatcher windowCloseDispatcher(event);
-	windowCloseDispatcher.Dispatch<CC_WindowCloseEvent>(BIND_FUNCTION(this, EngineApplication::Quit));
+	CC_EventSingleDispatcher eventDispatcher(event);
+	eventDispatcher.Dispatch<CC_WindowCloseEvent>(BIND_FUNCTION(this, EngineApplication::Quit));
 	CC_Window->OnEvent(event);
 	
 	for (auto it = m_LayerStack.end(); it != m_LayerStack.begin();)
@@ -91,37 +91,37 @@ void EngineApplication::Run()
 	while (m_IsRunning)
 	{
 		Time::Instance().Update();
-
-		ProcessInput();
 		
 		for (Layer* layer : m_LayerStack)
 			layer->OnUpdate();
 
+		m_ImGuiLayer->Begin();
+		for (Layer* layer : m_LayerStack)
+			layer->OnImGuiRender();
+		m_ImGuiLayer->End();
+		
 		Render();
 	}
 }
 
-void EngineApplication::ProcessInput() const
-{
-	CC_EventSystem->Update();
-}
-
 void EngineApplication::Render() 
 {
-	CC_RendererSystem->Update();
 	CC_RendererSystem->Render();
 }
 
 void EngineApplication::PushLayer(Layer* layer)
 {
 	m_LayerStack.PushLayer(layer);
-	layer->OnAttach();
 }
 
 void EngineApplication::PushOverlay(Layer* layer)
 {
 	m_LayerStack.PushOverlay(layer);
-	layer->OnAttach();
+}
+
+void EngineApplication::CreateGame(CC_Game* game)
+{
+	m_Game = game;
 }
 
 bool EngineApplication::Quit(CC_WindowCloseEvent& event)

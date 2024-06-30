@@ -23,7 +23,7 @@ protected:
 	
 private:
 	static EngineApplication* s_Instance;
-	//CC_ImGuiLayer m_ImGuiLayer;
+	ImGuiLayer* m_ImGuiLayer;
 	LayerStack m_LayerStack;
 	
 	bool m_IsRunning = true;
@@ -45,12 +45,11 @@ public:
 	void PushOverlay(Layer* layer);
 
 protected:
+	void CreateGame(CC_Game* game);
 	virtual void Render();
 private:
 	void Init();
 	bool Quit(CC_WindowCloseEvent& event);
-	
-	void ProcessInput() const;
 
 	friend int ::main(int argc, char* argv[]);
 	friend class ImGuiLayer;

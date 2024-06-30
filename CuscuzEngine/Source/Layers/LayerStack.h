@@ -1,14 +1,15 @@
 ﻿#pragma once
 
+
 class Layer;
 
 class LayerStack
 {
     std::vector<Layer*> m_Layers;
-    std::vector<Layer*>::iterator m_LayerInsert;
+    unsigned int m_LayerInsertIndex = 0;
     
 public:
-    LayerStack();
+    LayerStack() = default;
     ~LayerStack();
 
     void PushLayer(Layer* layer);

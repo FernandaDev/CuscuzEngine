@@ -32,8 +32,8 @@ Window::~Window()
 
 void Window::OnEvent(CC_Event& event)
 {
-	CC_EventSingleDispatcher windowResizeDispatcher(event);
-	windowResizeDispatcher.Dispatch<CC_WindowResizeEvent>(BIND_FUNCTION(this,  Window::OnWindowResized));
+	CC_EventSingleDispatcher eventDispatcher(event);
+	eventDispatcher.Dispatch<CC_WindowResizeEvent>(BIND_FUNCTION(this,  Window::OnWindowResized));
 }
 
 bool Window::OnWindowResized(const CC_WindowResizeEvent& event)

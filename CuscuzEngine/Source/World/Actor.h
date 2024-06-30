@@ -77,6 +77,8 @@ public:
     OnComponentAdded& GetOnComponentAddedDelegate() { return m_OnComponentAddedDelegate; }
     //World& GetWorld() const { return *m_World; } DO WE NEED THIS?
 
+    const std::vector<std::shared_ptr<Component>>& GetComponents() const { return m_Components; }
+
 protected:
     void UpdateComponents(float DeltaTime) const;
     virtual void UpdateActor(float DeltaTime){}
