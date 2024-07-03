@@ -17,15 +17,14 @@ project "App"
    {
       "Source",
       "Assets",
-      "../GameCore/Source",
-      "../CuscuzEngine/Source",
+
+      "%{wks.location}/CuscuzEngine/Source",
+      "%{wks.location}/CuscuzEngine/Vendor",
+      "%{wks.location}/Vendor/Log/include",
 
       "%{includedir.SDL2}",
       "%{includedir.SDL2_image}",
-      "%{includedir.ImGui}",
       "%{includedir.glm}",
-
-      "../Vendor/Log/include",
    }
 
    -- libdirs {} 

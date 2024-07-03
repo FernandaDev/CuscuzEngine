@@ -1,14 +1,15 @@
 ﻿#include "pch.h"
 
+#include <backends/imgui_impl_sdlrenderer.h>
+#include <backends/imgui_impl_sdl.h>
+
+#include "ImGuiLayer.h"
 #include "EventSystem.h"
 #include "imgui.h"
 #include "Input.h"
-#include "GUI/imgui_impl_sdl.h"
-#include "GUI/imgui_impl_sdlrenderer.h"
 #include "Core/EngineApplication.h"
 #include "Utils/Log.h"
 #include "Components/SpriteComponent.h"
-#include "ImGuiLayer.h"
 #include "Events/SDLEvent.h"
 
 ImGuiLayer::ImGuiLayer(const Window& window, SDL_Renderer* renderer) :
