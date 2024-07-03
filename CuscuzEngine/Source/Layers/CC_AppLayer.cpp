@@ -1,35 +1,30 @@
 ﻿#include "pch.h"
 
-#include "EngineAppLayer.h"
-
+#include "CC_AppLayer.h"
 #include "EventSystem.h"
 #include "imgui.h"
 #include "KeyCodes.h"
 #include "Core/Time.h"
 #include "Core/CC_Game.h"
 #include "RendererSystem.h"
+#include "Core/CC_Application.h"
 #include "Events/KeyEvents.h"
 
-class CC_KeyDownEvent;
+CC_AppLayer::CC_AppLayer(const std::shared_ptr<CC_Game>& game):
+m_Game(game), m_ShowPlayWindow(true) {}
 
-EngineAppLayer::EngineAppLayer(EventSystem* eventSystem, RendererSystem* renderer, CC_Game* game) :
-Layer("Engine App Layer"), m_EventSystem(eventSystem), m_RendererSystem(renderer), m_Game(game),
-m_ShowPlayWindow(true)
-{}
-
-void EngineAppLayer::OnUpdate()
+void CC_AppLayer::OnUpdate()
 {
     Layer::OnUpdate();
 
-    m_EventSystem->Update();
-    
-    m_RendererSystem->Update();
+    CC_Application::Get().CC_EventSystem->Update();
+    CC_Application::Get().CC_RendererSystem->Update();
     
     if(m_Game->IsRunning())
         m_Game->UpdateGame(Time::Instance().DeltaTime());
 }
 
-void EngineAppLayer::OnImGuiRender()
+void CC_AppLayer::OnImGuiRender()
 {
     Layer::OnImGuiRender();
 
@@ -37,15 +32,15 @@ void EngineAppLayer::OnImGuiRender()
         ShowPlayWindow();
 }
 
-void EngineAppLayer::OnEvent(CC_Event& event)
+void CC_AppLayer::OnEvent(CC_Event& event)
 {
     Layer::OnEvent(event);
 
     CC_EventSingleDispatcher eventDispatcher(event);
-    eventDispatcher.Dispatch<CC_KeyDownEvent>(BIND_FUNCTION(this, EngineAppLayer::ToggleMainWindow));
+    eventDispatcher.Dispatch<CC_KeyDownEvent>(BIND_FUNCTION(this, CC_AppLayer::ToggleMainWindow));
 }
 
-bool EngineAppLayer::ToggleMainWindow(const CC_KeyDownEvent& event)
+bool CC_AppLayer::ToggleMainWindow(const CC_KeyDownEvent& event)
 {
     if(event.GetKeyCode() == CC_KeyCode::Tab)
         m_ShowPlayWindow = !m_ShowPlayWindow;
@@ -53,7 +48,7 @@ bool EngineAppLayer::ToggleMainWindow(const CC_KeyDownEvent& event)
     return false;
 }
 
-void EngineAppLayer::ShowPlayWindow()
+void CC_AppLayer::ShowPlayWindow()
 {
     ImGui::Begin("Game", &m_ShowPlayWindow);
 

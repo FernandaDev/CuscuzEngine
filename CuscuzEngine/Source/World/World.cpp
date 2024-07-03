@@ -3,12 +3,12 @@
 
 #include "Actor.h"
 
-void World::Update(float DeltaTime)
+void World::Update(float deltaTime)
 {
     m_UpdatingActors = true;
     for (const auto& actor : m_ActiveActors)
     {
-        actor->Update(DeltaTime);
+        actor->Update(deltaTime);
     }
     m_UpdatingActors = false;
 

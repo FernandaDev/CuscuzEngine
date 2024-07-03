@@ -8,9 +8,9 @@
 #include "ResourceManager.h"
 #include "Components/SpriteComponent.h"
 
-RendererSystem::RendererSystem(Window* Window)
+RendererSystem::RendererSystem(Window* window)
 {
-    m_Renderer = SDL_CreateRenderer(Window->GetWindow(), -1, 0);
+    m_Renderer = SDL_CreateRenderer(window->GetWindow(), -1, 0);
 
     if (!m_Renderer)
         LOG_ERROR("Could not create a renderer.");
@@ -48,13 +48,13 @@ void RendererSystem::AddRenderComponent(std::shared_ptr<IRender> NewRenderCompon
     m_RenderComponents.insert(it, NewRenderComponent);
 }
 
-void RendererSystem::RemoveRenderComponent(std::shared_ptr<IRender> RenderComponent)
+void RendererSystem::RemoveRenderComponent(std::shared_ptr<IRender> renderComponent)
 {
     auto it = std::remove_if(m_RenderComponents.begin(), m_RenderComponents.end(),
-                           [RenderComponent](const auto& spriteComponent)
+                           [renderComponent](const auto& spriteComponent)
                            {
                                if (const auto sprite = spriteComponent.lock())
-                                   return sprite.get() == RenderComponent.get();
+                                   return sprite.get() == renderComponent.get();
                                return false;
                            });
     

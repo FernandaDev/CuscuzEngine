@@ -7,7 +7,7 @@
 #include "EventSystem.h"
 #include "imgui.h"
 #include "Input.h"
-#include "Core/EngineApplication.h"
+#include "Core/CC_Application.h"
 #include "Utils/Log.h"
 #include "Components/SpriteComponent.h"
 #include "Events/SDLEvent.h"
@@ -70,7 +70,7 @@ void ImGuiLayer::End()
 {
     ImGuiIO& io = ImGui::GetIO();
     ImGui::Render();
-    SDL_RenderSetScale(EngineApplication::Get().CC_RendererSystem->GetRenderer(),
+    SDL_RenderSetScale(CC_Application::Get().CC_RendererSystem->GetRenderer(),
                         io.DisplayFramebufferScale.x, io.DisplayFramebufferScale.y);
     ImGui_ImplSDLRenderer_RenderDrawData(ImGui::GetDrawData());
 }

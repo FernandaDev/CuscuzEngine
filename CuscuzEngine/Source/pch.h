@@ -14,4 +14,4 @@
 
 #define BIT(x) (1 << x)
 
-#define BIND_FUNCTION(Instance, Func) std::bind(&Func, Instance, std::placeholders::_1)
+#define BIND_FUNCTION(instance, func) std::bind(&func, instance, std::placeholders::_1)

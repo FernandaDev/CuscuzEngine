@@ -4,15 +4,16 @@
 
 class AppGame;
 class Actor;
- class CC_Game;
+class CC_Game;
+class CC_KeyDownEvent;
 
  class AppGameLayer : public Layer
  {
      bool m_ShowDebugWindow;
-     AppGame* m_AppGame;
+     std::shared_ptr<AppGame> m_AppGame;
      
  public:
-     AppGameLayer(AppGame* appGame);
+     AppGameLayer(const std::shared_ptr<AppGame>& appGame);
      ~AppGameLayer() override = default;
 
      void OnAttach() override;

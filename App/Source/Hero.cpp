@@ -3,13 +3,13 @@
 #include "Input.h"
 #include "KeyCodes.h"
 
-Hero::Hero(World* World, std::string Name, glm::vec2 Position) :
-Actor(World, Name, Position)
+Hero::Hero(World* world, std::string name, glm::vec2 position) :
+Actor(world, name, position)
 {}
 
-void Hero::UpdateActor(float DeltaTime)
+void Hero::UpdateActor(float deltaTime)
 {
-    Actor::UpdateActor(DeltaTime);
+    Actor::UpdateActor(deltaTime);
 
     glm::vec2 movement(0,0);
     
@@ -22,7 +22,7 @@ void Hero::UpdateActor(float DeltaTime)
     if(Input::IsKeyPressed(W))
         movement += glm::vec2(0,-1);
 
-    movement *= moveSpeed * DeltaTime;
+    movement *= moveSpeed * deltaTime;
 
     m_Position += movement;
 }

@@ -15,8 +15,8 @@ public:
     World() = default;
     ~World() = default;
 
-    void Update(float DeltaTime);
-    void AddActor(Actor* Actor);
+    void Update(float deltaTime);
+    void AddActor(Actor* actor);
 
     void ResetWorld();
 

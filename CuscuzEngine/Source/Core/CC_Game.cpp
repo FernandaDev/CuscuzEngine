@@ -17,12 +17,12 @@ void CC_Game::PauseGame()
     m_GameIsPaused = !m_GameIsPaused;
 }
 
-void CC_Game::UpdateGame(float DeltaTime)
+void CC_Game::UpdateGame(float deltaTime)
 {
     if(m_GameIsPaused)
         return;
     
-    m_World.Update(DeltaTime);
+    m_World.Update(deltaTime);
 }
 
 void CC_Game::ShutdownGame()

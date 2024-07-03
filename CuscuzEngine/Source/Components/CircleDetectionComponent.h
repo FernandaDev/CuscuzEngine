@@ -7,10 +7,10 @@ class CircleDetectionComponent : public Component
     float m_Radius;
     
 public:
-    CircleDetectionComponent(float Radius);
+    CircleDetectionComponent(float radius);
     ~CircleDetectionComponent() override = default;
 
-    void SetRadius(float NewRadius);
+    void SetRadius(float newRadius);
     float GetRadius() const { return m_Radius; }
 
     const glm::vec2& GetCenter() const; 

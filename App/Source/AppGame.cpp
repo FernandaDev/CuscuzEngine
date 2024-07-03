@@ -40,12 +40,12 @@ void AppGame::OnGameEnd()
     CC_Game::OnGameEnd();
 }
 
-void AppGame::UpdateGame(float DeltaTime)
+void AppGame::UpdateGame(float deltaTime)
 {
-    CC_Game::UpdateGame(DeltaTime);
+    CC_Game::UpdateGame(deltaTime);
 }
 
-Actor* AppGame::CreateNewActor(const std::string& Name, int x, int y)
+Actor* AppGame::CreateNewActor(const std::string& name, int x, int y)
 {
-    return new Actor(&m_World, Name, glm::vec2(x,y));
+    return new Actor(&m_World, name, glm::vec2(x,y));
 }

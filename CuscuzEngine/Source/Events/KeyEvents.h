@@ -7,7 +7,7 @@ class CC_KeyDownEvent : public CC_Event
     int m_KeyCode;
     
 public:
-    CC_KeyDownEvent(int KeyCode) : m_KeyCode(KeyCode){}
+    CC_KeyDownEvent(int keyCode) : m_KeyCode(keyCode){}
     ~CC_KeyDownEvent() override = default;
     
     int GetKeyCode() const { return m_KeyCode; }
@@ -32,7 +32,7 @@ class CC_KeyUpEvent : public CC_Event
     int m_KeyCode;
     
 public:
-    CC_KeyUpEvent(int KeyCode) : m_KeyCode(KeyCode){}
+    CC_KeyUpEvent(int keyCode) : m_KeyCode(keyCode){}
     ~CC_KeyUpEvent() override = default;
     
     int GetKeyCode() const { return m_KeyCode; }

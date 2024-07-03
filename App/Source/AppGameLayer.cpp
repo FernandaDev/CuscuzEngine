@@ -6,9 +6,10 @@
 #include "ImGui/imgui.h"
 #include "Components/Animation2DComponent.h"
 #include "Components/SpriteComponent.h"
+#include "Events/KeyEvents.h"
 #include "World/Actor.h"
 
-AppGameLayer::AppGameLayer(AppGame* appGame) : Layer("Game Layer"),
+AppGameLayer::AppGameLayer(const std::shared_ptr<AppGame>& appGame) : Layer("Game Layer"),
 m_ShowDebugWindow( true), m_AppGame(appGame)
 {}
 

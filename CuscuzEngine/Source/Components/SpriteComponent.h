@@ -18,19 +18,19 @@ protected:
     std::weak_ptr<Sprite> m_Sprite;
 
 public:
-    SpriteComponent(int DrawOrder = 0, SDL_BlendMode BlendMode = SDL_BLENDMODE_NONE);
+    SpriteComponent(int drawOrder = 0, SDL_BlendMode blendMode = SDL_BLENDMODE_NONE);
     ~SpriteComponent() override = default;
 
-    void Draw(SDL_Renderer* Renderer) override;
-    void SetSprite(std::weak_ptr<Sprite> NewSprite);
+    void Draw(SDL_Renderer* renderer) override;
+    void SetSprite(std::weak_ptr<Sprite> newSprite);
 
-    void SetDrawOrder(int DrawOrder);
-    void SetBlendMode(SDL_BlendMode BlendMode);
+    void SetDrawOrder(int drawOrder);
+    void SetBlendMode(SDL_BlendMode blendMode);
 
     int GetDrawOrder() const override { return m_DrawOrder; }
     int GetTexHeight() const;
     int GetTextWidth() const;
 protected:
-    SDL_Rect GetDestination(const std::shared_ptr<Sprite>& Sprite) const;
+    SDL_Rect GetDestination(const std::shared_ptr<Sprite>& sprite) const;
     float GetRotationDegrees() const;
 };

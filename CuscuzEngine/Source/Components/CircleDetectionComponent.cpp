@@ -3,15 +3,15 @@
 
 #include "World/Actor.h"
 
-CircleDetectionComponent::CircleDetectionComponent(float Radius):
-m_Radius(Radius)
+CircleDetectionComponent::CircleDetectionComponent(float radius):
+m_Radius(radius)
 {
     m_Name = "Circle Detection";
 }
 
-void CircleDetectionComponent::SetRadius(float NewRadius)
+void CircleDetectionComponent::SetRadius(float newRadius)
 {
-    m_Radius = NewRadius;
+    m_Radius = newRadius;
 }
 
 const glm::vec2& CircleDetectionComponent::GetCenter() const

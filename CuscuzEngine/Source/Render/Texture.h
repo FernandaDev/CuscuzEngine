@@ -9,9 +9,9 @@ class Texture
     SDL_Texture* m_Texture;
     
 public:
-   Texture(SDL_Renderer* Renderer, std::string FilePath) : m_Texture(nullptr)
+   Texture(SDL_Renderer* renderer, std::string filePath) : m_Texture(nullptr)
    {
-       m_Texture = IMG_LoadTexture(Renderer, FilePath.c_str());
+       m_Texture = IMG_LoadTexture(renderer, filePath.c_str());
 
        if(!m_Texture)
            LOG_ERROR("Couldn't load the texture!");

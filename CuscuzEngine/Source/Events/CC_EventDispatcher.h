@@ -9,18 +9,18 @@ class CC_EventDispatcher
     std::unordered_map<EventType, std::vector<EventFunc>> m_Listeners;
 
 public:
-    void AddListener(EventType Type, const EventFunc& Func)
+    void AddListener(EventType type, const EventFunc& func)
     {        
-        m_Listeners[Type].emplace_back(Func);
+        m_Listeners[type].emplace_back(func);
     }
 
-    void RemoveListener(const EventFunc& Func)
+    void RemoveListener(const EventFunc& func)
     {
         for (auto& listeners : m_Listeners)
         {
             auto it = std::remove_if(listeners.second.begin(), listeners.second.end(),
-                [&Func](const EventFunc& listener) {
-                    return listener.target_type() == Func.target_type();
+                [&func](const EventFunc& listener) {
+                    return listener.target_type() == func.target_type();
                 });
 
             if (it != listeners.second.end()) {
@@ -30,15 +30,15 @@ public:
         }
     }
 
-    void SendEvent(const CC_Event& Event)
+    void SendEvent(const CC_Event& event)
     {
-        if (m_Listeners.find(Event.GetEventType()) == m_Listeners.end())
+        if (m_Listeners.find(event.GetEventType()) == m_Listeners.end())
             return;
 
-        for (auto&& Listener : m_Listeners.at(Event.GetEventType()))
+        for (auto&& Listener : m_Listeners.at(event.GetEventType()))
         {
-            if (!Event.Handled())
-                Listener(Event);
+            if (!event.Handled())
+                Listener(event);
         }
     }
 };

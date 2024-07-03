@@ -1,7 +1,7 @@
 ﻿#pragma once
 #include "World/World.h"
 
-class EngineApplication;
+class CC_Application;
 class Actor;
 
 class CC_Game
@@ -19,7 +19,7 @@ public:
     
     virtual void OnGameBegin(){}
     virtual void OnGameEnd(){}
-    virtual void UpdateGame(float DeltaTime);
+    virtual void UpdateGame(float deltaTime);
 
     bool IsRunning() const { return m_GameIsRunning; }
     void StartGame();
@@ -28,5 +28,5 @@ public:
 private:
     void PauseGame();
 
-    friend class EngineAppLayer;
+    friend class CC_AppLayer;
 };

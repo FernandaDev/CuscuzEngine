@@ -14,19 +14,19 @@ class RendererSystem
 
 public:
 	RendererSystem() = delete;
-	RendererSystem(class Window* Window);
+	RendererSystem(class Window* window);
 	~RendererSystem();
 
 	SDL_Renderer* GetRenderer() const { return m_Renderer; }
 
-	void AddRenderComponent(std::shared_ptr<IRender> SpriteComponent);
-	void RemoveRenderComponent(std::shared_ptr<IRender> RenderComponent);
+	void AddRenderComponent(std::shared_ptr<IRender> spriteComponent);
+	void RemoveRenderComponent(std::shared_ptr<IRender> renderComponent);
 
 	void Update();
 	void Render() const;
 	
 private:
-	void Blit(const Sprite& Sprite) const;
+	void Blit(const Sprite& sprite) const;
 	void Clear() const;
 };
 

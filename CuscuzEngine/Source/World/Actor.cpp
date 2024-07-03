@@ -2,12 +2,12 @@
 #include "Actor.h"
 
 #include "World.h"
-#include "Core/EngineApplication.h"
+#include "Core/CC_Application.h"
 #include "Components/SpriteComponent.h"
 
-Actor::Actor(World* World, std::string Name, glm::vec2 Position, float Scale, float Rotation) :
- m_Name(std::move(Name)), m_State(Active), m_Position(Position), m_Scale(Scale), m_Rotation(Rotation),
-m_World(World)
+Actor::Actor(World* world, std::string name, glm::vec2 position, float scale, float rotation) :
+ m_Name(std::move(name)), m_State(Active), m_Position(position), m_Scale(scale), m_Rotation(rotation),
+m_World(world)
 {
     if(m_World)
         m_World->AddActor(this);
@@ -20,10 +20,10 @@ Actor::~Actor()
     m_Components.clear();
 }
 
-void Actor::Update(float DeltaTime)
+void Actor::Update(float deltaTime)
 {    
-    UpdateComponents(DeltaTime);
-    UpdateActor(DeltaTime);
+    UpdateComponents(deltaTime);
+    UpdateActor(deltaTime);
 }
 
 void Actor::RemoveComponent(Component* ComponentToRemove)
@@ -52,13 +52,13 @@ void Actor::Destroy()
     TryRemoveRenderComponent();
 }
 
-void Actor::UpdateComponents(float DeltaTime) const
+void Actor::UpdateComponents(float deltaTime) const
 {
     if(m_Components.empty())
         return;
     
     for (const auto& component : m_Components)
-        component->Update(DeltaTime);
+        component->Update(deltaTime);
 }
 
 void Actor::OnComponentAdded()
@@ -70,13 +70,13 @@ void Actor::OnComponentAdded()
     TryRenderComponent(latestComponent);
 }
 
-void Actor::TryRenderComponent(std::shared_ptr<Component> Component)
+void Actor::TryRenderComponent(std::shared_ptr<Component> component)
 {
-    const auto renderComponent = std::dynamic_pointer_cast<IRender>(Component);
+    const auto renderComponent = std::dynamic_pointer_cast<IRender>(component);
     if (!renderComponent)
         return;
     
-    EngineApplication::Get().CC_RendererSystem->AddRenderComponent(renderComponent);
+    CC_Application::Get().CC_RendererSystem->AddRenderComponent(renderComponent);
 }
 
 void Actor::TryRemoveRenderComponent()
@@ -87,6 +87,6 @@ void Actor::TryRemoveRenderComponent()
         if (!renderComponent)
             continue;
     
-        EngineApplication::Get().CC_RendererSystem->RemoveRenderComponent(renderComponent);
+        CC_Application::Get().CC_RendererSystem->RemoveRenderComponent(renderComponent);
     }
 }

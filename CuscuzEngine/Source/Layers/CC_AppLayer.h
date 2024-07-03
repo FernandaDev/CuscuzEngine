@@ -3,19 +3,14 @@
 #include "Layer.h"
 
 class CC_Game;
-class EventSystem;
-class RendererSystem;
 
-class EngineAppLayer : public Layer
+class CC_AppLayer : public Layer
 {
-    EventSystem* m_EventSystem;
-    RendererSystem* m_RendererSystem;
-    CC_Game* m_Game;
-
+    std::shared_ptr<CC_Game> m_Game;
     bool m_ShowPlayWindow;
     
 public:
-    EngineAppLayer(EventSystem* eventSystem, RendererSystem* renderer, CC_Game* game);
+    CC_AppLayer(const std::shared_ptr<CC_Game>& game);
 
     void OnUpdate() override;
     void OnImGuiRender() override;

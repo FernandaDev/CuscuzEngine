@@ -7,7 +7,7 @@ class CC_WindowResizeEvent : public CC_Event
      int m_Width, m_Height;
      
  public:
-     CC_WindowResizeEvent(int Width, int Height) : m_Width(Width), m_Height(Height) {}
+     CC_WindowResizeEvent(int width, int height) : m_Width(width), m_Height(height) {}
      ~CC_WindowResizeEvent() override = default;
 
      int GetWidth() const { return m_Width; }

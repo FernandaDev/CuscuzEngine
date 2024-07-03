@@ -8,13 +8,13 @@
 #include "Render/Sprite.h"
 #include "World/Actor.h"
 
-SpriteComponent::SpriteComponent(int DrawOrder, SDL_BlendMode BlendMode) :
-m_DrawOrder(DrawOrder), m_BlendMode(BlendMode), m_Color(0,0,0,1)
+SpriteComponent::SpriteComponent(int drawOrder, SDL_BlendMode blendMode) :
+m_DrawOrder(drawOrder), m_BlendMode(blendMode), m_Color(0,0,0,1)
 {
     m_Name = "SpriteComponent";
 }
 
-void SpriteComponent::Draw(SDL_Renderer* Renderer)
+void SpriteComponent::Draw(SDL_Renderer* renderer)
 {
     const auto sprite = m_Sprite.lock();
     if(!sprite || !sprite->GetTexture())
@@ -26,23 +26,23 @@ void SpriteComponent::Draw(SDL_Renderer* Renderer)
     dest.x = static_cast<int>(m_OwnerActor->GetPosition().x - dest.w * 0.5);
     dest.y = static_cast<int>(m_OwnerActor->GetPosition().y - dest.h * 0.5);
 
-    SDL_RenderCopyEx(Renderer, sprite->GetTexture()->SDLPtr(),
+    SDL_RenderCopyEx(renderer, sprite->GetTexture()->SDLPtr(),
         nullptr, &dest, -GetRotationDegrees(), nullptr, SDL_FLIP_NONE);
 }
 
-void SpriteComponent::SetSprite(std::weak_ptr<Sprite> NewSprite)
+void SpriteComponent::SetSprite(std::weak_ptr<Sprite> newSprite)
 {
-    m_Sprite = std::move(NewSprite);
+    m_Sprite = std::move(newSprite);
 }
 
-void SpriteComponent::SetDrawOrder(int DrawOrder)
+void SpriteComponent::SetDrawOrder(int drawOrder)
 {
-    m_DrawOrder = DrawOrder;
+    m_DrawOrder = drawOrder;
 }
 
-void SpriteComponent::SetBlendMode(SDL_BlendMode BlendMode)
+void SpriteComponent::SetBlendMode(SDL_BlendMode blendMode)
 {
-    m_BlendMode = BlendMode;
+    m_BlendMode = blendMode;
 }
 
 int SpriteComponent::GetTexHeight() const

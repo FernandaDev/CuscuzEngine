@@ -1,6 +1,6 @@
 ﻿#pragma once
 
-#include "Core/EngineApplication.h"
+#include "Core/CC_Application.h"
 #include "Input.h"
 #include "KeyCodes.h"
 #include "ResourceManager.h"

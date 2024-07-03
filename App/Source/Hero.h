@@ -7,8 +7,8 @@ class Hero : public Actor
     float rotateSpeed = 40;
     
 public:
-    Hero(World* World, std::string Name, glm::vec2 Position);
+    Hero(World* world, std::string name, glm::vec2 position);
     ~Hero() override = default;
     
-    void UpdateActor(float DeltaTime) override;
+    void UpdateActor(float deltaTime) override;
 };

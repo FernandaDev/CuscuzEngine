@@ -12,7 +12,7 @@ class Window
 
 public:
 	Window() = delete;
-	Window(const char* Name, int Width, int Height);
+	Window(const char* name, int width, int height);
 	~Window();
 
 	int GetWidth() const { return m_Width; }

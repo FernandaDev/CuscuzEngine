@@ -7,7 +7,7 @@ class CC_MouseMovedEvent : public CC_Event
     int m_X, m_Y;
     
 public:
-    CC_MouseMovedEvent(int X, int Y) : m_X(X), m_Y(Y) { }
+    CC_MouseMovedEvent(int x, int y) : m_X(x), m_Y(y) { }
     ~CC_MouseMovedEvent() override = default;
     
     int GetX() const { return m_X; }
@@ -33,7 +33,7 @@ class CC_MouseButtonDownEvent : public CC_Event
     int m_Button;
     
 public:
-    CC_MouseButtonDownEvent(int Button) : m_Button(Button) { }
+    CC_MouseButtonDownEvent(int button) : m_Button(button) { }
     ~CC_MouseButtonDownEvent() override = default;
     
     int GetButton() const { return m_Button; }
@@ -58,7 +58,7 @@ class CC_MouseButtonUpEvent : public CC_Event
     int m_Button;
     
 public:
-    CC_MouseButtonUpEvent(int Button) : m_Button(Button) { }
+    CC_MouseButtonUpEvent(int button) : m_Button(button) { }
     ~CC_MouseButtonUpEvent() override = default;
     
     int GetButton() const { return m_Button; }
@@ -83,7 +83,7 @@ class CC_MouseScrolledEvent : public CC_Event
     float m_X, m_Y;
     
 public:
-    CC_MouseScrolledEvent(float X, float Y) : m_X(X), m_Y(Y) {}
+    CC_MouseScrolledEvent(float x, float y) : m_X(x), m_Y(y) {}
     ~CC_MouseScrolledEvent() override = default;
     
     float GetX() const { return m_X; }

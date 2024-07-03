@@ -11,7 +11,7 @@ class Sprite
     
 public:
     Sprite() = delete;
-    Sprite(std::weak_ptr<Texture> Texture);
+    Sprite(std::weak_ptr<Texture> texture);
     ~Sprite();
 
     int GetWidth() const { return m_PixelsDimension.x; }

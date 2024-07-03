@@ -6,14 +6,14 @@
 class Input
 {
 public:
-    static bool IsKeyPressed(unsigned int KeyCode)
+    static bool IsKeyPressed(unsigned int keyCode)
     {
         const Uint8* key_CurrentState = SDL_GetKeyboardState(nullptr);
-        return key_CurrentState[KeyCode];
+        return key_CurrentState[keyCode];
     }
 
-    static bool IsMousePressed(unsigned int Button)
+    static bool IsMousePressed(unsigned int button)
     {
-        return SDL_GetMouseState(nullptr, nullptr) & SDL_BUTTON(Button);
+        return SDL_GetMouseState(nullptr, nullptr) & SDL_BUTTON(button);
     }
 };

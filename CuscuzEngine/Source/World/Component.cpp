@@ -1,11 +1,11 @@
 ﻿#include "pch.h"
 #include "Component.h"
 
-void Component::SetOwner(Actor* OwnerActor)
+void Component::SetOwner(Actor* ownerActor)
 {
-    m_OwnerActor = OwnerActor;
+    m_OwnerActor = ownerActor;
 }
 
-void Component::Update(float DeltaTime)
+void Component::Update(float deltaTime)
 {
 }

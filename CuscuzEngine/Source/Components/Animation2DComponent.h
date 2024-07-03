@@ -13,15 +13,15 @@ class Animation2DComponent : public SpriteComponent
     glm::i32vec2 m_SingleSpriteSize = { 80, 110 }; 
     
 public:
-    Animation2DComponent(int FrameCount, int DrawOrder = 0, SDL_BlendMode BlendMode = SDL_BLENDMODE_NONE);
+    Animation2DComponent(int frameCount, int drawOrder = 0, SDL_BlendMode blendMode = SDL_BLENDMODE_NONE);
     ~Animation2DComponent() override = default;
     
-    void Update(float DeltaTime) override;
-    void Draw(SDL_Renderer* Renderer) override;
+    void Update(float deltaTime) override;
+    void Draw(SDL_Renderer* renderer) override;
 
     float GetAnimFPS() const { return m_AnimFPS; }
     void SetAnimFPS(float fps) { m_AnimFPS = fps; }
 
 private:
-    void PlayFrame(int X, int Y);
+    void PlayFrame(int x, int y);
 };

@@ -18,11 +18,11 @@ public:
         return *s_Instance;
     }
 
-    void SetRootResourcesPath(const std::string& RootPath);
+    void SetRootResourcesPath(const std::string& rootPath);
     
-    std::weak_ptr<Texture> GetTexture(SDL_Renderer* Renderer, const std::string& Filepath);
+    std::weak_ptr<Texture> GetTexture(SDL_Renderer* renderer, const std::string& filePath);
 
-    std::weak_ptr<Sprite> CreateSprite(const std::string& FilePath, SDL_Renderer* Renderer);
+    std::weak_ptr<Sprite> CreateSprite(const std::string& filePath, SDL_Renderer* renderer);
     
     void UnloadResources();
     

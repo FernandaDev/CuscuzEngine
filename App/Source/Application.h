@@ -1,12 +1,13 @@
 ﻿#pragma once
 
-#include "Core/EngineApplication.h"
+#include "Core/CC_Application.h"
 
+class AppGame;
 
-class Application : public EngineApplication
+class Application : public CC_Application
 {
-    class AppGame* m_AppGame;
-    
+    std::shared_ptr<AppGame> m_AppGame;
+
 public:
     Application();
     ~Application() override = default;

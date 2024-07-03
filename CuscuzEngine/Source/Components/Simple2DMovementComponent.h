@@ -8,12 +8,12 @@ class Simple2DMovementComponent : public Component
     float m_AngularSpeed;
     
 public:
-    Simple2DMovementComponent(float ForwardSpeed, float AngularSpeed, int UpdateOrder = 10);
+    Simple2DMovementComponent(float forwardSpeed, float angularSpeed, int updateOrder = 10);
 
-    void Update(float DeltaTime) override;
+    void Update(float deltaTime) override;
 
     float GetForwardSpeed() const { return m_ForwardSpeed; }
     float GetAngularSpeed() const { return m_AngularSpeed; }
-    void SetForwardSpeed(float Speed);
-    void SetAngularSpeed(float Speed);
+    void SetForwardSpeed(float speed);
+    void SetAngularSpeed(float speed);
 };

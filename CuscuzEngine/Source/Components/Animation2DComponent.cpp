@@ -4,17 +4,17 @@
 #include "Render/Sprite.h"
 #include "World/Actor.h"
 
-Animation2DComponent::Animation2DComponent(int FrameCount, int DrawOrder, SDL_BlendMode BlendMode) :
-SpriteComponent(DrawOrder, BlendMode), m_FrameCount(FrameCount), m_AnimFPS(10), m_CurrentFrame(0)
+Animation2DComponent::Animation2DComponent(int frameCount, int drawOrder, SDL_BlendMode blendMode) :
+SpriteComponent(drawOrder, blendMode), m_FrameCount(frameCount), m_AnimFPS(10), m_CurrentFrame(0)
 {
     m_Name = "Animation2DComponent";
 }
 
-void Animation2DComponent::Update(float DeltaTime)
+void Animation2DComponent::Update(float deltaTime)
 {    
     PlayFrame(0,0);
 
-    m_CurrentFrame += m_AnimFPS * DeltaTime;
+    m_CurrentFrame += m_AnimFPS * deltaTime;
 
     while(m_CurrentFrame >= m_FrameCount)
     {
@@ -22,7 +22,7 @@ void Animation2DComponent::Update(float DeltaTime)
     }
 }
 
-void Animation2DComponent::Draw(SDL_Renderer* Renderer)
+void Animation2DComponent::Draw(SDL_Renderer* renderer)
 {
     const auto sprite = m_Sprite.lock();
     if(!sprite || !sprite->GetTexture())
@@ -34,15 +34,15 @@ void Animation2DComponent::Draw(SDL_Renderer* Renderer)
     dest.x = static_cast<int>(m_OwnerActor->GetPosition().x);
     dest.y = static_cast<int>(m_OwnerActor->GetPosition().y);
     
-    SDL_RenderCopyEx(Renderer, sprite->GetTexture()->SDLPtr(),
+    SDL_RenderCopyEx(renderer, sprite->GetTexture()->SDLPtr(),
     &m_Source, &dest, -GetRotationDegrees(), nullptr, SDL_FLIP_NONE);
 }
 
-void Animation2DComponent::PlayFrame(int X, int Y)
+void Animation2DComponent::PlayFrame(int x, int y)
 {
     m_Source.w = m_SingleSpriteSize.x;
     m_Source.h = m_SingleSpriteSize.y;
     
-    m_Source.y = Y;
-    m_Source.x = X + m_Source.w * static_cast<int>(m_CurrentFrame);
+    m_Source.y = y;
+    m_Source.x = x + m_Source.w * static_cast<int>(m_CurrentFrame);
 }

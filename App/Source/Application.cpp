@@ -5,24 +5,24 @@
 #include "AppGame.h"
 #include "AppGameLayer.h"
 
-EngineApplication* CreateApplication()
+CC_Application* CreateApplication()
 {
     return new Application();
 }
 
-Application::Application() : m_AppGame(new AppGame)
+Application::Application() : m_AppGame(std::make_shared<AppGame>())
 {
     CreateGame(m_AppGame);
 }
 
 void Application::Start()
 {
-    EngineApplication::Start();
+    CC_Application::Start();
 
     PushOverlay(new AppGameLayer(m_AppGame));
 }
 
 void Application::Render()
 {
-    EngineApplication::Render();
+    CC_Application::Render();
 }
