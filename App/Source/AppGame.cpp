@@ -1,4 +1,4 @@
-﻿#include <CC_Engine.h>
+﻿#include <..\..\CuscuzEngine\Source\CC_Core.h>
 #include "AppGame.h"
 
 #include "Utils/Log.h"

@@ -7,7 +7,7 @@
 #include "Core/Time.h"
 #include "Core/CC_Game.h"
 #include "RendererSystem.h"
-#include "Core/CC_Application.h"
+#include "CC_Engine.h"
 #include "Events/KeyEvents.h"
 
 CC_AppLayer::CC_AppLayer(const std::shared_ptr<CC_Game>& game):
@@ -17,8 +17,8 @@ void CC_AppLayer::OnUpdate()
 {
     Layer::OnUpdate();
 
-    CC_Application::Get().CC_EventSystem->Update();
-    CC_Application::Get().CC_RendererSystem->Update();
+    CC_Engine::Get().CC_EventSystem->Update();
+    CC_Engine::Get().CC_RendererSystem->Update();
     
     if(m_Game->IsRunning())
         m_Game->UpdateGame(Time::Instance().DeltaTime());

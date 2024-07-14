@@ -1,7 +1,7 @@
 ﻿#pragma once
 #include "World/World.h"
 
-class CC_Application;
+class CC_Engine;
 class Actor;
 
 class CC_Game

@@ -1,10 +1,10 @@
 ﻿#pragma once
 
-#include "Core/CC_Application.h"
+#include "CC_Engine.h"
 
 class AppGame;
 
-class Application : public CC_Application
+class Application : public CC_Engine
 {
     std::shared_ptr<AppGame> m_AppGame;
 

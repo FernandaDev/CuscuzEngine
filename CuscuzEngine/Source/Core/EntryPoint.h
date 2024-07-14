@@ -1,8 +1,8 @@
 ﻿#pragma once
 
-#include "CC_Application.h"
+#include "CC_Engine.h"
 
-extern CC_Application* CreateApplication();
+extern CC_Engine* CreateApplication();
 
 int main(int argc, char* argv[])
 {

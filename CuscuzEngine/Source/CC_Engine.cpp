@@ -1,7 +1,7 @@
 #include "pch.h"
 #include <SDL.h>
 
-#include "CC_Application.h"
+#include "CC_Engine.h"
 #include "ResourceManager.h"
 #include "Core/Time.h"
 #include "Events/EventHandler.h"
@@ -17,9 +17,9 @@ enum
 	SCREEN_HEIGHT = 720
 };
 
-CC_Application* CC_Application::s_Instance = nullptr;
+CC_Engine* CC_Engine::s_Instance = nullptr;
 
-CC_Application::CC_Application() :
+CC_Engine::CC_Engine() :
 	CC_Window{ new Window("Game", SCREEN_WIDTH, SCREEN_HEIGHT) },
 	CC_RendererSystem { new RendererSystem {CC_Window.get()}},
 	CC_EventSystem{ new EventSystem() }	
@@ -27,7 +27,7 @@ CC_Application::CC_Application() :
 	Init();
 }
 
-CC_Application::CC_Application(CC_Game* game) :
+CC_Engine::CC_Engine(CC_Game* game) :
 	CC_Window{ new Window("Game", SCREEN_WIDTH, SCREEN_HEIGHT) },
 	CC_RendererSystem { new RendererSystem {CC_Window.get()}},
 	CC_EventSystem{ new EventSystem() },
@@ -36,17 +36,17 @@ CC_Application::CC_Application(CC_Game* game) :
 	Init();
 }
 
-void CC_Application::Init()
+void CC_Engine::Init()
 {
 	s_Instance = this;
 	Log::Init();
 
 	ResourceManager::Get().SetRootResourcesPath("../App/Assets/Images/");
 
-	CC_EventSystem->SetEventCallback(BIND_FUNCTION(this, CC_Application::OnEvent));
+	CC_EventSystem->SetEventCallback(BIND_FUNCTION(this, CC_Engine::OnEvent));
 }
 
-CC_Application::~CC_Application()
+CC_Engine::~CC_Engine()
 {
 	if(m_Game->IsRunning())
 		m_Game->ShutdownGame();
@@ -56,18 +56,18 @@ CC_Application::~CC_Application()
 	SDL_Quit();
 }
 
-void CC_Application::Start()
+void CC_Engine::Start()
 {
-	PushLayer(new CC_AppLayer(m_Game));
+	PushLayer(std::make_shared<CC_AppLayer>(m_Game));
 	
-	m_ImGuiLayer = new ImGuiLayer(*CC_Window, CC_RendererSystem->GetRenderer());
+	m_ImGuiLayer = std::make_shared<ImGuiLayer>(*CC_Window, CC_RendererSystem->GetRenderer());
 	PushOverlay(m_ImGuiLayer);	
 }
 
-void CC_Application::OnEvent(CC_Event& event)
+void CC_Engine::OnEvent(CC_Event& event)
 {
 	CC_EventSingleDispatcher eventDispatcher(event);
-	eventDispatcher.Dispatch<CC_WindowCloseEvent>(BIND_FUNCTION(this, CC_Application::Quit));
+	eventDispatcher.Dispatch<CC_WindowCloseEvent>(BIND_FUNCTION(this, CC_Engine::Quit));
 	CC_Window->OnEvent(event);
 	
 	for (auto it = m_LayerStack.end(); it != m_LayerStack.begin();)
@@ -78,7 +78,7 @@ void CC_Application::OnEvent(CC_Event& event)
 	}
 }
 
-void CC_Application::Run()
+void CC_Engine::Run()
 {
 	Start();
 	
@@ -86,11 +86,11 @@ void CC_Application::Run()
 	{
 		Time::Instance().Update();
 		
-		for (Layer* layer : m_LayerStack)
+		for (const auto& layer : m_LayerStack)
 			layer->OnUpdate();
 
 		m_ImGuiLayer->Begin();
-		for (Layer* layer : m_LayerStack)
+		for (const auto& layer : m_LayerStack)
 			layer->OnImGuiRender();
 		m_ImGuiLayer->End();
 		
@@ -98,27 +98,27 @@ void CC_Application::Run()
 	}
 }
 
-void CC_Application::Render() 
+void CC_Engine::Render() 
 {
 	CC_RendererSystem->Render();
 }
 
-void CC_Application::PushLayer(Layer* layer)
+void CC_Engine::PushLayer(std::shared_ptr<Layer> layer)
 {
 	m_LayerStack.PushLayer(layer);
 }
 
-void CC_Application::PushOverlay(Layer* layer)
+void CC_Engine::PushOverlay(std::shared_ptr<Layer> layer)
 {
 	m_LayerStack.PushOverlay(layer);
 }
 
-void CC_Application::CreateGame(const std::shared_ptr<CC_Game>& game)
+void CC_Engine::CreateGame(const std::shared_ptr<CC_Game>& game)
 {
 	m_Game = game;
 }
 
-bool CC_Application::Quit(CC_WindowCloseEvent& event)
+bool CC_Engine::Quit(CC_WindowCloseEvent& event)
 {
 	LOG_WARN("Quitting the engine...");
 	m_IsRunning = false;

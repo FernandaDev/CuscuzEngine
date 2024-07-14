@@ -2,7 +2,7 @@
 #include "Actor.h"
 
 #include "World.h"
-#include "Core/CC_Application.h"
+#include "CC_Engine.h"
 #include "Components/SpriteComponent.h"
 
 Actor::Actor(World* world, std::string name, glm::vec2 position, float scale, float rotation) :
@@ -76,7 +76,7 @@ void Actor::TryRenderComponent(std::shared_ptr<Component> component)
     if (!renderComponent)
         return;
     
-    CC_Application::Get().CC_RendererSystem->AddRenderComponent(renderComponent);
+    CC_Engine::Get().CC_RendererSystem->AddRenderComponent(renderComponent);
 }
 
 void Actor::TryRemoveRenderComponent()
@@ -87,6 +87,6 @@ void Actor::TryRemoveRenderComponent()
         if (!renderComponent)
             continue;
     
-        CC_Application::Get().CC_RendererSystem->RemoveRenderComponent(renderComponent);
+        CC_Engine::Get().CC_RendererSystem->RemoveRenderComponent(renderComponent);
     }
 }
