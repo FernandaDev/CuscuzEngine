@@ -10,9 +10,9 @@ CC_Engine* CreateApplication()
     return new Application();
 }
 
-Application::Application() : m_AppGame(std::make_shared<AppGame>())
+Application::Application() : m_AppGame{ std::make_shared<AppGame>() }
 {
-    CreateGame(m_AppGame);
+    SetCurrentGame(m_AppGame);
 }
 
 void Application::Start()

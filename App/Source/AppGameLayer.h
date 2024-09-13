@@ -9,7 +9,7 @@ class CC_KeyDownEvent;
 
  class AppGameLayer : public Layer
  {
-     bool m_ShowDebugWindow;
+     bool m_ShowWorldWindow;
      std::shared_ptr<AppGame> m_AppGame;
      
  public:
@@ -22,11 +22,13 @@ class CC_KeyDownEvent;
      void OnEvent(CC_Event& event) override;
 
  private:
-    bool ToggleDebugWindow(const CC_KeyDownEvent& event);
+    bool ToggleWindow(const CC_KeyDownEvent& event);
 
-    void ShowDebugWindow();
+    void ShowWorldWindow();
      
      void ActorCreation(bool showing) const;
      void ShowAllActors(bool showing) const;
+
      void ShowActor(Actor* actor, int index) const ;
+     void ShowActorComponents(Actor* actor, int index) const;
  };

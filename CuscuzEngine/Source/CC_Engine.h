@@ -8,7 +8,7 @@
 #include "Core/CC_Game.h"
 #include "Layers/LayerStack.h"
 
-class CC_AppLayer;
+class CC_MainLayer;
 
 constexpr Uint32 FramesPerSecond = 30;
 
@@ -31,7 +31,6 @@ private:
 
 public:
 	CC_Engine();
-	CC_Engine(CC_Game* game);
 	virtual ~CC_Engine();
 
 	static CC_Engine& Get() { return *s_Instance;}
@@ -46,7 +45,7 @@ public:
 	void PushOverlay(std::shared_ptr<Layer> layer);
 
 protected:
-	void CreateGame(const std::shared_ptr<CC_Game>& game);
+	void SetCurrentGame(const std::shared_ptr<CC_Game>& game);
 	virtual void Render();
 private:
 	void Init();

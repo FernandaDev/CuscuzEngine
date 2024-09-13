@@ -1,6 +1,6 @@
 ﻿#include "pch.h"
 
-#include "CC_AppLayer.h"
+#include "CC_MainLayer.h"
 #include "EventSystem.h"
 #include "imgui.h"
 #include "KeyCodes.h"
@@ -10,10 +10,10 @@
 #include "CC_Engine.h"
 #include "Events/KeyEvents.h"
 
-CC_AppLayer::CC_AppLayer(const std::shared_ptr<CC_Game>& game):
+CC_MainLayer::CC_MainLayer(const std::shared_ptr<CC_Game>& game):
 m_Game(game), m_ShowPlayWindow(true) {}
 
-void CC_AppLayer::OnUpdate()
+void CC_MainLayer::OnUpdate()
 {
     Layer::OnUpdate();
 
@@ -24,7 +24,7 @@ void CC_AppLayer::OnUpdate()
         m_Game->UpdateGame(Time::Instance().DeltaTime());
 }
 
-void CC_AppLayer::OnImGuiRender()
+void CC_MainLayer::OnImGuiRender()
 {
     Layer::OnImGuiRender();
 
@@ -32,15 +32,15 @@ void CC_AppLayer::OnImGuiRender()
         ShowPlayWindow();
 }
 
-void CC_AppLayer::OnEvent(CC_Event& event)
+void CC_MainLayer::OnEvent(CC_Event& event)
 {
     Layer::OnEvent(event);
 
     CC_EventSingleDispatcher eventDispatcher(event);
-    eventDispatcher.Dispatch<CC_KeyDownEvent>(BIND_FUNCTION(this, CC_AppLayer::ToggleMainWindow));
+    eventDispatcher.Dispatch<CC_KeyDownEvent>(BIND_FUNCTION(this, CC_MainLayer::TogglePlayWindow));
 }
 
-bool CC_AppLayer::ToggleMainWindow(const CC_KeyDownEvent& event)
+bool CC_MainLayer::TogglePlayWindow(const CC_KeyDownEvent& event)
 {
     if(event.GetKeyCode() == CC_KeyCode::Tab)
         m_ShowPlayWindow = !m_ShowPlayWindow;
@@ -48,7 +48,7 @@ bool CC_AppLayer::ToggleMainWindow(const CC_KeyDownEvent& event)
     return false;
 }
 
-void CC_AppLayer::ShowPlayWindow()
+void CC_MainLayer::ShowPlayWindow()
 {
     ImGui::Begin("Game", &m_ShowPlayWindow);
 

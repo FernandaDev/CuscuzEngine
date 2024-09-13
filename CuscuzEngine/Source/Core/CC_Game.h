@@ -28,5 +28,5 @@ public:
 private:
     void PauseGame();
 
-    friend class CC_AppLayer;
+    friend class CC_MainLayer;
 };

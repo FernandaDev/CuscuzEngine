@@ -7,31 +7,17 @@
 #include "Events/EventHandler.h"
 #include "Events/WindowEvents.h"
 #include "GUI/ImGuiLayer.h"
-#include "Layers/CC_AppLayer.h"
+#include "Layers/CC_MainLayer.h"
 #include "Layers/Layer.h"
 #include "Utils/Log.h"
-
-enum
-{
-	SCREEN_WIDTH = 1280,
-	SCREEN_HEIGHT = 720
-};
 
 CC_Engine* CC_Engine::s_Instance = nullptr;
 
 CC_Engine::CC_Engine() :
-	CC_Window{ new Window("Game", SCREEN_WIDTH, SCREEN_HEIGHT) },
-	CC_RendererSystem { new RendererSystem {CC_Window.get()}},
-	CC_EventSystem{ new EventSystem() }	
-{
-	Init();
-}
-
-CC_Engine::CC_Engine(CC_Game* game) :
-	CC_Window{ new Window("Game", SCREEN_WIDTH, SCREEN_HEIGHT) },
-	CC_RendererSystem { new RendererSystem {CC_Window.get()}},
-	CC_EventSystem{ new EventSystem() },
-	m_Game(game)
+	CC_Window{ std::make_unique<Window>("Game", SCREEN_WIDTH, SCREEN_HEIGHT) },
+	CC_RendererSystem{ std::make_unique<RendererSystem>(CC_Window.get()) },
+	CC_EventSystem{ std::make_unique<EventSystem>() },
+	m_Game{ nullptr }
 {
 	Init();
 }
@@ -58,7 +44,7 @@ CC_Engine::~CC_Engine()
 
 void CC_Engine::Start()
 {
-	PushLayer(std::make_shared<CC_AppLayer>(m_Game));
+	PushLayer(std::make_shared<CC_MainLayer>(m_Game));
 	
 	m_ImGuiLayer = std::make_shared<ImGuiLayer>(*CC_Window, CC_RendererSystem->GetRenderer());
 	PushOverlay(m_ImGuiLayer);	
@@ -113,7 +99,7 @@ void CC_Engine::PushOverlay(std::shared_ptr<Layer> layer)
 	m_LayerStack.PushOverlay(layer);
 }
 
-void CC_Engine::CreateGame(const std::shared_ptr<CC_Game>& game)
+void CC_Engine::SetCurrentGame(const std::shared_ptr<CC_Game>& game)
 {
 	m_Game = game;
 }

@@ -31,6 +31,6 @@ public:
     int GetTexHeight() const;
     int GetTextWidth() const;
 protected:
-    SDL_Rect GetDestination(const std::shared_ptr<Sprite>& sprite) const;
+    //SDL_Rect GetDestination(const std::shared_ptr<Sprite>& sprite) const;
     float GetRotationDegrees() const;
 };

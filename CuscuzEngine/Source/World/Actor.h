@@ -30,8 +30,6 @@ protected:
     World* m_World;
     OnComponentAdded m_OnComponentAddedDelegate;
 
-    friend class AppImGuiLayer;
-
 public:
     Actor(World* world, std::string name, glm::vec2 position,
         float scale = 1.f, float rotation = 0);

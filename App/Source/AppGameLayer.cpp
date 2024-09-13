@@ -10,7 +10,7 @@
 #include "World/Actor.h"
 
 AppGameLayer::AppGameLayer(const std::shared_ptr<AppGame>& appGame) : Layer("Game Layer"),
-m_ShowDebugWindow( true), m_AppGame(appGame)
+m_ShowWorldWindow( true), m_AppGame(appGame)
 {}
 
 void AppGameLayer::OnAttach()
@@ -28,13 +28,13 @@ void AppGameLayer::OnEvent(CC_Event& event)
     Layer::OnEvent(event);
 
     CC_EventSingleDispatcher eventDispatcher(event);
-    eventDispatcher.Dispatch<CC_KeyDownEvent>(BIND_FUNCTION(this, AppGameLayer::ToggleDebugWindow));
+    eventDispatcher.Dispatch<CC_KeyDownEvent>(BIND_FUNCTION(this, AppGameLayer::ToggleWindow));
 }
 
-bool AppGameLayer::ToggleDebugWindow(const CC_KeyDownEvent& event)
+bool AppGameLayer::ToggleWindow(const CC_KeyDownEvent& event)
 {
     if(event.GetKeyCode() == CC_KeyCode::F1)
-        m_ShowDebugWindow = !m_ShowDebugWindow;
+        m_ShowWorldWindow = !m_ShowWorldWindow;
     
     return false;
 }
@@ -43,13 +43,13 @@ void AppGameLayer::OnImGuiRender()
 {
     Layer::OnImGuiRender();
 
-    if(m_ShowDebugWindow)
-        ShowDebugWindow();
+    if(m_ShowWorldWindow)
+        ShowWorldWindow();
 }
 
-void AppGameLayer::ShowDebugWindow()
+void AppGameLayer::ShowWorldWindow()
 {
-    ImGui::Begin("World", &m_ShowDebugWindow);
+    ImGui::Begin("World", &m_ShowWorldWindow);
 
     {
         const bool showingActorCreation = ImGui::CollapsingHeader("Actor Creation");
@@ -129,14 +129,7 @@ void AppGameLayer::ShowActor(Actor* actor, int index) const
         actor->Destroy();
 
     ImGui::Spacing();
-    ImGui::TextColored(ImVec4(0.f,.5f,1.f,1.f),"Components");
-    const auto name = std::to_string(index);
-    ImGui::BeginListBox(name.c_str(), ImVec2(200, 50));
-    for (const auto& component : actor->GetComponents())
-    {
-        ImGui::Text(component->GetName().data());
-    }
-    ImGui::EndListBox();
+    ShowActorComponents(actor, index);
     ImGui::Spacing();
     
     ImGui::Text("Position: ");
@@ -150,4 +143,17 @@ void AppGameLayer::ShowActor(Actor* actor, int index) const
             
     ImGui::EndGroup();
     ImGui::Separator();
+}
+
+void AppGameLayer::ShowActorComponents(Actor* actor, int index) const
+{
+    ImGui::TextColored(ImVec4(0.f,.5f,1.f,1.f),"Components");
+
+    const auto name = std::to_string(index);
+    ImGui::BeginListBox(name.c_str(), ImVec2(300, 50));
+    for (const auto& component : actor->GetComponents())
+    {
+        ImGui::Text(component->GetName().data());
+    }
+    ImGui::EndListBox();
 }
