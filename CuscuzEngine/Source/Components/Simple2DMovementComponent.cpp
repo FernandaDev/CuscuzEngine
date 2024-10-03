@@ -6,9 +6,7 @@
 
 Simple2DMovementComponent::Simple2DMovementComponent(float forwardSpeed, float angularSpeed, int updateOrder) :
     Component(updateOrder), m_ForwardSpeed(forwardSpeed), m_AngularSpeed(angularSpeed)
-{
-    m_Name = "Simple2DMovementComponent";
-}
+{}
 
 void Simple2DMovementComponent::Update(float deltaTime)
 {

@@ -33,7 +33,7 @@ void World::HandleDeadActors()
     auto iter = m_ActiveActors.begin();
     while (iter != m_ActiveActors.end())
     {
-        if ((*iter)->GetState() == Actor::Dead)
+        if ((*iter)->GetState() == ActorState::Dead)
         {
             iter = m_ActiveActors.erase(iter);
         }

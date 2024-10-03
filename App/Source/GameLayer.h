@@ -7,14 +7,15 @@ class Actor;
 class CC_Game;
 class CC_KeyDownEvent;
 
- class AppGameLayer : public Layer
+ class GameLayer : public Layer
  {
      bool m_ShowWorldWindow;
-     std::shared_ptr<AppGame> m_AppGame;
+     //std::shared_ptr<AppGame> m_AppGame;
      
  public:
-     AppGameLayer(const std::shared_ptr<AppGame>& appGame);
-     ~AppGameLayer() override = default;
+     GameLayer() = default;
+     //GameLayer(const std::shared_ptr<AppGame>& appGame);
+     ~GameLayer() override = default;
 
      void OnAttach() override;
      void OnDetach() override;

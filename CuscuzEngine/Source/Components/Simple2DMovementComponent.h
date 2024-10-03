@@ -16,4 +16,6 @@ public:
     float GetAngularSpeed() const { return m_AngularSpeed; }
     void SetForwardSpeed(float speed);
     void SetAngularSpeed(float speed);
+
+    COMPONENT_TYPE(Simple2DMovementComponent)
 };

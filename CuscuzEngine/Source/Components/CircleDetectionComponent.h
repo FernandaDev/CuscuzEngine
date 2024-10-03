@@ -13,5 +13,7 @@ public:
     void SetRadius(float newRadius);
     float GetRadius() const { return m_Radius; }
 
-    const glm::vec2& GetCenter() const; 
+    const glm::vec2& GetCenter() const;
+
+    COMPONENT_TYPE(CircleDetectionComponent)
 };

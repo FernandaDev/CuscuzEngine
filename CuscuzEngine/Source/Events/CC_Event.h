@@ -1,6 +1,7 @@
 #pragma once
 
 #include "pch.h"
+#include "Core/CC_Core.h"
 
 enum class CC_EventType
 {

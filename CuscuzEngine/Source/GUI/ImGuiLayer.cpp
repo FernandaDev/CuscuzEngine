@@ -4,13 +4,15 @@
 #include <backends/imgui_impl_sdl.h>
 
 #include "ImGuiLayer.h"
-#include "EventSystem.h"
+#include "Core/EventSystem.h"
 #include "imgui.h"
-#include "Input.h"
-#include "CC_Engine.h"
+#include "Core/Input.h"
+#include "Core/CC_Engine.h"
 #include "Utils/Log.h"
 #include "Components/SpriteComponent.h"
 #include "Events/SDLEvent.h"
+#include "Core/Window.h"
+#include "Core/RendererSystem.h"
 
 ImGuiLayer::ImGuiLayer(const Window& window, SDL_Renderer* renderer) :
 Layer("ImGui Layer"), m_ShowMainWindow(true)

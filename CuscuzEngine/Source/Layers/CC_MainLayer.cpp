@@ -1,17 +1,12 @@
 ﻿#include "pch.h"
+#include <imgui.h>
 
 #include "CC_MainLayer.h"
-#include "EventSystem.h"
-#include "imgui.h"
-#include "KeyCodes.h"
-#include "Core/Time.h"
-#include "Core/CC_Game.h"
-#include "RendererSystem.h"
-#include "CC_Engine.h"
+#include "Core/CC_Engine.h"
+#include "Core/EventSystem.h"
+#include "Core/KeyCodes.h"
+#include "Core/RendererSystem.h"
 #include "Events/KeyEvents.h"
-
-CC_MainLayer::CC_MainLayer(const std::shared_ptr<CC_Game>& game):
-m_Game(game), m_ShowPlayWindow(true) {}
 
 void CC_MainLayer::OnUpdate()
 {
@@ -19,17 +14,6 @@ void CC_MainLayer::OnUpdate()
 
     CC_Engine::Get().CC_EventSystem->Update();
     CC_Engine::Get().CC_RendererSystem->Update();
-    
-    if(m_Game->IsRunning())
-        m_Game->UpdateGame(Time::Instance().DeltaTime());
-}
-
-void CC_MainLayer::OnImGuiRender()
-{
-    Layer::OnImGuiRender();
-
-    if(m_ShowPlayWindow)
-        ShowPlayWindow();
 }
 
 void CC_MainLayer::OnEvent(CC_Event& event)
@@ -38,6 +22,14 @@ void CC_MainLayer::OnEvent(CC_Event& event)
 
     CC_EventSingleDispatcher eventDispatcher(event);
     eventDispatcher.Dispatch<CC_KeyDownEvent>(BIND_FUNCTION(this, CC_MainLayer::TogglePlayWindow));
+}
+
+void CC_MainLayer::OnImGuiRender()
+{
+    Layer::OnImGuiRender();
+
+    if(m_ShowPlayWindow)
+        ShowPlayWindow();
 }
 
 bool CC_MainLayer::TogglePlayWindow(const CC_KeyDownEvent& event)
@@ -54,22 +46,24 @@ void CC_MainLayer::ShowPlayWindow()
 
     if(ImGui::Button("Play"))
     {
-        if(!m_Game->IsRunning())
-            m_Game->StartGame();
+        if(m_GameState != GameState::Running)
+            LOG_INFO("Game is playing...");
     }
 
     ImGui::SameLine();
     
     if(ImGui::Button("Pause"))
     {
-        m_Game->PauseGame();
+        m_GameState = GameState::Paused;
+        LOG_INFO("Game is paused...");
     }
     
     ImGui::SameLine();
     
     if(ImGui::Button("Quit"))
     {
-        m_Game->ShutdownGame();
+        LOG_INFO("Game has shutdown...");
+        m_GameState = GameState::Off;
     }
     
     ImGui::End();

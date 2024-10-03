@@ -2,8 +2,9 @@
 #include "Actor.h"
 
 #include "World.h"
-#include "CC_Engine.h"
+#include "Core/CC_Engine.h"
 #include "Components/SpriteComponent.h"
+#include "Core/RendererSystem.h"
 
 Actor::Actor(World* world, std::string name, glm::vec2 position, float scale, float rotation) :
  m_Name(std::move(name)), m_State(Active), m_Position(position), m_Scale(scale), m_Rotation(rotation),
@@ -24,25 +25,6 @@ void Actor::Update(float deltaTime)
 {    
     UpdateComponents(deltaTime);
     UpdateActor(deltaTime);
-}
-
-void Actor::RemoveComponent(Component* ComponentToRemove)
-{
-    const auto it = std::find_if(m_Components.begin(), m_Components.end(), 
-        [ComponentToRemove](const std::shared_ptr<Component>& ptr)
-        {
-            return ptr.get() == ComponentToRemove;
-        });
-    
-    if(it == m_Components.end())
-    {
-        LOG_WARN("Trying to remove an invalid component!");
-        return;
-    }
-
-    ComponentToRemove->OnRemoved();
-    LOG_INFO("Removed Component");
-    m_Components.erase(it);
 }
 
 void Actor::Destroy()

@@ -6,9 +6,7 @@
 
 Animation2DComponent::Animation2DComponent(int frameCount, int drawOrder, SDL_BlendMode blendMode) :
 SpriteComponent(drawOrder, blendMode), m_FrameCount(frameCount), m_AnimFPS(10), m_CurrentFrame(0)
-{
-    m_Name = "Animation2DComponent";
-}
+{}
 
 void Animation2DComponent::Update(float deltaTime)
 {    

@@ -4,10 +4,7 @@
 #include "World/Actor.h"
 
 CircleDetectionComponent::CircleDetectionComponent(float radius):
-m_Radius(radius)
-{
-    m_Name = "Circle Detection";
-}
+m_Radius(radius){}
 
 void CircleDetectionComponent::SetRadius(float newRadius)
 {

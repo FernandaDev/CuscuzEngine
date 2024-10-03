@@ -3,16 +3,13 @@
 
 #include <utility>
 
-#include "../../../../App/Source/Application.h"
 #include "detail/func_trigonometric.inl"
 #include "Render/Sprite.h"
 #include "World/Actor.h"
 
 SpriteComponent::SpriteComponent(int drawOrder, SDL_BlendMode blendMode) :
 m_DrawOrder(drawOrder), m_BlendMode(blendMode), m_Color(0,0,0,1)
-{
-    m_Name = "SpriteComponent";
-}
+{}
 
 void SpriteComponent::Draw(SDL_Renderer* renderer)
 {

@@ -1,14 +1,15 @@
 #pragma once
 
-#include "Core/Window.h"
-#include "RendererSystem.h"
-#include "EventSystem.h"
+#include "Core/EventSystem.h"
 #include "Events/CC_Event.h"
 #include "Events/WindowEvents.h"
-#include "Core/CC_Game.h"
 #include "Layers/LayerStack.h"
 
+class ImGuiLayer;
 class CC_MainLayer;
+class Window;
+class RendererSystem;
+class EventSystem;
 
 constexpr Uint32 FramesPerSecond = 30;
 
@@ -20,7 +21,7 @@ public:
 	std::unique_ptr<EventSystem> CC_EventSystem;
 
 protected:
-	std::shared_ptr<CC_Game> m_Game;
+	//std::shared_ptr<CC_Game> m_Game;
 	
 private:
 	static CC_Engine* s_Instance;
@@ -45,7 +46,7 @@ public:
 	void PushOverlay(std::shared_ptr<Layer> layer);
 
 protected:
-	void SetCurrentGame(const std::shared_ptr<CC_Game>& game);
+	//void SetCurrentGame(const std::shared_ptr<CC_Game>& game);
 	virtual void Render();
 private:
 	void Init();

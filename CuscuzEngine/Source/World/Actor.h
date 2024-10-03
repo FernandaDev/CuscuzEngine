@@ -10,19 +10,20 @@ class World;
 
 DECLARE_EVENT(OnComponentAdded, const std::shared_ptr<Component>&)
 
+enum ActorState
+{
+    Active,
+    Paused,
+    Dead
+};
+
 class Actor
 {
-public:
-    enum State
-    {
-        Active,
-        Paused,
-        Dead
-    };
+    
 protected:
     //ID?
     std::string m_Name;
-    State m_State;
+    ActorState m_State;
     glm::vec2 m_Position;
     float m_Scale;
     float m_Rotation;
@@ -58,24 +59,17 @@ public:
     void Update(float deltaTime);
     void Destroy();
 
-    template<typename T>
-    T& AddComponent(T* component);
-    void RemoveComponent(Component* component);
-
     const std::string& GetName() const { return m_Name; }
-    State GetState() const { return m_State; }
-    const glm::vec2& GetPosition() const { return m_Position; }
-    float GetScale() const { return m_Scale; }
-    float GetRotation() const { return m_Rotation; }
-    glm::vec2 GetForward() const { return {CC_Math::Cos(m_Rotation), -CC_Math::Sin(m_Rotation)}; }
+    ActorState              GetState() const { return m_State; }
+    const glm::vec2&   GetPosition() const { return m_Position; }
+    float              GetScale() const { return m_Scale; }
+    float              GetRotation() const { return m_Rotation; }
+    glm::vec2          GetForward() const { return {CC_Math::Cos(m_Rotation), -CC_Math::Sin(m_Rotation)}; }
+
+    const std::vector<std::shared_ptr<Component>>& GetComponents() const { return m_Components; }
 
     void SetPosition(const glm::vec2& newPosition) { m_Position = newPosition; }
     void SetRotation(float newRotation) { m_Rotation = newRotation; }
-
-    OnComponentAdded& GetOnComponentAddedDelegate() { return m_OnComponentAddedDelegate; }
-    //World& GetWorld() const { return *m_World; } DO WE NEED THIS?
-
-    const std::vector<std::shared_ptr<Component>>& GetComponents() const { return m_Components; }
 
 protected:
     void UpdateComponents(float deltaTime) const;
@@ -85,16 +79,76 @@ protected:
 private:
     void TryRenderComponent(std::shared_ptr<Component> component);
     void TryRemoveRenderComponent();
-};
 
-template <typename T>
-T& Actor::AddComponent(T* newComponent)
-{
-    static_assert(std::is_base_of<Component, T>::value, "T must be derived from Component");
+
+    ///////////////TEMPLATES//////////////////
+public:
+    template<typename T, typename... Args>
+    T& AddComponent(Args&&... args)
+    {
+        static_assert(std::is_base_of<Component, T>::value, "T must be derived from Component");
+
+        auto& newComponent = m_Components.emplace_back(std::make_shared<T>(std::forward<Args>(args)...));
+        newComponent->SetOwner(this);
+        OnComponentAdded();
+        LOG_INFO("{0} was added to {1}.", T::GetStaticComponentType(), m_Name);
+        return *std::static_pointer_cast<T>(newComponent);
+    }
+
+    template<typename T>
+    T& GetComponent()
+    {
+        static_assert(std::is_base_of<Component, T>::value, "T must be derived from Component");
+
+        for (const auto& component : m_Components)
+        {
+            if(component->GetComponentType() == T::GetStaticComponentType())
+            {
+                LOG_INFO("Got {0} from {1}.", T::GetStaticComponentType(), m_Name);
+                return *std::static_pointer_cast<T>(component);
+            }
+        }
+
+        throw std::runtime_error("Component not found!");
+    }
+
+    template<typename T>
+    bool HasComponent()
+    {
+        static_assert(std::is_base_of<Component, T>::value, "T must be derived from Component");
+
+        for (const auto& component : m_Components)
+        {
+            if(component->GetComponentType() == T::GetStaticComponentType())
+            {
+                LOG_INFO("{0} has {1}.", m_Name, T::GetStaticComponentType() );
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    template<typename T>
+    bool RemoveComponent()
+    {
+        static_assert(std::is_base_of<Component, T>::value, "T must be derived from Component");
+        
+        const auto it = std::find_if(m_Components.begin(), m_Components.end(), 
+        [](const std::shared_ptr<Component>& component)
+        {
+            return component->GetComponentType() == T::GetStaticComponentType();
+        });
     
-    m_Components.emplace_back(newComponent);
-    LOG_INFO("Added Component");
-    newComponent->SetOwner(this);
-    OnComponentAdded();
-    return *newComponent;
-}
+        if(it == m_Components.end())
+        {
+            LOG_WARN("Trying to remove an invalid component!");
+            return false;
+        }
+        
+        std::static_pointer_cast<T>(*it)->OnRemoved();
+        LOG_INFO("{0} was removed from {1}.", T::GetStaticComponentType(), m_Name );
+        m_Components.erase(it);
+        return true;
+    }
+};
