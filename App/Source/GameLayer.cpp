@@ -1,6 +1,6 @@
 ﻿#include "GameLayer.h"
 
-#include "Components/Animation2DComponent.h"
+#include "Components/SpriteComponent.h"
 #include "Core/KeyCodes.h"
 #include "ImGui/imgui.h"
 #include "Events/KeyEvents.h"

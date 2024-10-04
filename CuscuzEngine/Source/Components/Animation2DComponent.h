@@ -22,7 +22,7 @@ public:
     float GetAnimFPS() const { return m_AnimFPS; }
     void SetAnimFPS(float fps) { m_AnimFPS = fps; }
 
-    COMPONENT_TYPE(Animation2DComponent)
+    REGISTER_COMPONENT(Animation2DComponent);
 
 private:
     void PlayFrame(int x, int y);

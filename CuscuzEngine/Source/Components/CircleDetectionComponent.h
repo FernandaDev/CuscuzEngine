@@ -15,5 +15,5 @@ public:
 
     const glm::vec2& GetCenter() const;
 
-    COMPONENT_TYPE(CircleDetectionComponent)
+    REGISTER_COMPONENT(CircleDetectionComponent);
 };

@@ -1,9 +1,8 @@
 ﻿#pragma once
 
-class Actor;
+#include "Components/ComponentRegistry.h"
 
-#define COMPONENT_TYPE(type) static std::string_view GetStaticComponentType() { return #type; }\
-                             virtual std::string_view GetComponentType() const override { return GetStaticComponentType(); }
+class Actor;
 
 class Component
 {

@@ -1,8 +1,10 @@
 ﻿#pragma once
 
+#include "Components/Animation2DComponent.h"
 #include "ImGui/imgui.h"
 #include "World/World.h"
 #include "World/Actor.h"
+#include "Components/ComponentRegistry.h"
 
 inline static void ShowActorCreation(bool showing, World* world)
 {
@@ -27,7 +29,10 @@ inline static void ShowActorCreation(bool showing, World* world)
 
 inline static void ShowAddComponentBar(Actor* actor, int index)
 {
-    const char* items[] = { "Option 1", "Option 2", "Option 3" };
+    auto a = SpriteComponent::GetStaticComponentType();
+    
+    const char* items[] = { SpriteComponent::GetStaticComponentType().data(),
+                            Animation2DComponent::GetStaticComponentType().data() };
     static int currentItem = 0;  // Index of the currently selected item
 
     // Create the combo box (dropdown)
@@ -35,6 +40,12 @@ inline static void ShowAddComponentBar(Actor* actor, int index)
     {
         //TODO
     }
+}
+
+template <typename  T>
+static void GetActorComponent()
+{
+    
 }
 
 inline static void ShowActorComponents(Actor* actor, int index)

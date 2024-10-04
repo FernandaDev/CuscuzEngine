@@ -17,5 +17,5 @@ public:
     void SetForwardSpeed(float speed);
     void SetAngularSpeed(float speed);
 
-    COMPONENT_TYPE(Simple2DMovementComponent)
+    REGISTER_COMPONENT(Simple2DMovementComponent);
 };

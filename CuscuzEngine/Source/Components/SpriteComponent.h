@@ -31,7 +31,8 @@ public:
     int GetTexHeight() const;
     int GetTextWidth() const;
 
-    COMPONENT_TYPE(SpriteComponent)
+    REGISTER_COMPONENT(SpriteComponent);
+
 protected:
     //SDL_Rect GetDestination(const std::shared_ptr<Sprite>& sprite) const;
     float GetRotationDegrees() const;
