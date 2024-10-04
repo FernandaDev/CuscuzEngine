@@ -6,17 +6,13 @@
 #include "Components/SpriteComponent.h"
 #include "Core/RendererSystem.h"
 
-Actor::Actor(World* world, std::string name, glm::vec2 position, float scale, float rotation) :
+Actor::Actor(World* world, std::string&& name, glm::vec2 position, float scale, float rotation) :
  m_Name(std::move(name)), m_State(Active), m_Position(position), m_Scale(scale), m_Rotation(rotation),
-m_World(world)
-{
-    if(m_World)
-        m_World->AddActor(this);
-}
+m_World(world) { }
 
 Actor::~Actor()
 {
-    LOG_INFO("Actor being removed!");
+    LOG_INFO("Actor being destroyed!");
     
     m_Components.clear();
 }

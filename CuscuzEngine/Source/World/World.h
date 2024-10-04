@@ -1,14 +1,13 @@
 ﻿#pragma once
+#include "vec2.hpp"
 
 class Actor;
 class Component;
 
-// The world is going to be created as soon as the game starts. All the game state and entities is
-// going to be stored in there.
 class World
 {
-    std::vector<std::shared_ptr<Actor>> m_ActiveActors;
-    std::vector<std::shared_ptr<Actor>> m_PendingActors;
+    std::vector<std::shared_ptr<Actor>> m_ActiveActors {};
+    std::vector<std::shared_ptr<Actor>> m_PendingActors {};
     bool m_UpdatingActors = false;
 
 public:
@@ -16,7 +15,12 @@ public:
     ~World() = default;
 
     void Update(float deltaTime);
-    void AddActor(Actor* actor);
+    
+    Actor& CreateActor(std::string&& name,
+                    glm::vec2 position = glm::vec2(0,0),
+                    float scale = 1, float rotation = 0);
+
+    void DestroyActor(Actor* actor) const;
 
     void ResetWorld();
 

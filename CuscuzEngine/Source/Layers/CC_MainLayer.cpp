@@ -8,9 +8,9 @@
 #include "Core/RendererSystem.h"
 #include "Events/KeyEvents.h"
 
-void CC_MainLayer::OnUpdate()
+void CC_MainLayer::OnUpdate(float deltaTime)
 {
-    Layer::OnUpdate();
+    Layer::OnUpdate(deltaTime);
 
     CC_Engine::Get().CC_EventSystem->Update();
     CC_Engine::Get().CC_RendererSystem->Update();

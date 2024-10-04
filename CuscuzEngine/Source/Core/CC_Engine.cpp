@@ -71,7 +71,7 @@ void CC_Engine::Run()
 		Time::Instance().Update();
 		
 		for (const auto& layer : m_LayerStack)
-			layer->OnUpdate();
+			layer->OnUpdate(Time::Instance().DeltaTime());
 
 		m_ImGuiLayer->Begin();
 		for (const auto& layer : m_LayerStack)

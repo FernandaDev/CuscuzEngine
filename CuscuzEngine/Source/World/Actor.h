@@ -32,7 +32,7 @@ protected:
     OnComponentAdded m_OnComponentAddedDelegate;
 
 public:
-    Actor(World* world, std::string name, glm::vec2 position,
+    Actor(World* world, std::string&& name, glm::vec2 position,
         float scale = 1.f, float rotation = 0);
     Actor(const Actor& other):
     m_Name(other.m_Name), m_State(other.m_State), m_Position(other.m_Position)

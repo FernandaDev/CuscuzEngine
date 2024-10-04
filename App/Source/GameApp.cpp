@@ -10,13 +10,8 @@ public:
         PushLayer(std::make_shared<GameLayer>());
     }
 
-    ~GameApp(){  }
+    ~GameApp() override = default;
 };
 
 
-CC_Engine* CreateApplication()
-{
-    return new GameApp();
-}
-
-
+CC_Engine* CreateApplication() { return new GameApp(); }
