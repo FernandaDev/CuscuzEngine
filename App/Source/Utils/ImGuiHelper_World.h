@@ -60,7 +60,7 @@ inline static void ShowAddComponentBar(Actor* actor, int index)
 
     if(ImGui::Button("Add##999"))
     {
-        LOG_INFO("Component added: {0}", items[currentItem]);
+        LOG_INFO("Component added: {0}", registry[currentItem].Name);
     }
 
 }

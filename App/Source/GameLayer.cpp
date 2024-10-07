@@ -13,6 +13,9 @@ GameLayer::GameLayer() : m_World(std::make_unique<World>())
 void GameLayer::OnAttach()
 {
     Layer::OnAttach();
+
+    auto actor = m_World->CreateActor("AH");
+    actor.AddComponent<SpriteComponent>();
 }
 
 void GameLayer::OnDetach()
