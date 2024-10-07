@@ -1,5 +1,5 @@
 #include "pch.h"
-#include "SDL_image.h"
+//#include "SDL_image.h"
 
 #include "Utils/Log.h"
 #include "Core/Window.h"
@@ -17,10 +17,10 @@ RendererSystem::RendererSystem(Window* window)
 
     SDL_SetRenderDrawColor(m_Renderer, 0xFF, 0xFF, 0xFF, 0xFF);
 
-    if (IMG_Init(IMG_INIT_PNG | IMG_INIT_JPG) == 0)
-    {
-        LOG_ERROR("Couldn't load SDL image!");
-    }
+    // if (IMG_Init(IMG_INIT_PNG | IMG_INIT_JPG) == 0)
+    // {
+    //     LOG_ERROR("Couldn't load SDL image!");
+    // }
 }
 
 RendererSystem::~RendererSystem()
@@ -28,7 +28,7 @@ RendererSystem::~RendererSystem()
     if (m_Renderer)
         SDL_DestroyRenderer(m_Renderer);
 
-    IMG_Quit();
+    //IMG_Quit();
 
     m_RenderComponents.clear();
 }

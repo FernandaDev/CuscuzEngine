@@ -7,6 +7,8 @@
 #include "Render/Sprite.h"
 #include "World/Actor.h"
 
+CREATE_COMPONENT_REGISTRY(SpriteComponent);
+
 SpriteComponent::SpriteComponent(int drawOrder, SDL_BlendMode blendMode) :
 m_DrawOrder(drawOrder), m_BlendMode(blendMode), m_Color(0,0,0,1)
 {}

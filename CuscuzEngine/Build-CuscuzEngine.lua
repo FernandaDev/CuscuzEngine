@@ -20,7 +20,7 @@ project "CuscuzEngine"
    {
       "Source",
       "Dependencies/SDL2/include",
-      "Dependencies/SDL2_image/include",
+      --"Dependencies/SDL2_image/include",
       
       "%{includedir.ImGui}",
       "%{includedir.SPD_Log}",
@@ -31,7 +31,7 @@ project "CuscuzEngine"
    libdirs
    { 
       "Dependencies/SDL2/lib",
-      "Dependencies/SDL2_image/lib" 
+      --"Dependencies/SDL2_image/lib" 
    } 
 
    links
@@ -40,7 +40,7 @@ project "CuscuzEngine"
       "yaml-cpp",
       "SDL2.lib",
       "SDL2main.lib",
-      "SDL2_image.lib",
+      --"SDL2_image.lib",
    }
 
    targetdir ("../Binaries/" .. outputdir .. "/%{prj.name}")

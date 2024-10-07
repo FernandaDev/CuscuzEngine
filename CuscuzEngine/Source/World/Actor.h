@@ -60,7 +60,7 @@ public:
     void Destroy();
 
     const std::string& GetName() const { return m_Name; }
-    ActorState              GetState() const { return m_State; }
+    ActorState         GetState() const { return m_State; }
     const glm::vec2&   GetPosition() const { return m_Position; }
     float              GetScale() const { return m_Scale; }
     float              GetRotation() const { return m_Rotation; }
@@ -95,6 +95,8 @@ public:
         return *std::static_pointer_cast<T>(newComponent);
     }
 
+    // TODO Create an "AddComponent" function that receives a pointer of a component.
+
     template<typename T>
     T& GetComponent()
     {
@@ -102,11 +104,16 @@ public:
 
         for (const auto& component : m_Components)
         {
-            if(component->GetComponentType() == T::GetStaticComponentType())
+            if(auto comp = std::dynamic_pointer_cast<T>(component))
             {
                 LOG_INFO("Got {0} from {1}.", T::GetStaticComponentType(), m_Name);
-                return *std::static_pointer_cast<T>(component);
+                return *comp;
             }
+            
+            // if(component->GetComponentType() == T::GetStaticComponentType())
+            // {
+            //     return *std::static_pointer_cast<T>(component);
+            // }
         }
 
         throw std::runtime_error("Component not found!");

@@ -24,6 +24,7 @@ public:
 
     REGISTER_COMPONENT(Animation2DComponent);
 
+    Animation2DComponent_Registry oloco;
 private:
     void PlayFrame(int x, int y);
 };

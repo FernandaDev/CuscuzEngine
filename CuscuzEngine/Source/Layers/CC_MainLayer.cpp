@@ -2,11 +2,19 @@
 #include <imgui.h>
 
 #include "CC_MainLayer.h"
+
+#include "Components/ComponentRegistry.h"
 #include "Core/CC_Engine.h"
 #include "Core/EventSystem.h"
 #include "Core/KeyCodes.h"
 #include "Core/RendererSystem.h"
 #include "Events/KeyEvents.h"
+
+void CC_MainLayer::OnAttach()
+{
+    Layer::OnAttach();
+
+}
 
 void CC_MainLayer::OnUpdate(float deltaTime)
 {

@@ -2,7 +2,7 @@
 #include "vec2.hpp"
 #include "World/Component.h"
 
-class CircleDetectionComponent : public Component
+class [[nodiscard]] CircleDetectionComponent : public Component
 {
     float m_Radius;
     

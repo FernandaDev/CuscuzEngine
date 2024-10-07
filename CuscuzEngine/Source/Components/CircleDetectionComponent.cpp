@@ -3,6 +3,8 @@
 
 #include "World/Actor.h"
 
+CREATE_COMPONENT_REGISTRY(CircleDetectionComponent);
+
 CircleDetectionComponent::CircleDetectionComponent(float radius):
 m_Radius(radius){}
 

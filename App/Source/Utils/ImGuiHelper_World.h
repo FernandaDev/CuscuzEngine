@@ -5,6 +5,7 @@
 #include "World/World.h"
 #include "World/Actor.h"
 #include "Components/ComponentRegistry.h"
+#include "Components/Simple2DMovementComponent.h"
 
 inline static void ShowActorCreation(bool showing, World* world)
 {
@@ -27,26 +28,40 @@ inline static void ShowActorCreation(bool showing, World* world)
     ImGui::EndGroup();
 }
 
+
+template <typename  T>
+static void AddActorComponent(Actor* actor)
+{
+    actor->AddComponent<T>();
+}
+
 inline static void ShowAddComponentBar(Actor* actor, int index)
 {
-    auto a = SpriteComponent::GetStaticComponentType();
+    auto registry = ComponentRegistry::GetRegistry();
     
-    const char* items[] = { SpriteComponent::GetStaticComponentType().data(),
-                            Animation2DComponent::GetStaticComponentType().data() };
+    const char* items[3] = {"", "", ""};
+
+    // for(int i = 0; i < 3; i++)
+    // {
+    //     items[i] = components[i]->GetComponentType().data();    
+    // }
+    
     static int currentItem = 0;  // Index of the currently selected item
 
     // Create the combo box (dropdown)
     if (ImGui::Combo("Add Component", &currentItem, items, IM_ARRAYSIZE(items)))
     {
         //TODO
+        
     }
+
+    if(ImGui::Button("Add##999"))
+    {
+        LOG_INFO("Component added: {0}", items[currentItem]);
+    }
+
 }
 
-template <typename  T>
-static void GetActorComponent()
-{
-    
-}
 
 inline static void ShowActorComponents(Actor* actor, int index)
 {
