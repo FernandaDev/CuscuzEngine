@@ -79,8 +79,7 @@ protected:
 private:
     void TryRenderComponent(std::shared_ptr<Component> component);
     void TryRemoveRenderComponent();
-
-
+    
     ///////////////TEMPLATES//////////////////
 public:
     template<typename T, typename... Args>
@@ -109,11 +108,6 @@ public:
                 LOG_INFO("Got {0} from {1}.", T::GetStaticComponentType(), m_Name);
                 return *comp;
             }
-            
-            // if(component->GetComponentType() == T::GetStaticComponentType())
-            // {
-            //     return *std::static_pointer_cast<T>(component);
-            // }
         }
 
         throw std::runtime_error("Component not found!");
@@ -126,7 +120,7 @@ public:
 
         for (const auto& component : m_Components)
         {
-            if(component->GetComponentType() == T::GetStaticComponentType())
+            if(std::dynamic_pointer_cast<T>(component)) // quem tem Animation2D has um sprite component, entao ele entra.
             {
                 LOG_INFO("{0} has {1}.", m_Name, T::GetStaticComponentType() );
                 return true;
@@ -135,7 +129,8 @@ public:
 
         return false;
     }
-
+    
+    // Note: this function will remove the specific component and will not try to cast to another component.
     template<typename T>
     bool RemoveComponent()
     {
@@ -153,7 +148,7 @@ public:
             return false;
         }
         
-        std::static_pointer_cast<T>(*it)->OnRemoved();
+        it->OnRemoved();
         LOG_INFO("{0} was removed from {1}.", T::GetStaticComponentType(), m_Name );
         m_Components.erase(it);
         return true;

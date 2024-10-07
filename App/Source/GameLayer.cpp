@@ -13,12 +13,6 @@ GameLayer::GameLayer() : m_World(std::make_unique<World>())
 void GameLayer::OnAttach()
 {
     Layer::OnAttach();
-
-    auto actor = m_World->CreateActor("test");
-    actor.AddComponent<Animation2DComponent>(5);
-
-    auto registry = ComponentRegistry::GetRegistry();
-    
 }
 
 void GameLayer::OnDetach()

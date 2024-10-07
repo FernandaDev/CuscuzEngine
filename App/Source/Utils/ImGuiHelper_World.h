@@ -37,19 +37,22 @@ static void AddActorComponent(Actor* actor)
 
 inline static void ShowAddComponentBar(Actor* actor, int index)
 {
-    auto registry = ComponentRegistry::GetRegistry();
+    const auto registry = ComponentRegistry::GetRegistry();
     
-    const char* items[3] = {"", "", ""};
+    std::vector<char> items;
 
-    // for(int i = 0; i < 3; i++)
-    // {
-    //     items[i] = components[i]->GetComponentType().data();    
-    // }
+    for (size_t i = 0; i < registry.size(); i++)
+    {
+        items.insert(items.end(), registry[i].Name.begin(), registry[i].Name.end());
+        items.emplace_back(0);
+        if(i == registry.size() - 1) // in the last element, we need to insert 2 zeroes.
+            items.emplace_back(0);
+    }
     
     static int currentItem = 0;  // Index of the currently selected item
 
     // Create the combo box (dropdown)
-    if (ImGui::Combo("Add Component", &currentItem, items, IM_ARRAYSIZE(items)))
+    if (ImGui::Combo("Add Component", &currentItem, items.data()))
     {
         //TODO
         

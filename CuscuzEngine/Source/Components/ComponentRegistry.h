@@ -1,6 +1,6 @@
 ﻿#pragma once
 
-struct ComponentInfo
+struct ClassType
 {
     std::string Name;
     size_t Size;
@@ -8,13 +8,14 @@ struct ComponentInfo
 
 class ComponentRegistry {
 public:
-    static std::vector<ComponentInfo>& GetRegistry()
+    static std::vector<ClassType>& GetRegistry()
     {
-        static std::vector<ComponentInfo> registry;
+        static std::vector<ClassType> registry;
+
         return registry;
     }
 
-    static std::optional<ComponentInfo> GetComponentInfo(const std::string& className)
+    static std::optional<ClassType> GetClassType(const std::string& className)
     {
         for(const auto& component : GetRegistry())
         {
@@ -25,7 +26,7 @@ public:
         return {};
     }
 
-    static void RegisterComponent(const ComponentInfo& name)
+    static void RegisterComponent(const ClassType& name)
     {
         GetRegistry().emplace_back(name);
     }
@@ -42,23 +43,24 @@ public:
 template<typename T>
 T* Instantiate(std::string className)
 {
-    auto componentInfo = ComponentRegistry::GetComponentInfo(className);
+    const auto classType = ComponentRegistry::GetClassType(className);
 
-    if(!componentInfo)
+    if(!classType)
         return nullptr;
 
-    T* instance = malloc(componentInfo->Size);
-    memset(instance, 0, componentInfo->Size);
+    T* instance = malloc(classType->Size);
+    memset(instance, 0, classType->Size);
 
     return instance;
 }
 
 #define REGISTER_COMPONENT(type) \
-    static std::string_view GetStaticComponentType() { return #type; } \
+    static std::string_view GetStaticComponentType() { return ComponentRegistry::GetClassType(#type)->Name; } \
     virtual std::string_view GetComponentType() const override { return GetStaticComponentType(); } \
     struct [[nodiscard]] type##_Registry { \
-        type##_Registry() { ComponentRegistry::RegisterComponent(ComponentInfo(#type, sizeof(type))); } \
+        type##_Registry() { ComponentRegistry::RegisterComponent(ClassType(#type, sizeof(type))); } \
     }
     
 #define CREATE_COMPONENT_REGISTRY(type)\
-    static type::type##_Registry [[nodiscard]] type##_Registry_Instance {}
+    namespace _HIDDEN{\
+    type::type##_Registry [[nodiscard]] type##_Registry_Instance {}; }

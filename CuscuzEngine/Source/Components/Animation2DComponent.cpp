@@ -4,7 +4,7 @@
 #include "Render/Sprite.h"
 #include "World/Actor.h"
 
-CREATE_COMPONENT_REGISTRY(Animation2DComponent);
+CREATE_COMPONENT_REGISTRY(Animation2DComponent)
 
 Animation2DComponent::Animation2DComponent(int frameCount, int drawOrder, SDL_BlendMode blendMode) :
 SpriteComponent(drawOrder, blendMode), m_FrameCount(frameCount), m_AnimFPS(10), m_CurrentFrame(0)
@@ -15,7 +15,7 @@ void Animation2DComponent::Update(float deltaTime)
     PlayFrame(0,0);
 
     m_CurrentFrame += m_AnimFPS * deltaTime;
-
+    
     while(m_CurrentFrame >= m_FrameCount)
     {
         m_CurrentFrame -= m_FrameCount;
