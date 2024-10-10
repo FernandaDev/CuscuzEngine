@@ -43,11 +43,9 @@ project "App"
    objdir ("../Binaries/Intermediates/" .. outputdir .. "/%{prj.name}")
 
    filter "system:windows"
-       linkoptions { "/WHOLEARCHIVE:CuscuzEngine.lib", "/ENTRY:mainCRTStartup"}
-
-   filter "system:windows"
        systemversion "latest"
        defines { "WINDOWS", "_SILENCE_STDEXT_ARR_ITERS_DEPRECATION_WARNING" }
+       linkoptions { "/WHOLEARCHIVE:CuscuzEngine.lib", "/ENTRY:mainCRTStartup"}
 
    filter "configurations:Debug"
        defines { "DEBUG" }
