@@ -1,6 +1,7 @@
 ﻿#pragma once
 
-#include "Components/ComponentRegistry.h"
+
+#include "Core/ClassRegistry.h"
 
 class Actor;
 
@@ -17,7 +18,7 @@ public:
 
     virtual ~Component() = default;
 
-    virtual std::string_view GetComponentType() const = 0;
+    virtual std::string GetComponentType() const = 0;
     
     Component(const Component& other): m_OwnerActor(other.m_OwnerActor),
     m_UpdateOrder(other.m_UpdateOrder){}

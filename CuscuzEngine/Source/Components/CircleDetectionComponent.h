@@ -7,6 +7,7 @@ class [[nodiscard]] CircleDetectionComponent : public Component
     float m_Radius;
     
 public:
+    CircleDetectionComponent() = default;
     CircleDetectionComponent(float radius);
     ~CircleDetectionComponent() override = default;
 

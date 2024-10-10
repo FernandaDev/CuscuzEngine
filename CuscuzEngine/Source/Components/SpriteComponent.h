@@ -12,10 +12,10 @@ class Sprite;
 class SpriteComponent : public Component, public IRender
 {
 protected:
-    int m_DrawOrder;
-    SDL_BlendMode m_BlendMode;
-    glm::vec4 m_Color;
-    std::weak_ptr<Sprite> m_Sprite;
+    int m_DrawOrder = 0;
+    SDL_BlendMode m_BlendMode = SDL_BLENDMODE_NONE;
+    glm::vec4 m_Color = {};
+    std::weak_ptr<Sprite> m_Sprite {};
 
 public:
     SpriteComponent(int drawOrder = 0, SDL_BlendMode blendMode = SDL_BLENDMODE_NONE);

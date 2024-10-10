@@ -13,6 +13,7 @@ class Animation2DComponent : public SpriteComponent
     glm::i32vec2 m_SingleSpriteSize = { 80, 110 }; 
     
 public:
+    Animation2DComponent() = default;
     Animation2DComponent(int frameCount, int drawOrder = 0, SDL_BlendMode blendMode = SDL_BLENDMODE_NONE);
     ~Animation2DComponent() override = default;
     

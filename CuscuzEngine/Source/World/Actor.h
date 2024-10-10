@@ -94,7 +94,13 @@ public:
         return *std::static_pointer_cast<T>(newComponent);
     }
 
-    // TODO Create an "AddComponent" function that receives a pointer of a component.
+    void AddComponent(Component* component)
+    {
+        const auto& newComponent = m_Components.emplace_back(component);
+        newComponent->SetOwner(this);
+        LOG_INFO("{0} was added to {1}.", newComponent->GetComponentType(), m_Name);
+        OnComponentAdded();
+    }
 
     template<typename T>
     T& GetComponent()

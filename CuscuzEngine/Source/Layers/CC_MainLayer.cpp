@@ -3,7 +3,6 @@
 
 #include "CC_MainLayer.h"
 
-#include "Components/ComponentRegistry.h"
 #include "Core/CC_Engine.h"
 #include "Core/EventSystem.h"
 #include "Core/KeyCodes.h"

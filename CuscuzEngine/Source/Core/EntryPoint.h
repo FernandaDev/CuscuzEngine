@@ -4,7 +4,7 @@
 
 extern CC_Engine* CreateApplication();
 
-int main(int argc, char* argv[])
+inline int main(int argc, char* argv[])
 {
     const auto app = CreateApplication();
 

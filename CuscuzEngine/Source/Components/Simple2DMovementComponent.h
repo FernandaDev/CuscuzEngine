@@ -8,6 +8,7 @@ class Simple2DMovementComponent : public Component
     float m_AngularSpeed;
     
 public:
+    Simple2DMovementComponent() = default;
     Simple2DMovementComponent(float forwardSpeed, float angularSpeed, int updateOrder = 10);
 
     void Update(float deltaTime) override;

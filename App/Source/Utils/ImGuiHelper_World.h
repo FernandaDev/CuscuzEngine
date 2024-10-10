@@ -1,10 +1,12 @@
 ﻿#pragma once
 
+#include <ranges>
+
 #include "Components/Animation2DComponent.h"
 #include "ImGui/imgui.h"
 #include "World/World.h"
 #include "World/Actor.h"
-#include "Components/ComponentRegistry.h"
+#include "Core/ClassRegistry.h"
 #include "Components/Simple2DMovementComponent.h"
 
 inline static void ShowActorCreation(bool showing, World* world)
@@ -28,41 +30,43 @@ inline static void ShowActorCreation(bool showing, World* world)
     ImGui::EndGroup();
 }
 
-
-template <typename  T>
-static void AddActorComponent(Actor* actor)
+inline static bool ItemGetter(void* data, int idx, const char** out_text)
 {
-    actor->AddComponent<T>();
+    const std::vector<std::string>* items = static_cast<std::vector<std::string>*>(data);
+    if (idx < 0 || idx >= items->size()) return false;  // Out of bounds check
+    *out_text = (*items)[idx].c_str();
+    return true;
 }
 
 inline static void ShowAddComponentBar(Actor* actor, int index)
 {
-    const auto registry = ComponentRegistry::GetRegistry();
-    
-    std::vector<char> items;
+    const auto registry = ClassRegistry::GetRegistry();
 
-    for (size_t i = 0; i < registry.size(); i++)
+    std::vector<std::string> items;
+    items.reserve(registry.size());
+
+    for(const auto& registryKey : registry | std::views::keys)
     {
-        items.insert(items.end(), registry[i].Name.begin(), registry[i].Name.end());
-        items.emplace_back(0);
-        if(i == registry.size() - 1) // in the last element, we need to insert 2 zeroes.
-            items.emplace_back(0);
+        items.emplace_back(registryKey);
     }
     
     static int currentItem = 0;  // Index of the currently selected item
 
-    // Create the combo box (dropdown)
-    if (ImGui::Combo("Add Component", &currentItem, items.data()))
+    if(ImGui::Combo("Components List", &currentItem, ItemGetter, &items, static_cast<int>(items.size())))
     {
-        //TODO
-        
+        LOG_INFO("Selected component: {0}", items[currentItem]);
     }
 
     if(ImGui::Button("Add##999"))
     {
-        LOG_INFO("Component added: {0}", registry[currentItem].Name);
-    }
+        auto selectedComponent = ClassRegistry::GetClassType(items[currentItem]);
 
+        if(!selectedComponent)
+            return;
+        
+        const auto newComponent = Instantiate<Component>(selectedComponent->Name);
+        actor->AddComponent(newComponent);
+    }
 }
 
 
@@ -74,7 +78,9 @@ inline static void ShowActorComponents(Actor* actor, int index)
     ImGui::BeginListBox(listLabel.c_str(), ImVec2(300, 50));
     
     for (const auto& component : actor->GetComponents())
-        ImGui::Text(component->GetComponentType().data());
+    {
+        ImGui::Text(component->GetComponentType().c_str());
+    }
 
     ImGui::EndListBox();
 }
