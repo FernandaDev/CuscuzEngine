@@ -7,12 +7,21 @@
 #include "Utils/ImGuiHelper_World.h"
 #include "World/Actor.h"
 
+struct my_struct
+{
+    int value = 0;
+};
+
+
 GameLayer::GameLayer() : m_World(std::make_unique<World>())
 {}
 
 void GameLayer::OnAttach()
 {
     Layer::OnAttach();
+
+    auto& actor = m_World->CreateActor("Oi");
+    actor.AddComponent<SpriteComponent>();
 }
 
 void GameLayer::OnDetach()

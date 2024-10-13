@@ -43,6 +43,56 @@ public:
     }
 };
 
+#define REGISTER_CLASS(type)\
+    struct [[nodiscard]] type##_Registry { \
+    type##_Registry() { ClassRegistry::RegisterClass(#type, sizeof(type), []() -> void* { return new type(); }); } \
+    }
+
+#define REGISTER_COMPONENT(type) \
+    static std::string GetStaticComponentType() { return ClassRegistry::GetClassType(#type)->Name; } \
+    virtual std::string GetComponentType() const override { return GetStaticComponentType(); } \
+    REGISTER_CLASS(type)
+
+#define CREATE_COMPONENT_REGISTRY(type)\
+    namespace _HIDDEN{\
+    type::type##_Registry [[nodiscard]] type##_Registry_Instance {}; }
+
+static std::string GetCleanTypeName(const std::string& name)
+{
+    std::string result = name;
+    
+    // Remove "struct " or "class " prefix if present
+    const std::string structPrefix = "struct ";
+    const std::string classPrefix = "class ";
+    
+    if (result.find(structPrefix) == 0)
+    {
+        result = result.substr(structPrefix.length());
+    }
+    else if (result.find(classPrefix) == 0)
+    {
+        result = result.substr(classPrefix.length());
+    }
+
+    return result;
+}
+
+template<typename T>
+T* Instantiate()
+{
+    auto className = GetCleanTypeName(typeid(T).name());
+    
+    const auto classType = ClassRegistry::GetClassType(className);
+
+    if(!classType)
+    {
+        LOG_INFO("This class is not registered! {0}", className);
+        ClassRegistry::RegisterClassW(className, sizeof(T), []() -> void* { return new T(); } );
+    }
+    
+    return static_cast<T*>(classType->CreateInstanceFunc());
+}
+
 template<typename T>
 T* Instantiate(const std::string& className)
 {
@@ -64,17 +114,3 @@ T* Instantiate(std::string className)
     memset(instance, 0, classType->Size);
     return instance;
 }*/
-
-#define REGISTER_CLASS(type)\
-    struct [[nodiscard]] type##_Registry { \
-    type##_Registry() { ClassRegistry::RegisterClass(#type, sizeof(type), []() -> void* { return new type(); }); } \
-    }
-
-#define REGISTER_COMPONENT(type) \
-    static std::string GetStaticComponentType() { return ClassRegistry::GetClassType(#type)->Name; } \
-    virtual std::string GetComponentType() const override { return GetStaticComponentType(); } \
-    REGISTER_CLASS(type)
-
-#define CREATE_COMPONENT_REGISTRY(type)\
-    namespace _HIDDEN{\
-    type::type##_Registry [[nodiscard]] type##_Registry_Instance {}; }

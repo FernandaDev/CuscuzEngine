@@ -52,12 +52,16 @@ inline static void ShowAddComponentBar(Actor* actor, int index)
     
     static int currentItem = 0;  // Index of the currently selected item
 
-    if(ImGui::Combo("Components List", &currentItem, ItemGetter, &items, static_cast<int>(items.size())))
+    const auto componentsListLabel = "Components List##" + std::to_string(index);
+    
+    if(ImGui::Combo(componentsListLabel.c_str(), &currentItem, ItemGetter, &items, static_cast<int>(items.size())))
     {
         LOG_INFO("Selected component: {0}", items[currentItem]);
     }
 
-    if(ImGui::Button("Add##999"))
+    const auto addLabel = "Add##" + std::to_string(index);
+    
+    if(ImGui::Button(addLabel.c_str()))
     {
         auto selectedComponent = ClassRegistry::GetClassType(items[currentItem]);
 
