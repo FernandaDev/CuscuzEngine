@@ -19,28 +19,34 @@ project "CuscuzEngine"
    includedirs
    {
       "Source",
-      "Dependencies/SDL2/include",
-      --"Dependencies/SDL2_image/include",
-      
-      "%{includedir.ImGui}",
-      "%{includedir.SPD_Log}",
+
+      "%{includedir.SDL2}",
       "%{includedir.glm}",
-      "%{includedir.yaml}"
+      "%{includedir.SPD_Log}",
+      "%{includedir.ImGui}",
+      "%{includedir.yaml}",
+      "%{includedir.glew}",
    }
 
    libdirs
    { 
       "Dependencies/SDL2/lib",
-      --"Dependencies/SDL2_image/lib" 
    } 
 
    links
    {
       "ImGui",
       "yaml-cpp",
+      "glew",
       "SDL2.lib",
       "SDL2main.lib",
-      --"SDL2_image.lib",
+      "opengl32.lib",
+   }
+
+   defines
+   {
+        "GLEW_STATIC",      -- To match the Makefile static build
+        "GLEW_NO_GLU",       -- Exclude GLU support
    }
 
    targetdir ("../Binaries/" .. outputdir .. "/%{prj.name}")
@@ -48,7 +54,10 @@ project "CuscuzEngine"
 
    filter "system:windows"
        systemversion "latest"
-       defines { "WINDOWS", "_SILENCE_ALL_MS_EXT_DEPRECATION_WARNINGS" }
+       defines { 
+         "WINDOWS", 
+         "_SILENCE_ALL_MS_EXT_DEPRECATION_WARNINGS",
+      }
 
    filter "configurations:Debug"
        defines { "DEBUG" }

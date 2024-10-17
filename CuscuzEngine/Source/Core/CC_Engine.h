@@ -19,9 +19,6 @@ public:
 	std::unique_ptr<Window> CC_Window;
 	std::unique_ptr<RendererSystem> CC_RendererSystem;
 	std::unique_ptr<EventSystem> CC_EventSystem;
-
-protected:
-	//std::shared_ptr<CC_Game> m_Game;
 	
 private:
 	static CC_Engine* s_Instance;
@@ -46,7 +43,6 @@ public:
 	void PushOverlay(std::shared_ptr<Layer> layer);
 
 protected:
-	//void SetCurrentGame(const std::shared_ptr<CC_Game>& game);
 	virtual void Render();
 private:
 	void Init();

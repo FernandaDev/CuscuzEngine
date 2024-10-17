@@ -1,6 +1,7 @@
 #include "pch.h"
 #include <SDL.h>
 
+
 #include "CC_Engine.h"
 #include "Core/Window.h"
 #include "Core/RendererSystem.h"
@@ -12,6 +13,8 @@
 #include "Layers/CC_MainLayer.h"
 #include "Layers/Layer.h"
 #include "Utils/Log.h"
+
+#include <GL/glew.h>
 
 CC_Engine* CC_Engine::s_Instance = nullptr;
 
@@ -31,6 +34,8 @@ void CC_Engine::Init()
 	ResourceManager::Get().SetRootResourcesPath("../App/Assets/Images/"); // TODO REMOVE THIS
 
 	CC_EventSystem->SetEventCallback(BIND_FUNCTION(this, CC_Engine::OnEvent));
+
+	glewInit();
 }
 
 CC_Engine::~CC_Engine()

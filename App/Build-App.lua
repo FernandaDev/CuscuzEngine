@@ -20,10 +20,9 @@ project "App"
 
       "%{wks.location}/CuscuzEngine/Source",
       "%{wks.location}/CuscuzEngine/Vendor",
-      "%{wks.location}/Vendor/Log/include",
 
+      "%{includedir.SPD_Log}",
       "%{includedir.SDL2}",
-      "%{includedir.SDL2_image}",
       "%{includedir.glm}",
    }
 
