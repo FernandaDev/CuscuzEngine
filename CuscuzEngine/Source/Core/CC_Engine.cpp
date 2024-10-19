@@ -1,20 +1,15 @@
 #include "pch.h"
 #include <SDL.h>
 
-
 #include "CC_Engine.h"
 #include "Core/Window.h"
 #include "Core/RendererSystem.h"
-#include "Core/ResourceManager.h"
 #include "Core/Time.h"
-#include "Events/EventHandler.h"
 #include "Events/WindowEvents.h"
 #include "GUI/ImGuiLayer.h"
 #include "Layers/CC_MainLayer.h"
 #include "Layers/Layer.h"
 #include "Utils/Log.h"
-
-#include <GL/glew.h>
 
 CC_Engine* CC_Engine::s_Instance = nullptr;
 
@@ -31,17 +26,11 @@ void CC_Engine::Init()
 	s_Instance = this;
 	Log::Init();
 
-	ResourceManager::Get().SetRootResourcesPath("../App/Assets/Images/"); // TODO REMOVE THIS
-
 	CC_EventSystem->SetEventCallback(BIND_FUNCTION(this, CC_Engine::OnEvent));
-
-	glewInit();
 }
 
 CC_Engine::~CC_Engine()
 {
-	ResourceManager::Get().UnloadResources();
-	
 	SDL_Quit();
 }
 

@@ -47,17 +47,17 @@ project "CuscuzEngine"
    {
         "GLEW_STATIC",      -- To match the Makefile static build
         "GLEW_NO_GLU",       -- Exclude GLU support
+        "_SILENCE_ALL_MS_EXT_DEPRECATION_WARNINGS",
    }
+
+   linkoptions { "/IGNORE:4006" }
 
    targetdir ("../Binaries/" .. outputdir .. "/%{prj.name}")
    objdir ("../Binaries/Intermediates/" .. outputdir .. "/%{prj.name}")
 
    filter "system:windows"
        systemversion "latest"
-       defines { 
-         "WINDOWS", 
-         "_SILENCE_ALL_MS_EXT_DEPRECATION_WARNINGS",
-      }
+       defines { "WINDOWS" }
 
    filter "configurations:Debug"
        defines { "DEBUG" }

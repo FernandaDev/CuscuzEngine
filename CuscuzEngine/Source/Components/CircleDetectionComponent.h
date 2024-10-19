@@ -1,8 +1,9 @@
 ﻿#pragma once
+
 #include "vec2.hpp"
 #include "World/Component.h"
 
-class [[nodiscard]] CircleDetectionComponent : public Component
+class CircleDetectionComponent : public Component
 {
     float m_Radius;
     

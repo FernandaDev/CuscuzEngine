@@ -1,4 +1,9 @@
 ﻿#pragma once
+
+#include <memory>
+#include <vector>
+#include <string>
+
 #include "vec2.hpp"
 
 class Actor;

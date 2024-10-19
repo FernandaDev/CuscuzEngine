@@ -1,6 +1,5 @@
 #pragma once
 
-#include "pch.h"
 #include "Render/Sprite.h"
 #include "SDL.h"
 

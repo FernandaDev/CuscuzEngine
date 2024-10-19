@@ -1,8 +1,8 @@
 ﻿#pragma once
 
 #include <SDL_render.h>
+#include <memory>
 
-#include "vec2.hpp"
 #include "vec4.hpp"
 #include "Render/IRender.h"
 #include "World/Component.h"

@@ -1,4 +1,6 @@
 ﻿#pragma once
+
+#include "glm.hpp"
 #include "SpriteComponent.h"
 
 class Animation2DComponent : public SpriteComponent

@@ -2,8 +2,8 @@
 #include "Window.h"
 
 #include "Events/CC_EventDispatcher.h"
-#include "Events/EventHandler.h"
 #include "Events/WindowEvents.h"
+#include "GL/glew.h"
 #include "Utils/Log.h"
 
 Window::Window(const char* name, int width, int height):
@@ -18,10 +18,12 @@ Window::Window(const char* name, int width, int height):
 	m_Window = SDL_CreateWindow(name, SDL_WINDOWPOS_UNDEFINED, 
 									  SDL_WINDOWPOS_UNDEFINED,
 									  m_Width, m_Height, 
-									  SDL_WINDOW_SHOWN);
+									  SDL_WINDOW_OPENGL);
 
 	if (!m_Window)
 		LOG_ERROR("Could not create a window.");
+
+	glewInit();
 }
 
 Window::~Window()
