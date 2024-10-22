@@ -50,13 +50,13 @@ bool CC_MainLayer::TogglePlayWindow(const CC_KeyDownEvent& event)
 void CC_MainLayer::ShowPlayWindow()
 {
     ImGui::Begin("Game", &m_ShowPlayWindow);
-
+    
     if(ImGui::Button("Play"))
     {
         if(m_GameState != GameState::Running)
             LOG_INFO("Game is playing...");
     }
-
+    
     ImGui::SameLine();
     
     if(ImGui::Button("Pause"))

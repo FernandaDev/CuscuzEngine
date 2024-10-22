@@ -8,24 +8,40 @@
 #include "World/Component.h"
 
 class Sprite;
+class Shader;
+class VertexArray;
 
 class SpriteComponent : public Component, public IRender
 {
+    float vertexBuffer[12] = {
+        -0.5f, 0.5f, 0.0f,  //vertex 0
+         0.5f, 0.5f, 0.0f,  //vertex 1
+         0.5f,-0.5f, 0.0f,  //vertex 2
+        -0.5f,-0.5f, 0.0f   //vertex 3
+    };
+
+    unsigned int indexBuffer[6] = {
+        0, 1, 2,
+        2, 3, 0
+    };
+
+    VertexArray* m_SpriteVerts;
+    Shader* m_SpriteShader;
+    //Material
+    
 protected:
     int m_DrawOrder = 0;
-    SDL_BlendMode m_BlendMode = SDL_BLENDMODE_NONE;
     glm::vec4 m_Color = {};
     std::weak_ptr<Sprite> m_Sprite {};
 
 public:
-    SpriteComponent(int drawOrder = 0, SDL_BlendMode blendMode = SDL_BLENDMODE_NONE);
+    SpriteComponent(int drawOrder = 0);
     ~SpriteComponent() override = default;
 
-    void Draw(SDL_Renderer* renderer) override;
+    void Draw() override;
     void SetSprite(std::weak_ptr<Sprite> newSprite);
 
     void SetDrawOrder(int drawOrder);
-    void SetBlendMode(SDL_BlendMode blendMode);
 
     int GetDrawOrder() const override { return m_DrawOrder; }
     int GetTexHeight() const;
@@ -36,4 +52,7 @@ public:
 protected:
     //SDL_Rect GetDestination(const std::shared_ptr<Sprite>& sprite) const;
     float GetRotationDegrees() const;
+
+private:
+    bool LoadShaders();
 };

@@ -48,6 +48,7 @@ project "CuscuzEngine"
         "GLEW_STATIC",      -- To match the Makefile static build
         "GLEW_NO_GLU",       -- Exclude GLU support
         "_SILENCE_ALL_MS_EXT_DEPRECATION_WARNINGS",
+        "_CRT_SECURE_NO_WARNINGS",
    }
 
    linkoptions { "/IGNORE:4006" }

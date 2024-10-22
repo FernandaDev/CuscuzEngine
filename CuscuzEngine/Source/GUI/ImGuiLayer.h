@@ -14,7 +14,7 @@ class ImGuiLayer : public Layer
     bool m_ShowMainWindow;
     
 public:
-    ImGuiLayer(const Window& window, SDL_Renderer* renderer);
+    ImGuiLayer(const Window& window);
     ~ImGuiLayer() override;
 
     void OnAttach() override;

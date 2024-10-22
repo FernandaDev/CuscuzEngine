@@ -14,8 +14,8 @@
 CC_Engine* CC_Engine::s_Instance = nullptr;
 
 CC_Engine::CC_Engine() :
-	CC_Window{ std::make_unique<Window>("Game", SCREEN_WIDTH, SCREEN_HEIGHT) },
-	CC_RendererSystem{ std::make_unique<RendererSystem>(CC_Window.get()) },
+	CC_Window{ std::make_unique<Window>(SCREEN_WIDTH, SCREEN_HEIGHT) },
+	CC_RendererSystem{ std::make_unique<RendererSystem>() },
 	CC_EventSystem{ std::make_unique<EventSystem>() }
 {
 	Init();
@@ -24,7 +24,10 @@ CC_Engine::CC_Engine() :
 void CC_Engine::Init()
 {
 	s_Instance = this;
+
 	Log::Init();
+	CC_Window->Init("Cuscuz Engine");
+	CC_RendererSystem->Init();
 
 	CC_EventSystem->SetEventCallback(BIND_FUNCTION(this, CC_Engine::OnEvent));
 }
@@ -38,7 +41,7 @@ void CC_Engine::Start()
 {
 	PushLayer(std::make_shared<CC_MainLayer>());
 	
-	m_ImGuiLayer = std::make_shared<ImGuiLayer>(*CC_Window, CC_RendererSystem->GetRenderer());
+	m_ImGuiLayer = std::make_shared<ImGuiLayer>(*CC_Window);
 	PushOverlay(m_ImGuiLayer);	
 }
 

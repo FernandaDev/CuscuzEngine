@@ -64,15 +64,15 @@ void GameLayer::ShowWorldWindow()
 {
     ImGui::Begin("World", &m_ShowWorldWindow);
     
-    {
-        const bool showingActorCreation = ImGui::CollapsingHeader("Actor Creation", ImGuiTreeNodeFlags_DefaultOpen);
-        ShowActorCreation(showingActorCreation, m_World.get());
-    }
-    
-    {
-        const bool showingActors = ImGui::CollapsingHeader("Actors List", ImGuiTreeNodeFlags_DefaultOpen);
-        ShowAllActors(showingActors, m_World.get());
-    }
+    // {
+    //     const bool showingActorCreation = ImGui::CollapsingHeader("Actor Creation", ImGuiTreeNodeFlags_DefaultOpen);
+    //     ShowActorCreation(showingActorCreation, m_World.get());
+    // }
+    //
+    // {
+    //     const bool showingActors = ImGui::CollapsingHeader("Actors List", ImGuiTreeNodeFlags_DefaultOpen);
+    //     ShowAllActors(showingActors, m_World.get());
+    // }
     
     ImGui::End();
 }
