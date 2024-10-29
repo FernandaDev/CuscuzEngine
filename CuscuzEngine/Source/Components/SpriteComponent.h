@@ -6,14 +6,14 @@
 #include "vec4.hpp"
 #include "Render/IRender.h"
 #include "World/Component.h"
+#include "Render/Shader.h"
+#include "Render/VertexArray.h"
 
 class Sprite;
-class Shader;
-class VertexArray;
 
 class SpriteComponent : public Component, public IRender
 {
-    float vertexBuffer[12] = {
+    float vertexPositions[12] = {
         -0.5f, 0.5f, 0.0f,  //vertex 0
          0.5f, 0.5f, 0.0f,  //vertex 1
          0.5f,-0.5f, 0.0f,  //vertex 2
@@ -25,8 +25,8 @@ class SpriteComponent : public Component, public IRender
         2, 3, 0
     };
 
-    VertexArray* m_SpriteVerts;
-    Shader* m_SpriteShader;
+    std::unique_ptr<VertexArray> m_SpriteVerts;
+    std::unique_ptr<Shader> m_SpriteShader;
     //Material
     
 protected:

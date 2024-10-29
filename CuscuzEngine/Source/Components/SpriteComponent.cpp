@@ -1,20 +1,17 @@
 ﻿#include "pch.h"
 #include "SpriteComponent.h"
 
-#include <utility>
-
 #include "detail/func_trigonometric.inl"
-#include "Render/Shader.h"
 #include "Render/Sprite.h"
 #include "World/Actor.h"
-#include "Render/VertexArray.h"
+#include "GL/glew.h"
 
 CREATE_COMPONENT_REGISTRY(SpriteComponent);
 
 SpriteComponent::SpriteComponent(int drawOrder) :
 m_DrawOrder(drawOrder), m_Color(0,0,0,1)
 {
-    m_SpriteVerts = new VertexArray(vertexBuffer, 4, indexBuffer, 6);
+    m_SpriteVerts = std::make_unique<VertexArray>(vertexPositions, 4, indexBuffer, 6);
     LoadShaders();
 }
 
@@ -61,9 +58,9 @@ float SpriteComponent::GetRotationDegrees() const
 
 bool SpriteComponent::LoadShaders()
 {
-    m_SpriteShader = new Shader();
+    m_SpriteShader = std::make_unique<Shader>();
     
-    if(!m_SpriteShader->Load("Assets/Shaders/Basic.vert", "Assets/Shaders/Basic.frag"))
+    if(!m_SpriteShader->Load("Assets/Shaders/Basic.glsl"))
         return false;
 
     m_SpriteShader->SetActive();

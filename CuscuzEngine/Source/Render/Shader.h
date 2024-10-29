@@ -1,26 +1,25 @@
 ﻿#pragma once
 
 #include <string>
-#include "GL/glew.h"
 
 class Shader
 {
-    GLuint m_VertexShader;
-    GLuint m_FragmentShader;
-    GLuint m_ShaderProgram;
+    unsigned int m_VertexShader;
+    unsigned int m_FragmentShader;
+    unsigned int m_ShaderProgram;
     
 public:
     Shader() = default;
     ~Shader() = default;
 
-    bool Load(const std::string& vertName, const std::string& fragName);
+    bool Load(const std::string& shaderFile);
     void Unload() const;
     
     void SetActive() const;
 
 private:
-    bool CompileShader(const std::string& fileName, GLenum shaderType, GLuint& outShader);
-    bool IsCompiled(GLuint shader);
+    bool CompileShader(const std::string& fileName, unsigned int shaderType, unsigned int& outShader);
+    bool IsCompiled(unsigned int shader);
     bool IsValidProgram() const;
     
 };

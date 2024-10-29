@@ -2,6 +2,7 @@
 #include "VertexArray.h"
 #include "GL/glew.h"
 
+//TODO remember that this is limited to one attribute.
 VertexArray::VertexArray(const float* verts, unsigned int numVerts,
                          const unsigned int* indices, unsigned int numIndices)
 {
@@ -20,10 +21,8 @@ VertexArray::VertexArray(const float* verts, unsigned int numVerts,
 
     glBufferData(GL_ELEMENT_ARRAY_BUFFER, numIndices * sizeof(unsigned int), indices, GL_STATIC_DRAW);
 
-
-    glEnableVertexAttribArray(0);
+    glEnableVertexAttribArray(0); 
     glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof(float) * 3, 0);
-    
 }
 
 VertexArray::~VertexArray()

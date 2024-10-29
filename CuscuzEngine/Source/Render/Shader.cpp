@@ -1,10 +1,48 @@
 ﻿#include "pch.h"
 #include "Shader.h"
+#include "GL/glew.h"
 
-bool Shader::Load(const std::string& vertName, const std::string& fragName)
+struct ShaderSource
 {
-    if(!CompileShader(vertName, GL_VERTEX_SHADER, m_VertexShader) ||
-        !CompileShader(fragName, GL_FRAGMENT_SHADER, m_FragmentShader))
+    std::string VertexSource;
+    std::string FragmentSource;
+};
+
+static ShaderSource ParseShader(const std::string& file)
+{
+    std::ifstream stream(file);
+
+    enum class ShaderType { NONE = -1, VERTEX = 0, FRAGMENT = 1 };
+
+    std::string line;
+    std::stringstream ss[2];
+    ShaderType type = ShaderType::NONE;
+
+    while (std::getline(stream, line))
+    {
+        if(line.find("#type") != std::string::npos)
+        {
+            if(line.find("vertex") != std::string::npos)
+                type = ShaderType::VERTEX;
+            else if (line.find("fragment") != std::string::npos)
+                type = ShaderType::FRAGMENT;
+        }
+        else
+        {
+            ss[static_cast<int>(type)] << line << '\n';
+        }
+    }
+
+    return { ss[static_cast<int>(ShaderType::VERTEX)].str(),
+             ss[static_cast<int>(ShaderType::FRAGMENT)].str() };
+}
+
+bool Shader::Load(const std::string& shaderFile)
+{
+    const auto shaderSource = ParseShader(shaderFile);
+    
+    if(!CompileShader(shaderSource.VertexSource, GL_VERTEX_SHADER, m_VertexShader) ||
+        !CompileShader(shaderSource.FragmentSource, GL_FRAGMENT_SHADER, m_FragmentShader))
     {
         return false;
     }
@@ -32,33 +70,20 @@ void Shader::SetActive() const
     glUseProgram(m_ShaderProgram);
 }
 
-bool Shader::CompileShader(const std::string& fileName, GLenum shaderType, GLuint& outShader)
+bool Shader::CompileShader(const std::string& shaderSource, GLenum shaderType, GLuint& outShader)
 {
-    const std::ifstream shaderFile(fileName);
+    const char* contentsChar = shaderSource.c_str();
 
-    if(shaderFile.is_open())
+    outShader = glCreateShader(shaderType);
+    glShaderSource(outShader, 1, &(contentsChar), nullptr);
+    glCompileShader(outShader);
+    
+    if(!IsCompiled(outShader))
     {
-        std::stringstream ss;
-        ss << shaderFile.rdbuf();
-        const std::string contents = ss.str();
-        const char* contentsChar = contents.c_str();
-
-        outShader = glCreateShader(shaderType);
-        glShaderSource(outShader, 1, &(contentsChar), nullptr);
-        glCompileShader(outShader);
-
-        if(!IsCompiled(outShader))
-        {
-            LOG_ERROR("Failed to compile shader: {0}", fileName.c_str());
-            return false;
-        }        
-    }
-    else
-    {
-        LOG_ERROR("Shader file not found: {0}", fileName);
+        LOG_ERROR("Failed to compile shader: {0}", shaderType);
         return false;
     }
-    
+
     return true;
 }
 

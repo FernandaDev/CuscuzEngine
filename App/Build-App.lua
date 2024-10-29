@@ -9,8 +9,12 @@ project "App"
    { 
     "Source/**.h", 
     "Source/**.cpp",
-    "%{includedir.glm}/**.hpp",
-    "%{includedir.glm}/**.inl",
+    "Assets/**.glsl",
+    "Assets/**.png",
+    "Assets/**.bmp",
+    "Assets/**.jpeg",
+    -- "%{includedir.glm}/**.hpp",
+    -- "%{includedir.glm}/**.inl",
    }
 
    includedirs

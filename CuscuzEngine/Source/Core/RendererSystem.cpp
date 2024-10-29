@@ -17,28 +17,28 @@ void RendererSystem::Init() const
     Clear();
 }
 
-void RendererSystem::AddRenderComponent(std::shared_ptr<IRender> NewRenderComponent)
+void RendererSystem::AddRenderComponent(const std::shared_ptr<IRender>& renderComponent)
 {
-    const int drawOrder = NewRenderComponent->GetDrawOrder();
+    const int drawOrder = renderComponent->GetDrawOrder();
     auto it = m_RenderComponents.begin();
 
     for (; it != m_RenderComponents.end(); ++it)
     {
-        if (const auto sprite = it->lock())
-            if (drawOrder < sprite->GetDrawOrder())
+        if (const auto renderObject = it->lock())
+            if (drawOrder < renderObject->GetDrawOrder())
                 break;
     }
 
-    m_RenderComponents.insert(it, NewRenderComponent);
+    m_RenderComponents.insert(it, renderComponent);
 }
 
-void RendererSystem::RemoveRenderComponent(std::shared_ptr<IRender> renderComponent)
+void RendererSystem::RemoveRenderComponent(const std::shared_ptr<IRender>& renderComponent)
 {
     auto it = std::remove_if(m_RenderComponents.begin(), m_RenderComponents.end(),
-                           [renderComponent](const auto& spriteComponent)
+                           [renderComponent](const auto& component)
                            {
-                               if (const auto sprite = spriteComponent.lock())
-                                   return sprite.get() == renderComponent.get();
+                               if (const auto comp = component.lock())
+                                   return comp.get() == renderComponent.get();
                                return false;
                            });
     
@@ -52,13 +52,13 @@ void RendererSystem::Update()
 
     if (m_RenderComponents.empty())
         return;
-    
+
      auto it = m_RenderComponents.begin();
      while (it != m_RenderComponents.end())
      {
-         if (const auto& sprite = it->lock())
+         if (const auto& renderObject = it->lock())
          {
-             sprite->Draw();
+             renderObject->Draw();
              ++it;
          }
          else
@@ -78,3 +78,4 @@ void RendererSystem::Clear() const
     glClearColor(0.6f, 0.6f, 0.6f, 1.0f);
     glClear(GL_COLOR_BUFFER_BIT);
 }
+
