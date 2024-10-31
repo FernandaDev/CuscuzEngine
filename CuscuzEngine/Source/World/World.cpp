@@ -15,18 +15,16 @@ void World::Update(float deltaTime)
     if(!m_PendingActors.empty())
     {
         for (auto& pendingActor : m_PendingActors)
+        {
+            pendingActor->ComputeWorldTransform();
             m_ActiveActors.emplace_back(pendingActor);
+        }
         
         m_PendingActors.clear();
     }
     
     HandleDeadActors();
 }
-
-// void World::AddActor(Actor* NewActor)
-// {
-//     (m_UpdatingActors ? m_PendingActors : m_ActiveActors).emplace_back(NewActor);
-// }
 
 Actor& World::CreateActor(std::string&& name, glm::vec2 position, float scale, float rotation)
 {

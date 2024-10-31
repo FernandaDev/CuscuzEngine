@@ -1,6 +1,5 @@
 ﻿#pragma once
 
-
 #include "Core/ClassRegistry.h"
 
 class Actor;
@@ -40,4 +39,5 @@ public:
     virtual void Update(float deltaTime);
     virtual void OnAdded() {}
     virtual void OnRemoved() {}
+    virtual void OnTransformUpdate() {}
 };

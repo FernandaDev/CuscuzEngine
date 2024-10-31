@@ -1,6 +1,7 @@
 ﻿#include "pch.h"
 #include "Shader.h"
 #include "GL/glew.h"
+#include "gtc/type_ptr.hpp"
 
 struct ShaderSource
 {
@@ -70,6 +71,29 @@ void Shader::SetActive() const
     glUseProgram(m_ShaderProgram);
 }
 
+void Shader::SetMatrixUniform(const char* name, const glm::mat4x4& matrix)
+{
+    const auto uniformId = GetUniformID(name);
+
+    glUniformMatrix4fv(uniformId, 1, GL_TRUE, glm::value_ptr(matrix));
+}
+
+unsigned Shader::GetUniformID(const char* name)
+{
+    if(m_uniformMap.contains(name))
+    {
+        return m_uniformMap[name];
+    }
+
+    const auto uniformID = glGetUniformLocation(m_ShaderProgram, name);
+    if (uniformID == -1) {
+        LOG_ERROR("Warning: uniform '{0}' doesn't exist or is unused!", name);
+    }
+        
+    m_uniformMap[name] = uniformID;
+    return uniformID;
+}
+
 bool Shader::CompileShader(const std::string& shaderSource, GLenum shaderType, GLuint& outShader)
 {
     const char* contentsChar = shaderSource.c_str();
@@ -122,3 +146,4 @@ bool Shader::IsValidProgram() const
 
     return true;
 }
+

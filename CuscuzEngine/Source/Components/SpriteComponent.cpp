@@ -59,7 +59,7 @@ float SpriteComponent::GetRotationDegrees() const
 bool SpriteComponent::LoadShaders()
 {
     m_SpriteShader = std::make_unique<Shader>();
-    
+
     if(!m_SpriteShader->Load("Assets/Shaders/Basic.glsl"))
         return false;
 

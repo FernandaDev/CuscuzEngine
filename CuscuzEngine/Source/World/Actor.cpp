@@ -5,10 +5,12 @@
 #include "Core/CC_Engine.h"
 #include "Components/SpriteComponent.h"
 #include "Core/RendererSystem.h"
+#include "ext/matrix_transform.hpp"
 
 Actor::Actor(World* world, std::string&& name, glm::vec2 position, float scale, float rotation) :
- m_Name(std::move(name)), m_State(Active), m_Position(position), m_Scale(scale), m_Rotation(rotation),
-m_World(world) { }
+ m_Name(std::move(name)), m_State(Active), m_World(world), m_Position(position), m_Scale(scale),
+m_Rotation(rotation), m_RecomputeWorldTransform(true)
+{ }
 
 Actor::~Actor()
 {
@@ -18,9 +20,13 @@ Actor::~Actor()
 }
 
 void Actor::Update(float deltaTime)
-{    
+{
+    ComputeWorldTransform();
+    
     UpdateComponents(deltaTime);
     UpdateActor(deltaTime);
+
+    ComputeWorldTransform();
 }
 
 void Actor::Destroy()
@@ -28,6 +34,20 @@ void Actor::Destroy()
     m_State = Dead;
 
     TryRemoveRenderComponent();
+}
+
+void Actor::ComputeWorldTransform()
+{
+    if(!m_RecomputeWorldTransform)
+        return;
+
+    m_RecomputeWorldTransform = false;
+    m_WorldTransform = glm::scale(m_WorldTransform, glm::vec3(m_Scale, m_Scale, m_Scale));
+    m_WorldTransform = glm::rotate(m_WorldTransform, m_Rotation, glm::vec3(0,0,1.f));
+    m_WorldTransform = glm::translate(m_WorldTransform, glm::vec3(m_Position.x, m_Position.y, 0.f));
+
+    for (const auto& comp : m_Components)
+        comp->OnTransformUpdate();
 }
 
 void Actor::UpdateComponents(float deltaTime) const
