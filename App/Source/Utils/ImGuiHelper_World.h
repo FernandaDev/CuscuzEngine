@@ -102,12 +102,12 @@ inline static void ShowActor(Actor* actor, int index, World* world)
     
     ImGui::Text("Position: ");
     ImGui::SameLine();
-    ImGui::Text("X: %f ", actor->GetPosition().x);
+    ImGui::Text("X: %f ", actor->GetTransform().GetPosition().x);
     ImGui::SameLine();
-    ImGui::Text("Y: %f ", actor->GetPosition().y);
+    ImGui::Text("Y: %f ", actor->GetTransform().GetPosition().y);
     
-    ImGui::Text("Rotation: %f", actor->GetRotation());
-    ImGui::Text("Scale: %f", actor->GetScale());
+    ImGui::Text("Rotation: %f", actor->GetTransform().GetRotation());
+    ImGui::Text("Scale: %f", actor->GetTransform().GetScale());
     
     ImGui::Spacing();
     ShowActorComponents(actor, index);

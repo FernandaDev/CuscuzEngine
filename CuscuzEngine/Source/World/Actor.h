@@ -3,9 +3,8 @@
 #include "vec2.hpp"
 #include "Utils/Log.h"
 #include "Component.h"
-#include "mat4x4.hpp"
+#include "Components/TransformComponent.h"
 #include "Events/EventDefinitions.h"
-#include "Utils/Math.h"
 
 class World;
 
@@ -28,12 +27,7 @@ protected:
     World* m_World;
     OnComponentAdded m_OnComponentAddedDelegate {};
 
-    //TODO make this a Transform component
-    glm::vec2 m_Position;
-    float m_Scale;
-    float m_Rotation;
-    glm::mat4 m_WorldTransform;
-    bool m_RecomputeWorldTransform;
+    std::unique_ptr<TransformComponent> m_Transform;
 
 public:
     Actor(World* world, std::string&& name, glm::vec2 position,
@@ -44,18 +38,9 @@ public:
     void Destroy();
 
     const std::string& GetName() const { return m_Name; }
-    ActorState         GetState() const { return m_State; }
-    const glm::vec2&   GetPosition() const { return m_Position; }
-    float              GetScale() const { return m_Scale; }
-    float              GetRotation() const { return m_Rotation; }
-    glm::vec2          GetForward() const { return {CC_Math::Cos(m_Rotation), -CC_Math::Sin(m_Rotation)}; }
-    glm::mat4          GetWorldTransform() const  { return m_WorldTransform; }
-
+    ActorState GetState() const { return m_State; }
+    TransformComponent& GetTransform() const { return *m_Transform; }
     const std::vector<std::shared_ptr<Component>>& GetComponents() const { return m_Components; }
-
-    void SetPosition(const glm::vec2& newPosition) { m_Position = newPosition; }
-    void SetRotation(float newRotation) { m_Rotation = newRotation; }
-    void ComputeWorldTransform();
 
 protected:
     void UpdateComponents(float deltaTime) const;
@@ -65,6 +50,7 @@ protected:
 private:
     void TryRenderComponent(std::shared_ptr<Component> component);
     void TryRemoveRenderComponent();
+    void UpdateTransform(float deltaTime) const;
     
     ///////////////TEMPLATES//////////////////
 public:

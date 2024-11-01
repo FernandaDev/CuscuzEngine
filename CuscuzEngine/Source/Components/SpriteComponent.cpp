@@ -42,12 +42,12 @@ void SpriteComponent::Draw()
         auto scaleMatrix = glm::mat4(1.0f);
         scaleMatrix = scale(scaleMatrix, glm::vec3( sprite->GetWidthF(),sprite->GetHeightF(), 1.f));
 
-        const auto worldMatrix = scaleMatrix * m_OwnerActor->GetWorldTransform();
+        const auto worldMatrix = scaleMatrix * m_OwnerActor->GetTransform().GetWorldTransform();
         m_SpriteShader->SetMatrixUniform("uWorldTransform", worldMatrix);
     }
     else
     {
-        const auto worldTransform = m_OwnerActor->GetWorldTransform();
+        const auto worldTransform = m_OwnerActor->GetTransform().GetWorldTransform();
         m_SpriteShader->SetMatrixUniform("uWorldTransform", worldTransform);
     }
     
@@ -84,5 +84,5 @@ int SpriteComponent::GetTextWidth() const
 
 float SpriteComponent::GetRotationDegrees() const
 {
-    return glm::degrees(m_OwnerActor->GetRotation());
+    return glm::degrees(m_OwnerActor->GetTransform().GetRotation());
 }

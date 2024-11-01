@@ -16,16 +16,16 @@ void Simple2DMovementComponent::Update(float deltaTime)
 
     if(!CC_Math::NearZero(m_ForwardSpeed))
     {
-        glm::vec2 position = m_OwnerActor->GetPosition();
-        position += m_OwnerActor->GetForward() * m_ForwardSpeed * deltaTime;
-        m_OwnerActor->SetPosition(position);
+        glm::vec2 position = m_OwnerActor->GetTransform().GetPosition();
+        position += m_OwnerActor->GetTransform().GetForward() * m_ForwardSpeed * deltaTime;
+        m_OwnerActor->GetTransform().SetPosition(position);
     }
     
     if(!CC_Math::NearZero(m_AngularSpeed))
     {
-        float rotation = m_OwnerActor->GetRotation();
+        float rotation = m_OwnerActor->GetTransform().GetRotation();
         rotation += m_AngularSpeed * deltaTime;
-        m_OwnerActor->SetRotation(rotation);
+        m_OwnerActor->GetTransform().SetRotation(rotation);
     }
 }
 

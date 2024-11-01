@@ -16,7 +16,6 @@ void World::Update(float deltaTime)
     {
         for (auto& pendingActor : m_PendingActors)
         {
-            pendingActor->ComputeWorldTransform();
             m_ActiveActors.emplace_back(pendingActor);
         }
         
@@ -41,7 +40,6 @@ void World::DestroyActor(Actor* actor) const
 {
     actor->Destroy();
 }
-
 
 void World::HandleDeadActors()
 {

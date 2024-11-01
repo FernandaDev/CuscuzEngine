@@ -5,11 +5,10 @@
 #include "Core/CC_Engine.h"
 #include "Components/SpriteComponent.h"
 #include "Core/RendererSystem.h"
-#include "ext/matrix_transform.hpp"
 
 Actor::Actor(World* world, std::string&& name, glm::vec2 position, float scale, float rotation) :
- m_Name(std::move(name)), m_State(Active), m_World(world), m_Position(position), m_Scale(scale),
-m_Rotation(rotation), m_WorldTransform(glm::mat4(1.f)), m_RecomputeWorldTransform(true)
+ m_Name(std::move(name)), m_State(Active), m_World(world),
+m_Transform(std::make_unique<TransformComponent>(position, scale, rotation))
 { }
 
 Actor::~Actor()
@@ -19,16 +18,6 @@ Actor::~Actor()
     m_Components.clear();
 }
 
-void Actor::Update(float deltaTime)
-{
-    ComputeWorldTransform();
-    
-    UpdateComponents(deltaTime);
-    UpdateActor(deltaTime);
-
-    ComputeWorldTransform();
-}
-
 void Actor::Destroy()
 {
     m_State = Dead;
@@ -36,25 +25,29 @@ void Actor::Destroy()
     TryRemoveRenderComponent();
 }
 
-void Actor::ComputeWorldTransform()
+void Actor::Update(float deltaTime)
 {
-    if(!m_RecomputeWorldTransform)
-        return;
+    UpdateTransform(deltaTime);
+    
+    UpdateComponents(deltaTime);
+    UpdateActor(deltaTime);
 
-    m_RecomputeWorldTransform = false;
-    m_WorldTransform = glm::scale(m_WorldTransform, glm::vec3(m_Scale, m_Scale, m_Scale));
-    m_WorldTransform = glm::rotate(m_WorldTransform, m_Rotation, glm::vec3(0,0,1.f));
-    m_WorldTransform = glm::translate(m_WorldTransform, glm::vec3(m_Position.x, m_Position.y, 0.f));
+    UpdateTransform(deltaTime);
+}
 
-    for (const auto& comp : m_Components)
-        comp->OnTransformUpdate();
+void Actor::UpdateTransform(float deltaTime) const
+{
+    m_Transform->Update(deltaTime);
+    
+    for (const auto& component : m_Components)
+        component->OnTransformUpdate();
 }
 
 void Actor::UpdateComponents(float deltaTime) const
 {
     if(m_Components.empty())
         return;
-    
+
     for (const auto& component : m_Components)
         component->Update(deltaTime);
 }
@@ -88,3 +81,5 @@ void Actor::TryRemoveRenderComponent()
         CC_Engine::Get().CC_RendererSystem->RemoveRenderComponent(renderComponent);
     }
 }
+
+
