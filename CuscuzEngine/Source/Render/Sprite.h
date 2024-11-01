@@ -16,6 +16,8 @@ public:
 
     int GetWidth() const { return m_PixelsDimension.x; }
     int GetHeight() const { return m_PixelsDimension.y; }
+    float GetWidthF() const { return static_cast<float>(m_PixelsDimension.x); }
+    float GetHeightF() const { return static_cast<float>(m_PixelsDimension.y); }
 
     Texture* GetTexture() const
     {

@@ -32,7 +32,7 @@ protected:
     glm::vec2 m_Position;
     float m_Scale;
     float m_Rotation;
-    glm::mat4x4 m_WorldTransform {};
+    glm::mat4 m_WorldTransform;
     bool m_RecomputeWorldTransform;
 
 public:
@@ -49,6 +49,7 @@ public:
     float              GetScale() const { return m_Scale; }
     float              GetRotation() const { return m_Rotation; }
     glm::vec2          GetForward() const { return {CC_Math::Cos(m_Rotation), -CC_Math::Sin(m_Rotation)}; }
+    glm::mat4          GetWorldTransform() const  { return m_WorldTransform; }
 
     const std::vector<std::shared_ptr<Component>>& GetComponents() const { return m_Components; }
 

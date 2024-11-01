@@ -9,7 +9,7 @@
 
 Actor::Actor(World* world, std::string&& name, glm::vec2 position, float scale, float rotation) :
  m_Name(std::move(name)), m_State(Active), m_World(world), m_Position(position), m_Scale(scale),
-m_Rotation(rotation), m_RecomputeWorldTransform(true)
+m_Rotation(rotation), m_WorldTransform(glm::mat4(1.f)), m_RecomputeWorldTransform(true)
 { }
 
 Actor::~Actor()

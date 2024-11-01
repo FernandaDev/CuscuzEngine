@@ -39,7 +39,7 @@ public:
     ~SpriteComponent() override = default;
 
     void Draw() override;
-    void SetSprite(std::weak_ptr<Sprite> newSprite);
+    void SetSprite(const std::weak_ptr<Sprite>& newSprite);
 
     void SetDrawOrder(int drawOrder);
 

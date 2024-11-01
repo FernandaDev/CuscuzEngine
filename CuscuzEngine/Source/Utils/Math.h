@@ -1,7 +1,5 @@
 ﻿#pragma once
 
-//#include <glm.hpp>
-
 namespace CC_Math
 {
     const float Pi = 3.1415926535f;

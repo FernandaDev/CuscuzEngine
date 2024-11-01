@@ -4,6 +4,7 @@
 #include "Core/KeyCodes.h"
 #include "ImGui/imgui.h"
 #include "Events/KeyEvents.h"
+#include "Render/Sprite.h"
 #include "Utils/ImGuiHelper_World.h"
 #include "World/Actor.h"
 
@@ -20,7 +21,7 @@ void GameLayer::OnAttach()
 {
     Layer::OnAttach();
 
-    auto& actor = m_World->CreateActor("Oi");
+    auto& actor = m_World->CreateActor("Oi", glm::vec2(2, 2), 64.f);
     actor.AddComponent<SpriteComponent>();
 }
 
