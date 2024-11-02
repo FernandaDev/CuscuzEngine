@@ -5,6 +5,7 @@
 #include "Component.h"
 #include "Components/TransformComponent.h"
 #include "Events/EventDefinitions.h"
+#include "Utils/Math.h"
 
 class World;
 
@@ -31,7 +32,7 @@ protected:
 
 public:
     Actor(World* world, std::string&& name, glm::vec2 position,
-        float scale = 1.f, float rotation = 0);
+        float scale = 1.f, float rotation = CC_Math::PiOver2);
     virtual ~Actor();
 
     void Update(float deltaTime);

@@ -53,19 +53,22 @@ void RendererSystem::Update()
     if (m_RenderComponents.empty())
         return;
 
-     auto it = m_RenderComponents.begin();
-     while (it != m_RenderComponents.end())
-     {
-         if (const auto& renderObject = it->lock())
-         {
-             renderObject->Draw();
-             ++it;
-         }
-         else
-         {
-             it = m_RenderComponents.erase(it);
-         }
-     }
+    glEnable(GL_BLEND);
+    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+
+    auto it = m_RenderComponents.begin();
+    while (it != m_RenderComponents.end())
+    {
+        if (const auto& renderObject = it->lock())
+        {
+            renderObject->Draw();
+            ++it;
+        }
+        else
+        {
+            it = m_RenderComponents.erase(it);
+        }
+    }
 }
 
 void RendererSystem::Render() const

@@ -1,27 +1,22 @@
 ﻿#pragma once
 
-//#include <SDL_image.h>
-#include "SDL.h"
-#include "Utils/Log.h"
-
 class Texture
 {
-    SDL_Texture* m_Texture;
+protected:
+    unsigned int m_TextureID;
+    
+    int m_Width;
+    int m_Height;
     
 public:
-   Texture(SDL_Renderer* renderer, std::string filePath) : m_Texture(nullptr)
-   {
-       //m_Texture = IMG_LoadTexture(renderer, filePath.c_str());
+   Texture() = default;
+   virtual ~Texture() = default;
 
-       if(!m_Texture)
-           LOG_ERROR("Couldn't load the texture!");
-   }
+    virtual bool Load(const std::string& filePath) = 0;
+    virtual void Unload() = 0;
 
-   ~Texture()
-   {
-       SDL_DestroyTexture(m_Texture);
-       LOG_INFO("Destroyed texture!");
-   }
+    virtual void SetActive() = 0;
 
-    SDL_Texture* SDLPtr() const { return m_Texture; }
+    int GetWidth() const { return m_Width; }
+    int GetHeight() const { return m_Height; }
 };

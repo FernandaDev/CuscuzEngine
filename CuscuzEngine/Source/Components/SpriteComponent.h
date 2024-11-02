@@ -13,11 +13,11 @@ class Sprite;
 
 class SpriteComponent : public Component, public IRender
 {
-    float vertexPositions[12] = {
-        -0.5f, 0.5f, 0.0f,  //vertex 0
-         0.5f, 0.5f, 0.0f,  //vertex 1
-         0.5f,-0.5f, 0.0f,  //vertex 2
-        -0.5f,-0.5f, 0.0f   //vertex 3
+    float vertexPositions[20] = {
+        -0.5f,  0.5f, 0.0f, 0.0f, 1.0f, // vertex 0 top left
+         0.5f,  0.5f, 0.0f, 1.0f, 1.0f, // vertex 1 top right
+         0.5f, -0.5f, 0.0f, 1.0f, 0.0f, // vertex 2 bottom right
+        -0.5f, -0.5f, 0.0f, 0.0f, 0.0f  // vertex 3 bottom left
     };
 
     unsigned int indexBuffer[6] = {

@@ -20,7 +20,7 @@ bool SpriteComponent::LoadShaders()
 {
     m_SpriteShader = std::make_unique<Shader>();
 
-    if (!m_SpriteShader->Load("Assets/Shaders/Basic.glsl"))
+    if (!m_SpriteShader->Load("Assets/Shaders/Sprite.glsl"))
         return false;
 
     m_SpriteShader->SetActive();
@@ -39,6 +39,8 @@ void SpriteComponent::Draw()
 
     if (const auto& sprite = m_Sprite.lock())
     {
+        sprite->ActivateTexture();
+        
         auto scaleMatrix = glm::mat4(1.0f);
         scaleMatrix = scale(scaleMatrix, glm::vec3( sprite->GetWidthF(),sprite->GetHeightF(), 1.f));
 
@@ -47,8 +49,7 @@ void SpriteComponent::Draw()
     }
     else
     {
-        const auto worldTransform = m_OwnerActor->GetTransform().GetWorldTransform();
-        m_SpriteShader->SetMatrixUniform("uWorldTransform", worldTransform);
+        m_SpriteShader->SetMatrixUniform("uWorldTransform", m_OwnerActor->GetTransform().GetWorldTransform());
     }
     
     glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, nullptr);
