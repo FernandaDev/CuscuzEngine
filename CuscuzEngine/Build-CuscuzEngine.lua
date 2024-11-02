@@ -10,7 +10,7 @@ project "CuscuzEngine"
 
    files 
    {
-      "Source/**.h", 
+      "Source/**.h",
       "Source/**.cpp",
       "%{includedir.glm}/**.hpp",
       "%{includedir.glm}/**.inl",
@@ -26,6 +26,7 @@ project "CuscuzEngine"
       "%{includedir.ImGui}",
       "%{includedir.yaml}",
       "%{includedir.glew}",
+      "%{includedir.SOIL}",
    }
 
    libdirs
@@ -38,6 +39,7 @@ project "CuscuzEngine"
       "ImGui",
       "yaml-cpp",
       "glew",
+      "SOIL",
       "SDL2.lib",
       "SDL2main.lib",
       "opengl32.lib",

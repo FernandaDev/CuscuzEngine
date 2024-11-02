@@ -18,10 +18,12 @@ includedir["SPD_Log"] = "%{wks.location}/Vendor/Log/include"
 includedir["ImGui"] = "%{wks.location}/CuscuzEngine/Vendor/ImGui"
 includedir["yaml"] = "%{wks.location}/CuscuzEngine/Vendor/yaml/include/yaml-cpp"
 includedir["glew"] = "%{wks.location}/CuscuzEngine/Vendor/glew/include"
+includedir["SOIL"] = "%{wks.location}/CuscuzEngine/Vendor/SOIL/src"
 
 include "CuscuzEngine/Vendor/ImGui"
 include "CuscuzEngine/Vendor/yaml"
 include "CuscuzEngine/Vendor/glew"
+include "CuscuzEngine/Vendor/SOIL"
 
 include "CuscuzEngine/Build-CuscuzEngine.lua"
 include "App/Build-App.lua"
