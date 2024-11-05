@@ -44,7 +44,9 @@ void SpriteComponent::Draw()
         auto scaleMatrix = glm::mat4(1.0f);
         scaleMatrix = scale(scaleMatrix, glm::vec3( sprite->GetWidthF(),sprite->GetHeightF(), 1.f));
 
-        const auto worldMatrix = scaleMatrix * m_OwnerActor->GetTransform().GetWorldTransform();
+        const auto actorWorldTransform = m_OwnerActor->GetTransform().GetWorldTransform();
+        const auto worldMatrix = scaleMatrix * actorWorldTransform;
+        
         m_SpriteShader->SetMatrixUniform("uWorldTransform", worldMatrix);
     }
     else

@@ -18,6 +18,7 @@ class GameLayer : public Layer
 
     std::shared_ptr<OpenGLTexture> m_ActorTexture {};
     std::shared_ptr<Sprite> m_ActorSprite {};
+    Actor* m_MainActor {};
 
 public:
     GameLayer();

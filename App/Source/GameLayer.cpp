@@ -2,17 +2,11 @@
 #include "GameLayer.h"
 
 #include "Components/SpriteComponent.h"
+#include "Core/Input.h"
 #include "Core/KeyCodes.h"
 #include "ImGui/imgui.h"
 #include "Events/KeyEvents.h"
 #include "Utils/ImGuiHelper_World.h"
-#include "World/Actor.h"
-
-struct my_struct
-{
-    int value = 0;
-};
-
 
 GameLayer::GameLayer() : m_World(std::make_unique<World>()),
 m_ActorTexture(std::make_shared<OpenGLTexture>()), m_ActorSprite(std::make_shared<Sprite>())
@@ -22,8 +16,8 @@ void GameLayer::OnAttach()
 {
     Layer::OnAttach();
 
-    auto& actor = m_World->CreateActor("Fer", glm::vec2(1, 1), 1.f);
-    auto& actorSprite = actor.AddComponent<SpriteComponent>();
+    m_MainActor = &m_World->CreateActor("Fer", glm::vec2(1, 1), 1.f);
+    auto& actorSprite = m_MainActor->AddComponent<SpriteComponent>();
 
     m_ActorTexture->Load("Assets/Images/player.png");
     m_ActorSprite->SetTexture(m_ActorTexture);
@@ -41,6 +35,19 @@ void GameLayer::OnUpdate(float deltaTime)
     Layer::OnUpdate(deltaTime);
 
     m_World->Update(deltaTime);
+
+    auto pos = m_MainActor->GetTransform().GetPosition();
+
+    if(Input::IsKeyPressed(CC_KEYCODE_W))
+        pos.y += deltaTime;
+    else if(Input::IsKeyPressed(CC_KEYCODE_S))
+        pos.y -= deltaTime;
+    else if(Input::IsKeyPressed(CC_KEYCODE_A))
+        pos.x -= deltaTime;
+    else if(Input::IsKeyPressed(CC_KEYCODE_D))
+        pos.x += deltaTime;
+
+    m_MainActor->GetTransform().SetPosition(pos);
 }
 
 void GameLayer::OnEvent(CC_Event& event)

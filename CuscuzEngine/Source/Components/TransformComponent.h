@@ -26,13 +26,13 @@ public:
 
     std::string GetComponentType() const override { return "TransformComponent"; }
     
-    void SetPosition(const glm::vec2& newPosition) { m_Position = newPosition; }
+    void SetPosition(const glm::vec2& newPosition);
     const glm::vec2& GetPosition() const { return m_Position; }
     
-    void SetRotation(float newRotation) { m_Rotation = newRotation; }
+    void SetRotation(float newRotation);
     float GetRotation() const { return m_Rotation; }
 
-    void SetScale(float newScale) { m_Scale = newScale; } 
+    void SetScale(float newScale);
     float GetScale() const { return m_Scale; }
     
     glm::vec2 GetForward() const { return {glm::cos(m_Rotation), -glm::sin(m_Rotation)}; }

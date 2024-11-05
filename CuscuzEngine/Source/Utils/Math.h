@@ -1,12 +1,17 @@
 ﻿#pragma once
+#include <cmath>
+#include "glm.hpp"
 
 namespace CC_Math
 {
-    const float Pi = 3.1415926535f;
-    const float TwoPi = Pi * 2.0f;
-    const float PiOver2 = Pi / 2.0f;
+    constexpr float Pi = 3.1415926535f;
+    constexpr float TwoPi = Pi * 2.0f;
+    constexpr float PiOver2 = Pi / 2.0f;
     const float Infinity = std::numeric_limits<float>::infinity();
     const float NegInfinity = -std::numeric_limits<float>::infinity();
+    constexpr float epsilon = 1e-6f;
+    
+#define FLOAT_EQUAL(a, b) (std::fabs((a) - (b)) <= (CC_Math::epsilon))
 
     inline float ToRadians(float degrees)
     {
@@ -98,5 +103,14 @@ namespace CC_Math
     inline float LengthSq(float x, float y)
     {
         return x * x + y * y;
+    }
+    
+    static void PrintMatrix(const glm::mat4& matrix) {
+        for (int row = 0; row < 4; ++row) {
+            for (int col = 0; col < 4; ++col) {
+                std::cout << matrix[row][col] << " ";
+            }
+            std::cout << std::endl;
+        }
     }
 }

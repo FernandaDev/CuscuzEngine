@@ -16,7 +16,6 @@ public:
     CC_MainLayer() = default;
     ~CC_MainLayer() override = default;
 
-
     void OnAttach() override;
     void OnUpdate(float deltaTime) override;
     void OnImGuiRender() override;
