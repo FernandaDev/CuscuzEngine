@@ -11,21 +11,14 @@
 
 class Sprite;
 
-class SpriteComponent : public Component, public IRender
+class SpriteRenderer : public Component, public IRender
 {
     float vertexPositions[20] = {
-        -0.5f,  0.5f, 0.0f, 0.0f, 1.0f, // vertex 0 top left
-         0.5f,  0.5f, 0.0f, 1.0f, 1.0f, // vertex 1 top right
-         0.5f, -0.5f, 0.0f, 1.0f, 0.0f, // vertex 2 bottom right
-        -0.5f, -0.5f, 0.0f, 0.0f, 0.0f  // vertex 3 bottom left
+        -0.5f,  0.5f, 0.0f, 0.0f, 0.0f, // vertex 0 top left
+         0.5f,  0.5f, 0.0f, 1.0f, 0.0f, // vertex 1 top right
+         0.5f, -0.5f, 0.0f, 1.0f, 1.0f, // vertex 2 bottom right
+        -0.5f, -0.5f, 0.0f, 0.0f, 1.0f  // vertex 3 bottom left
     };
-
-    // float vertexPositions[20] = {
-    //     -0.5f,  0.5f, 0.0f, 0.0f, 0.0f, // vertex 0 top left
-    //      0.5f,  0.5f, 0.0f, 1.0f, 0.0f, // vertex 1 top right
-    //      0.5f, -0.5f, 0.0f, 1.0f, 1.0f, // vertex 2 bottom right
-    //     -0.5f, -0.5f, 0.0f, 0.0f, 1.0f  // vertex 3 bottom left
-    // };
 
     unsigned int indexBuffer[6] = {
         0, 1, 2,
@@ -42,8 +35,8 @@ protected:
     std::weak_ptr<Sprite> m_Sprite {};
 
 public:
-    SpriteComponent(int drawOrder = 0);
-    ~SpriteComponent() override = default;
+    SpriteRenderer(int drawOrder = 0);
+    ~SpriteRenderer() override = default;
 
     void Draw() override;
     void SetSprite(const std::weak_ptr<Sprite>& newSprite);
@@ -54,10 +47,9 @@ public:
     int GetTexHeight() const;
     int GetTextWidth() const;
 
-    REGISTER_COMPONENT(SpriteComponent);
+    REGISTER_COMPONENT(SpriteRenderer);
 
 protected:
-    //SDL_Rect GetDestination(const std::shared_ptr<Sprite>& sprite) const;
     float GetRotationDegrees() const;
 
 private:

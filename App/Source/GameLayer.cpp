@@ -1,7 +1,7 @@
 ﻿#include "pch.h"
 #include "GameLayer.h"
 
-#include "Components/SpriteComponent.h"
+#include "Components/SpriteRenderer.h"
 #include "Core/Input.h"
 #include "Core/KeyCodes.h"
 #include "ImGui/imgui.h"
@@ -9,17 +9,17 @@
 #include "Utils/ImGuiHelper_World.h"
 
 GameLayer::GameLayer() : m_World(std::make_unique<World>()),
-m_ActorTexture(std::make_shared<OpenGLTexture>()), m_ActorSprite(std::make_shared<Sprite>())
+m_ActorSprite(std::make_shared<Sprite>())
 {}
 
 void GameLayer::OnAttach()
 {
     Layer::OnAttach();
 
-    m_MainActor = &m_World->CreateActor("Fer", glm::vec2(1, 1), 1.f);
-    auto& actorSprite = m_MainActor->AddComponent<SpriteComponent>();
+    m_MainActor = &m_World->CreateActor("Fer", glm::vec2(5, 4), 1.f);
+    auto& actorSprite = m_MainActor->AddComponent<SpriteRenderer>();
 
-    m_ActorTexture->Load("Assets/Images/player.png");
+    m_ActorTexture = std::make_shared<OpenGLTexture>("Assets/Images/player.png");
     m_ActorSprite->SetTexture(m_ActorTexture);
 
     actorSprite.SetSprite(m_ActorSprite);

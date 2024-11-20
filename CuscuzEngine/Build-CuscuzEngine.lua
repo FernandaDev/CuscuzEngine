@@ -14,6 +14,8 @@ project "CuscuzEngine"
       "Source/**.cpp",
       "%{includedir.glm}/**.hpp",
       "%{includedir.glm}/**.inl",
+      "%{includedir.stb_image}/**.h",
+		"%{includedir.stb_image}/**.cpp",
    }
 
    includedirs
@@ -26,7 +28,7 @@ project "CuscuzEngine"
       "%{includedir.ImGui}",
       "%{includedir.yaml}",
       "%{includedir.glew}",
-      "%{includedir.SOIL}",
+      "%{includedir.stb_image}",
    }
 
    libdirs
@@ -39,7 +41,6 @@ project "CuscuzEngine"
       "ImGui",
       "yaml-cpp",
       "glew",
-      "SOIL",
       "SDL2.lib",
       "SDL2main.lib",
       "opengl32.lib",

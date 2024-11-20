@@ -3,7 +3,7 @@
 
 #include "World.h"
 #include "Core/CC_Engine.h"
-#include "Components/SpriteComponent.h"
+#include "Components/SpriteRenderer.h"
 #include "Core/RendererSystem.h"
 
 Actor::Actor(World* world, std::string&& name, glm::vec2 position, float scale, float rotation) :

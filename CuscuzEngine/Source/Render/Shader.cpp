@@ -71,14 +71,49 @@ void Shader::SetActive() const
     glUseProgram(m_ShaderProgram);
 }
 
-void Shader::SetMatrixUniform(const char* name, const glm::mat4x4& matrix)
+void Shader::SetUniformF1(const char* name, float value)
+{
+    const auto uniformId = GetUniformID(name);
+
+    glUniform1f(uniformId, value);
+}
+
+void Shader::SetUniformF2(const char* name, const glm::vec2& value)
+{
+    const auto uniformId = GetUniformID(name);
+
+    glUniform2f(uniformId, value.x, value.y);
+}
+
+void Shader::SetUniformF3(const char* name, const glm::vec3& value)
+{
+    const auto uniformId = GetUniformID(name);
+
+    glUniform3f(uniformId, value.x, value.y, value.z);
+}
+
+void Shader::SetUniformF4(const char* name, const glm::vec4& value)
+{
+    const auto uniformId = GetUniformID(name);
+
+    glUniform4f(uniformId, value.x, value.y, value.z, value.w);
+}
+
+void Shader::SetUniformI(const char* name, int value)
+{
+    const auto uniformId = GetUniformID(name);
+
+    glUniform1i(uniformId, value);
+}
+
+void Shader::SetUniformM4(const char* name, const glm::mat4x4& matrix)
 {
     const auto uniformId = GetUniformID(name);
 
     glUniformMatrix4fv(uniformId, 1, GL_TRUE, glm::value_ptr(matrix));
 }
 
-unsigned Shader::GetUniformID(const char* name)
+int Shader::GetUniformID(const char* name)
 {
     if(m_uniformMap.contains(name))
     {
@@ -94,7 +129,7 @@ unsigned Shader::GetUniformID(const char* name)
     return uniformID;
 }
 
-bool Shader::CompileShader(const std::string& shaderSource, GLenum shaderType, GLuint& outShader)
+bool Shader::CompileShader(const std::string& shaderSource, unsigned int shaderType, unsigned int& outShader)
 {
     const char* contentsChar = shaderSource.c_str();
 
@@ -111,7 +146,7 @@ bool Shader::CompileShader(const std::string& shaderSource, GLenum shaderType, G
     return true;
 }
 
-bool Shader::IsCompiled(GLuint shader)
+bool Shader::IsCompiled(unsigned int shader)
 {
     GLint status;
 

@@ -2,7 +2,6 @@
 #include "VertexArray.h"
 #include "GL/glew.h"
 
-//TODO remember that this is limited to one attribute.
 VertexArray::VertexArray(const float* verts, unsigned int numVerts,
                          const unsigned int* indices, unsigned int numIndices)
 {

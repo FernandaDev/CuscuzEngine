@@ -5,10 +5,9 @@
 class OpenGLTexture : public Texture
 {
 public:
-    OpenGLTexture() = default;
-    ~OpenGLTexture() override = default;
+    OpenGLTexture(std::string&& filePath);
+    ~OpenGLTexture() override;
 
-    bool Load(const std::string& filePath) override;
+    void SetActive(unsigned int slot = 0) override;
     void Unload() override;
-    void SetActive() override;
 };

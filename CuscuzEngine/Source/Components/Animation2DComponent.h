@@ -1,9 +1,9 @@
 ﻿#pragma once
 
 #include "glm.hpp"
-#include "SpriteComponent.h"
+#include "SpriteRenderer.h"
 
-class Animation2DComponent : public SpriteComponent
+class Animation2DComponent : public SpriteRenderer
 {
     int m_FrameCount;
     float m_AnimFPS;

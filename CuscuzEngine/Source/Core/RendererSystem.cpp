@@ -5,7 +5,7 @@
 #include "RendererSystem.h"
 
 #include "CC_Engine.h"
-#include "Components/SpriteComponent.h"
+#include "Components/SpriteRenderer.h"
 
 RendererSystem::~RendererSystem()
 {

@@ -7,7 +7,7 @@
 CREATE_COMPONENT_REGISTRY(Animation2DComponent)
 
 Animation2DComponent::Animation2DComponent(int frameCount, int drawOrder) :
-SpriteComponent(drawOrder), m_FrameCount(frameCount), m_AnimFPS(10), m_CurrentFrame(0)
+SpriteRenderer(drawOrder), m_FrameCount(frameCount), m_AnimFPS(10), m_CurrentFrame(0)
 {}
 
 void Animation2DComponent::Update(float deltaTime)
