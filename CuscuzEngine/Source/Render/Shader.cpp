@@ -66,9 +66,14 @@ void Shader::Unload() const
     glDeleteShader(m_FragmentShader);
 }
 
-void Shader::SetActive() const
+void Shader::Bind() const
 {
     glUseProgram(m_ShaderProgram);
+}
+
+void Shader::Unbind() const
+{
+    glUseProgram(0);
 }
 
 void Shader::SetUniformF1(const char* name, float value)

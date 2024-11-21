@@ -21,7 +21,7 @@ void Sprite::SetTexture(const std::weak_ptr<Texture>& texture)
     }
 }
 
-void Sprite::ActivateTexture() const
+void Sprite::BindTexture() const
 {
     if(const auto tex = m_Texture.lock())
         tex->SetActive();

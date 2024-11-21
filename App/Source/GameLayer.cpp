@@ -9,7 +9,7 @@
 #include "Utils/ImGuiHelper_World.h"
 
 GameLayer::GameLayer() : m_World(std::make_unique<World>()),
-m_ActorSprite(std::make_shared<Sprite>())
+m_ActorSprite(std::make_shared<Sprite>()), m_EnemySprite(std::make_shared<Sprite>())
 {}
 
 void GameLayer::OnAttach()
@@ -23,6 +23,14 @@ void GameLayer::OnAttach()
     m_ActorSprite->SetTexture(m_ActorTexture);
 
     actorSprite.SetSprite(m_ActorSprite);
+
+    m_EnemyActor = &m_World->CreateActor("Enemy", glm::vec2(10, 4), 1.f);
+    auto& enemySprite = m_EnemyActor->AddComponent<SpriteRenderer>();
+
+    m_EnemyTexture = std::make_shared<OpenGLTexture>("Assets/Images/adventurer.png");
+    m_EnemySprite->SetTexture(m_EnemyTexture);
+
+    enemySprite.SetSprite(m_EnemySprite);
 }
 
 void GameLayer::OnDetach()

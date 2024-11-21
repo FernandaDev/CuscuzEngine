@@ -15,7 +15,7 @@ public:
     ~Sprite();
 
     void SetTexture(const std::weak_ptr<Texture>& texture);
-    void ActivateTexture() const;
+    void BindTexture() const;
 
     int GetWidth() const { return m_PixelsDimension.x; }
     int GetHeight() const { return m_PixelsDimension.y; }

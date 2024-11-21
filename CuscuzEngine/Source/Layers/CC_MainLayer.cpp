@@ -35,8 +35,8 @@ void CC_MainLayer::OnImGuiRender()
 {
     Layer::OnImGuiRender();
 
-    if(m_ShowPlayWindow)
-        ShowPlayWindow();
+    //if(m_ShowPlayWindow)
+      //  ShowPlayWindow();
 }
 
 bool CC_MainLayer::TogglePlayWindow(const CC_KeyDownEvent& event)

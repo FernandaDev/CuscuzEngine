@@ -1,21 +1,19 @@
 ﻿#pragma once
 
+#include "VertexBuffer.h"
+
+class VertexBufferLayout;
+
 class VertexArray
 {
-    unsigned int m_NumberOfVerts;
-    unsigned int m_NumberOfIndices;
+    unsigned int m_RendererID;
     
-    unsigned int m_VertexBuffer;
-    unsigned int m_IndexBuffer;
-    unsigned int m_VertexArray;
-        
 public:
-    VertexArray(const float* verts, unsigned int numVerts,
-                const unsigned int* indices, unsigned int numIndices);
+    VertexArray();
     ~VertexArray();
 
-    void SetActive();
-
-    unsigned int GetNumIndices() const { return m_NumberOfIndices; }
-    unsigned int GetNumVerts() const { return m_NumberOfVerts; }
+    void AddBuffer(const VertexBuffer& vertexBuffer, const VertexBufferLayout& layout);
+    
+    void Bind() const;
+    void Unbind() const;
 };

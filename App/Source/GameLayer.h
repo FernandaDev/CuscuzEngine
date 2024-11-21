@@ -20,6 +20,10 @@ class GameLayer : public Layer
     std::shared_ptr<Sprite> m_ActorSprite {};
     Actor* m_MainActor {};
 
+    std::shared_ptr<OpenGLTexture> m_EnemyTexture {};
+    std::shared_ptr<Sprite> m_EnemySprite {};
+    Actor* m_EnemyActor {};
+
 public:
     GameLayer();
     ~GameLayer() override = default;

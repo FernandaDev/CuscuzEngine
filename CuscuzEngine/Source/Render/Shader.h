@@ -19,7 +19,8 @@ public:
     bool Load(const std::string& shaderFile);
     void Unload() const;
     
-    void SetActive() const;
+    void Bind() const;
+    void Unbind() const;
     void SetUniformF1(const char* name, float value);
     void SetUniformF2(const char* name, const glm::vec2& value);
     void SetUniformF3(const char* name, const glm::vec3& value);
