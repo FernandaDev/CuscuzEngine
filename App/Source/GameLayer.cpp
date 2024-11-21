@@ -91,10 +91,10 @@ void GameLayer::ShowWorldWindow()
     //     ShowActorCreation(showingActorCreation, m_World.get());
     // }
     //
-    // {
-    //     const bool showingActors = ImGui::CollapsingHeader("Actors List", ImGuiTreeNodeFlags_DefaultOpen);
-    //     ShowAllActors(showingActors, m_World.get());
-    // }
+    {
+        const bool showingActors = ImGui::CollapsingHeader("Actors List", ImGuiTreeNodeFlags_DefaultOpen);
+        ImGuiHelper::ShowAllActors(showingActors, m_World.get());
+    }
     
     ImGui::End();
 }

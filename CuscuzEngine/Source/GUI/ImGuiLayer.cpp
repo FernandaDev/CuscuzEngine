@@ -8,13 +8,14 @@
 #include "Core/EventSystem.h"
 #include "Core/Input.h"
 #include "Core/CC_Engine.h"
+#include "Core/KeyCodes.h"
 #include "Utils/Log.h"
 #include "Events/SDLEvent.h"
 #include "Core/Window.h"
 #include "GL/glew.h"
 
 ImGuiLayer::ImGuiLayer(const Window& window) :
-Layer("ImGui Layer"), m_ShowMainWindow(true)
+Layer("ImGui Layer"), m_ShowDemoWindow(false)
 {
     IMGUI_CHECKVERSION();
     ImGui::CreateContext();
@@ -26,8 +27,6 @@ Layer("ImGui Layer"), m_ShowMainWindow(true)
     
     ImGui_ImplSDL2_InitForOpenGL(window.GetWindow(), window.GetCurrentContext());
     ImGui_ImplOpenGL3_Init("#version 330");
-    
-    m_ShowMainWindow = true;
 }
 
 ImGuiLayer::~ImGuiLayer()
@@ -53,6 +52,7 @@ void ImGuiLayer::OnEvent(CC_Event& event)
     
     CC_EventSingleDispatcher eventDispatcher(event);
     eventDispatcher.Dispatch<CC_SDLEvent>(BIND_FUNCTION(this, ImGuiLayer::OnSDLEvent));
+    eventDispatcher.Dispatch<CC_KeyDownEvent>(BIND_FUNCTION(this, ImGuiLayer::OnKeyDown));
 }
 
 void ImGuiLayer::Begin()
@@ -65,6 +65,9 @@ void ImGuiLayer::Begin()
 void ImGuiLayer::OnImGuiRender()
 {
     Layer::OnImGuiRender();
+
+    if(m_ShowDemoWindow)
+        ImGui::ShowDemoWindow(&m_ShowDemoWindow);
 }
 
 void ImGuiLayer::End()
@@ -82,4 +85,14 @@ bool ImGuiLayer::OnSDLEvent(const CC_SDLEvent& event)
 {
     ImGui_ImplSDL2_ProcessEvent(&event.GetSDLEvent());
     return true;
+}
+
+bool ImGuiLayer::OnKeyDown(const CC_KeyDownEvent& event)
+{
+    if(event.GetKeyCode() != CC_KeyCode::F8)
+        return false;
+
+    m_ShowDemoWindow = !m_ShowDemoWindow;
+    
+    return false;
 }
