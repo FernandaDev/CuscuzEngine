@@ -9,7 +9,7 @@
 class TransformComponent : public Component
 {
     glm::vec2 m_Position;
-    float m_Scale;
+    glm::vec2 m_Scale;
     float m_Rotation;
     glm::mat4 m_WorldTransform;
     bool m_RecomputeWorldTransform;
@@ -32,8 +32,8 @@ public:
     void SetRotation(float newRotation);
     float GetRotation() const { return m_Rotation; }
 
-    void SetScale(float newScale);
-    float GetScale() const { return m_Scale; }
+    void SetScale(glm::vec2 newScale);
+    glm::vec2 GetScale() const { return m_Scale; }
     
     glm::vec2 GetForward() const { return {glm::cos(m_Rotation), -glm::sin(m_Rotation)}; }
 

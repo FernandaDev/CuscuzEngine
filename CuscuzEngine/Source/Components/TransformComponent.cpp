@@ -33,9 +33,9 @@ void TransformComponent::SetRotation(float newRotation)
     m_RecomputeWorldTransform = true;
 }
 
-void TransformComponent::SetScale(float newScale)
+void TransformComponent::SetScale(glm::vec2 newScale)
 {
-    if(FLOAT_EQUAL(newScale, m_Scale))
+    if(newScale == m_Scale)
         return;
 
     m_Scale = newScale;
@@ -58,7 +58,7 @@ void TransformComponent::ComputeWorldTransform()
     
     m_WorldTransform = glm::mat4(1.0f); 
     
-    m_WorldTransform = glm::scale(m_WorldTransform, glm::vec3(m_Scale, m_Scale, m_Scale));
+    m_WorldTransform = glm::scale(m_WorldTransform, glm::vec3(m_Scale.x, m_Scale.y, 1.0f));
     m_WorldTransform = glm::rotate(m_WorldTransform, glm::radians(m_Rotation), glm::vec3(0.0f, 0.0f, 1.0f));
     m_WorldTransform = glm::translate(m_WorldTransform, glm::vec3(m_Position.x, m_Position.y, 0.f));
 }

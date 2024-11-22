@@ -7,29 +7,74 @@
 namespace ImGuiHelper
 {
     static bool showingActor = false;
+
+    inline static void ShowActorTransform(Actor* actor)
+    {
+        ImGui::Text("Transform");
+
+        ImGui::Separator();
+        ImGui::Dummy(ImVec2(0.0f, 3.0f));
+
+        ImGui::PushItemWidth(100.0f); 
+        
+        ImGui::Text("Position");
+        auto actorPos = actor->GetTransform().GetPosition();
+        
+        ImGui::DragFloat("x##pos", &actorPos.x);
+        ImGui::DragFloat("y##pos", &actorPos.y);
+
+        actor->GetTransform().SetPosition(actorPos);
+
+        ImGui::Dummy(ImVec2(0.0f, 10.0f));
+        
+        ImGui::Text("Rotation");
+
+        auto actorRot = actor->GetTransform().GetRotation();
+
+        ImGui::DragFloat("degrees", &actorRot);
+
+        actor->GetTransform().SetRotation(actorRot);
+        
+        ImGui::Dummy(ImVec2(0.0f, 10.0f));
+        
+        ImGui::Text("Scale");
+        
+        auto actorScale =  actor->GetTransform().GetScale();
+
+        ImGui::DragFloat("x##scale", &actorScale.x);
+        ImGui::DragFloat("y##scale", &actorScale.y);
+        
+        actor->GetTransform().SetScale(actorScale);
+
+        ImGui::PopItemWidth();
+        ImGui::Dummy(ImVec2(0.0f, 3.0f));
+        ImGui::Separator();
+    }
     
     inline static void ShowActor(Actor* actor, int index)
     {
         ImGui::PushID(index);
-        //const auto name = actor->GetName() + std::to_string(index);
+
         ImGui::Begin(actor->GetName().c_str(), &showingActor);
-        
-        ImGui::Text(actor->GetName().c_str());
-        
-        ImGui::Separator();
-        
-        ImGui::BeginListBox("Transform");
-        
-        ImGui::Text("Position: (%.1f, %.1f)", actor->GetTransform().GetPosition().x,
-                                                 actor->GetTransform().GetPosition().y);
-        
-        ImGui::Text("Rotation: %f", actor->GetTransform().GetRotation());
-        ImGui::Text("Scale: %f", actor->GetTransform().GetScale());
-        
-        ImGui::EndListBox();
+
+        if (ImGui::BeginTabBar("##TabBar"))
+        {
+            if (ImGui::BeginTabItem("Transform"))
+            {
+                ShowActorTransform(actor);
+                ImGui::EndTabItem();
+            }
+
+            if (ImGui::BeginTabItem("Components"))
+            {
+                ImGui::Text("TO DO");
+                ImGui::EndTabItem();
+            }
+
+            ImGui::EndTabBar();
+        }
         
         ImGui::End();
-        
         ImGui::PopID();
     }
     
