@@ -3,13 +3,15 @@
 #include "SDL.h"
 #include "Events/CC_Event.h"
 
+class GraphicsContext;
+
 class Window
 {
 	int m_Width;
 	int m_Height;
 	
 	SDL_Window* m_Window{nullptr};
-	SDL_GLContext m_Context {};
+	std::unique_ptr<GraphicsContext> m_Context{};
 	
 public:
 	Window() = delete;
@@ -17,14 +19,15 @@ public:
 	~Window();
 
 	void Init(const char* name);
+	void OnEvent(CC_Event& event);
+	void Render();
 
 	int GetWidth() const { return m_Width; }
 	int GetHeight() const { return m_Height; }
 	SDL_Window* GetWindow() const { return m_Window; }
 
-	SDL_GLContext GetCurrentContext() const { return m_Context; }
+	GraphicsContext* GetContext() const { return m_Context.get(); }
 
-	void OnEvent(CC_Event& event);
 
 private:
 	bool OnWindowResized(const class CC_WindowResizeEvent& event);

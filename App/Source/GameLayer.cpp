@@ -16,7 +16,7 @@ void GameLayer::OnAttach()
 {
     Layer::OnAttach();
 
-    m_MainActor = &m_World->CreateActor("Fer", glm::vec2(5, 4), 1.f);
+    m_MainActor = &m_World->CreateActor("Fer", glm::vec2(570, 100), 1.f);
     auto& actorSprite = m_MainActor->AddComponent<SpriteRenderer>();
 
     m_ActorTexture = std::make_shared<OpenGLTexture>("Assets/Images/player.png");
@@ -24,7 +24,7 @@ void GameLayer::OnAttach()
 
     actorSprite.SetSprite(m_ActorSprite);
 
-    m_EnemyActor = &m_World->CreateActor("Enemy", glm::vec2(10, 4), 1.f);
+    m_EnemyActor = &m_World->CreateActor("Enemy", glm::vec2(500, 420), 1.f);
     auto& enemySprite = m_EnemyActor->AddComponent<SpriteRenderer>();
 
     m_EnemyTexture = std::make_shared<OpenGLTexture>("Assets/Images/adventurer.png");

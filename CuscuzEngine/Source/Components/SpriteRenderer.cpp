@@ -54,7 +54,7 @@ void SpriteRenderer::Draw()
         scaleMatrix = scale(scaleMatrix, glm::vec3( sprite->GetWidthF(),sprite->GetHeightF(), 1.f));
 
         const auto actorWorldTransform = m_OwnerActor->GetTransform().GetWorldTransform();
-        const auto worldMatrix = scaleMatrix * actorWorldTransform;
+        const auto worldMatrix = actorWorldTransform * scaleMatrix;
         
         m_SpriteShader.SetUniformM4("uWorldTransform", worldMatrix);
     }

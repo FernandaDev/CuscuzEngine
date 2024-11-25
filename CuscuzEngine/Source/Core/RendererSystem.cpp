@@ -71,11 +71,6 @@ void RendererSystem::Update()
     }
 }
 
-void RendererSystem::Render() const
-{
-    SDL_GL_SwapWindow(CC_Engine::Get().CC_Window->GetWindow());
-}
-
 void RendererSystem::Clear() const
 {
     glClearColor(0.6f, 0.6f, 0.6f, 1.0f);

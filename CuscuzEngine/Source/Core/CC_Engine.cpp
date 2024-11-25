@@ -75,13 +75,8 @@ void CC_Engine::Run()
 			layer->OnImGuiRender();
 		m_ImGuiLayer->End();
 		
-		Render();
+		CC_Window->Render();
 	}
-}
-
-void CC_Engine::Render() 
-{
-	CC_RendererSystem->Render();
 }
 
 void CC_Engine::PushLayer(std::shared_ptr<Layer> layer)

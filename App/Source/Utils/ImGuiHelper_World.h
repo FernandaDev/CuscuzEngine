@@ -93,13 +93,14 @@ namespace ImGuiHelper
              if (const auto actor = allActors[actorIndex].get())
              {
                  ImGui::PushID(actorIndex);
-                 //const auto actorName = actor->GetName()+ "##" + std::to_string(actorIndex);
+                 
                  if(ImGui::Button(actor->GetName().c_str(), ImVec2(ImGui::GetContentRegionAvail().x, 0)))
                  {
                      selectedActor = actor;
                      selectedIndex = actorIndex;
                      showingActor = true;
                  }
+                 
                  ImGui::PopID();
              }
          }

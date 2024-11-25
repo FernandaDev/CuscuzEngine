@@ -13,6 +13,7 @@
 #include "Events/SDLEvent.h"
 #include "Core/Window.h"
 #include "GL/glew.h"
+#include "Platform/OpenGL/OpenGLContext.h"
 
 ImGuiLayer::ImGuiLayer(const Window& window) :
 Layer("ImGui Layer"), m_ShowDemoWindow(false)
@@ -24,8 +25,11 @@ Layer("ImGui Layer"), m_ShowDemoWindow(false)
     ImGuiIO& io = ImGui::GetIO();
     io.BackendFlags |= ImGuiBackendFlags_HasMouseCursors;
     io.BackendFlags |= ImGuiBackendFlags_HasSetMousePos;
+
+    GraphicsContext* context = window.GetContext();
+    const auto openGlContext = dynamic_cast<OpenGLContext*>(context);
     
-    ImGui_ImplSDL2_InitForOpenGL(window.GetWindow(), window.GetCurrentContext());
+    ImGui_ImplSDL2_InitForOpenGL(window.GetWindow(), openGlContext->GetContext());
     ImGui_ImplOpenGL3_Init("#version 330");
 }
 
