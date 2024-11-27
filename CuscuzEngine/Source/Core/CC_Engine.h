@@ -5,13 +5,13 @@
 #include "Events/WindowEvents.h"
 #include "Layers/LayerStack.h"
 
+class ResourcesManager;
 class ImGuiLayer;
-class CC_MainLayer;
+class EngineLayer;
 class Window;
 class RendererSystem;
 class EventSystem;
-
-constexpr Uint32 FramesPerSecond = 30;
+class World;
 
 class CC_Engine 
 {
@@ -19,9 +19,11 @@ public:
 	std::unique_ptr<Window> CC_Window;
 	std::unique_ptr<RendererSystem> CC_RendererSystem;
 	std::unique_ptr<EventSystem> CC_EventSystem;
+	std::unique_ptr<World> CC_World;
 	
 private:
 	static CC_Engine* s_Instance;
+
 	std::shared_ptr<ImGuiLayer> m_ImGuiLayer;
 	LayerStack m_LayerStack;
 	

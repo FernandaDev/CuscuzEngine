@@ -5,6 +5,7 @@
 class OpenGLTexture : public Texture
 {
 public:
+    OpenGLTexture() = default;
     OpenGLTexture(std::string&& filePath);
     ~OpenGLTexture() override;
 

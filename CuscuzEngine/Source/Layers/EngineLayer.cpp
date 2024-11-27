@@ -1,7 +1,7 @@
 ﻿#include "pch.h"
 #include <imgui.h>
 
-#include "CC_MainLayer.h"
+#include "EngineLayer.h"
 
 #include "Core/CC_Engine.h"
 #include "Core/EventSystem.h"
@@ -9,13 +9,7 @@
 #include "Core/RendererSystem.h"
 #include "Events/KeyEvents.h"
 
-void CC_MainLayer::OnAttach()
-{
-    Layer::OnAttach();
-
-}
-
-void CC_MainLayer::OnUpdate(float deltaTime)
+void EngineLayer::OnUpdate(float deltaTime)
 {
     Layer::OnUpdate(deltaTime);
 
@@ -23,15 +17,13 @@ void CC_MainLayer::OnUpdate(float deltaTime)
     CC_Engine::Get().CC_RendererSystem->Update();
 }
 
-void CC_MainLayer::OnEvent(CC_Event& event)
+void EngineLayer::OnEvent(CC_Event& event)
 {
-    Layer::OnEvent(event);
-
     CC_EventSingleDispatcher eventDispatcher(event);
-    eventDispatcher.Dispatch<CC_KeyDownEvent>(BIND_FUNCTION(this, CC_MainLayer::TogglePlayWindow));
+    eventDispatcher.Dispatch<CC_KeyDownEvent>(BIND_FUNCTION(this, EngineLayer::TogglePlayWindow));
 }
 
-void CC_MainLayer::OnImGuiRender()
+void EngineLayer::OnImGuiRender()
 {
     Layer::OnImGuiRender();
 
@@ -39,7 +31,7 @@ void CC_MainLayer::OnImGuiRender()
       //  ShowPlayWindow();
 }
 
-bool CC_MainLayer::TogglePlayWindow(const CC_KeyDownEvent& event)
+bool EngineLayer::TogglePlayWindow(const CC_KeyDownEvent& event)
 {
     if(event.GetKeyCode() == CC_KeyCode::Tab)
         m_ShowPlayWindow = !m_ShowPlayWindow;
@@ -47,7 +39,7 @@ bool CC_MainLayer::TogglePlayWindow(const CC_KeyDownEvent& event)
     return false;
 }
 
-void CC_MainLayer::ShowPlayWindow()
+void EngineLayer::ShowPlayWindow()
 {
     ImGui::Begin("Game", &m_ShowPlayWindow);
     

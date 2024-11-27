@@ -34,14 +34,15 @@ class SpriteRenderer : public Component, public IRender
 protected:
     int m_DrawOrder = 0;
     glm::vec4 m_Color = {};
-    std::weak_ptr<Sprite> m_Sprite {};
+    Sprite* m_Sprite {};
 
 public:
     SpriteRenderer(int drawOrder = 0);
     ~SpriteRenderer() override = default;
 
     void Draw() override;
-    void SetSprite(const std::weak_ptr<Sprite>& newSprite);
+    void SetSprite(Sprite* newSprite);
+    Sprite* GetSprite() const { return m_Sprite; }
 
     void SetDrawOrder(int drawOrder);
 

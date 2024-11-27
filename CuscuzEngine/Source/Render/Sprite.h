@@ -1,12 +1,12 @@
 ﻿#pragma once
 
-
 #include "vec2.hpp"
-#include "Render/Texture.h"
+
+class Texture;
 
 class Sprite
 {
-    std::weak_ptr<Texture> m_Texture;
+    Texture* m_Texture{};
     glm::i32vec2 m_PixelsDimension;
     glm::vec2 m_Pivot;
     
@@ -14,7 +14,9 @@ public:
     Sprite();
     ~Sprite();
 
-    void SetTexture(const std::weak_ptr<Texture>& texture);
+    void SetTexture(Texture* texture);
+    Texture* GetTexture() const { return m_Texture; }
+
     void BindTexture() const;
 
     int GetWidth() const { return m_PixelsDimension.x; }

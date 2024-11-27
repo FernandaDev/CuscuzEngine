@@ -5,18 +5,21 @@
 #include "Core/Window.h"
 #include "Core/RendererSystem.h"
 #include "Core/Time.h"
+#include "Editor/EditorLayer.h"
 #include "Events/WindowEvents.h"
 #include "GUI/ImGuiLayer.h"
-#include "Layers/CC_MainLayer.h"
+#include "Layers/EngineLayer.h"
 #include "Layers/Layer.h"
 #include "Utils/Log.h"
+#include "Utils/ResourcesManager.h"
+#include "World/World.h"
 
 CC_Engine* CC_Engine::s_Instance = nullptr;
 
 CC_Engine::CC_Engine() :
 	CC_Window{ std::make_unique<Window>(SCREEN_WIDTH, SCREEN_HEIGHT) },
 	CC_RendererSystem{ std::make_unique<RendererSystem>() },
-	CC_EventSystem{ std::make_unique<EventSystem>() }
+	CC_EventSystem{ std::make_unique<EventSystem>() }, CC_World(std::make_unique<World>())
 {
 	Init();
 }
@@ -30,6 +33,8 @@ void CC_Engine::Init()
 	CC_RendererSystem->Init();
 
 	CC_EventSystem->SetEventCallback(BIND_FUNCTION(this, CC_Engine::OnEvent));
+
+	ResourcesManager::Get().Init();
 }
 
 CC_Engine::~CC_Engine()
@@ -39,10 +44,11 @@ CC_Engine::~CC_Engine()
 
 void CC_Engine::Start()
 {
-	PushLayer(std::make_shared<CC_MainLayer>());
+	PushLayer(std::make_shared<EngineLayer>());
+	PushOverlay(std::make_shared<EditorLayer>());
 	
 	m_ImGuiLayer = std::make_shared<ImGuiLayer>(*CC_Window);
-	PushOverlay(m_ImGuiLayer);	
+	PushOverlay(m_ImGuiLayer);
 }
 
 void CC_Engine::OnEvent(CC_Event& event)

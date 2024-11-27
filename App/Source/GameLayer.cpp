@@ -2,99 +2,69 @@
 #include "GameLayer.h"
 
 #include "Components/SpriteRenderer.h"
+#include "Core/CC_Engine.h"
 #include "Core/Input.h"
 #include "Core/KeyCodes.h"
-#include "ImGui/imgui.h"
-#include "Events/KeyEvents.h"
-#include "Utils/ImGuiHelper_World.h"
+#include "Utils/ResourcesManager.h"
+#include "World/Actor.h"
 
-GameLayer::GameLayer() : m_World(std::make_unique<World>()),
-m_ActorSprite(std::make_shared<Sprite>()), m_EnemySprite(std::make_shared<Sprite>())
-{}
+GameLayer::GameLayer() : m_ActorSprite(new Sprite()),
+m_EnemySprite(new Sprite())
+{
+    m_World = CC_Engine::Get().CC_World.get();
+}
 
 void GameLayer::OnAttach()
 {
-    Layer::OnAttach();
-
+    CC_ASSERT(m_World, "The World instance is null!");
+    
     m_MainActor = &m_World->CreateActor("Fer", glm::vec2(570, 100), 1.f);
     auto& actorSprite = m_MainActor->AddComponent<SpriteRenderer>();
 
-    m_ActorTexture = std::make_shared<OpenGLTexture>("Assets/Images/player.png");
-    m_ActorSprite->SetTexture(m_ActorTexture);
+    const auto texture = ResourcesManager::Get().GetTexture("player.png");
+    m_ActorSprite->SetTexture(texture);
 
     actorSprite.SetSprite(m_ActorSprite);
 
     m_EnemyActor = &m_World->CreateActor("Enemy", glm::vec2(500, 420), 1.f);
     auto& enemySprite = m_EnemyActor->AddComponent<SpriteRenderer>();
 
-    m_EnemyTexture = std::make_shared<OpenGLTexture>("Assets/Images/adventurer.png");
-    m_EnemySprite->SetTexture(m_EnemyTexture);
-
-    enemySprite.SetSprite(m_EnemySprite);
+    // m_EnemyTexture = std::make_shared<OpenGLTexture>("Assets/Images/adventurer.png");
+    // m_EnemySprite->SetTexture(m_EnemyTexture);
+    //
+    // enemySprite.SetSprite(m_EnemySprite);
 }
 
 void GameLayer::OnDetach()
 {
-    Layer::OnDetach();
 }
+
+static float MoveSpeed = 100.0f;
 
 void GameLayer::OnUpdate(float deltaTime)
 {
-    Layer::OnUpdate(deltaTime);
-
+    CC_ASSERT(m_World, "The World instance is null!");
+    
     m_World->Update(deltaTime);
 
     auto pos = m_MainActor->GetTransform().GetPosition();
 
     if(Input::IsKeyPressed(CC_KEYCODE_W))
-        pos.y += deltaTime;
+        pos.y += MoveSpeed * deltaTime;
     else if(Input::IsKeyPressed(CC_KEYCODE_S))
-        pos.y -= deltaTime;
+        pos.y -= MoveSpeed * deltaTime;
     else if(Input::IsKeyPressed(CC_KEYCODE_A))
-        pos.x -= deltaTime;
+        pos.x -= MoveSpeed * deltaTime;
     else if(Input::IsKeyPressed(CC_KEYCODE_D))
-        pos.x += deltaTime;
+        pos.x += MoveSpeed * deltaTime;
 
     m_MainActor->GetTransform().SetPosition(pos);
 }
 
 void GameLayer::OnEvent(CC_Event& event)
 {
-    Layer::OnEvent(event);
-
-    CC_EventSingleDispatcher eventDispatcher(event);
-    eventDispatcher.Dispatch<CC_KeyDownEvent>(BIND_FUNCTION(this, GameLayer::ToggleWindow));
-}
-
-bool GameLayer::ToggleWindow(const CC_KeyDownEvent& event)
-{
-    if (event.GetKeyCode() == CC_KeyCode::F1)
-        m_ShowWorldWindow = !m_ShowWorldWindow;
-
-    return false;
 }
 
 void GameLayer::OnImGuiRender()
 {
-    Layer::OnImGuiRender();
-
-    if (m_ShowWorldWindow)
-        ShowWorldWindow();
-}
-
-void GameLayer::ShowWorldWindow()
-{
-    ImGui::Begin("World", &m_ShowWorldWindow);
-    
-    // {
-    //     const bool showingActorCreation = ImGui::CollapsingHeader("Actor Creation", ImGuiTreeNodeFlags_DefaultOpen);
-    //     ShowActorCreation(showingActorCreation, m_World.get());
-    // }
-    //
-    {
-        const bool showingActors = ImGui::CollapsingHeader("Actors List", ImGuiTreeNodeFlags_DefaultOpen);
-        ImGuiHelper::ShowAllActors(showingActors, m_World.get());
-    }
-    
-    ImGui::End();
 }

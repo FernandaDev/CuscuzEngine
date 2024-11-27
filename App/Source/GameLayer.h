@@ -14,14 +14,12 @@ class CC_KeyDownEvent;
 class GameLayer : public Layer
 {
     bool m_ShowWorldWindow = true;
-    std::unique_ptr<World> m_World {};
-
-    std::shared_ptr<OpenGLTexture> m_ActorTexture {};
-    std::shared_ptr<Sprite> m_ActorSprite {};
+    World* m_World = nullptr;
+    
+    Sprite* m_ActorSprite {};
     Actor* m_MainActor {};
 
-    std::shared_ptr<OpenGLTexture> m_EnemyTexture {};
-    std::shared_ptr<Sprite> m_EnemySprite {};
+    Sprite* m_EnemySprite {};
     Actor* m_EnemyActor {};
 
 public:
@@ -36,6 +34,5 @@ public:
 
 private:
     // ImGUI
-    bool ToggleWindow(const CC_KeyDownEvent& event);
-    void ShowWorldWindow();
+    
 };

@@ -3,7 +3,9 @@
 #include <ranges>
 #include <vector>
 
-#include "ImGui/imgui.h"
+#include "imgui.h"
+#include "ImGuiHelper_SpriteRenderer.h"
+#include "Components/SpriteRenderer.h"
 #include "World/Actor.h"
 #include "Core/ClassRegistry.h"
 
@@ -31,7 +33,9 @@ namespace ImGuiHelper
 
         static int currentItem = 0; // Index of the currently selected item
 
-        const auto componentsListLabel = "Components List##" + std::to_string(index);
+        ImGui::TextColored(ImVec4(0.8f, .8f, .1f, 1.f), "Components List");
+        
+        const auto componentsListLabel = "##ComponentList" + std::to_string(index);
 
         if (ImGui::Combo(componentsListLabel.c_str(), &currentItem, ItemGetter, &items, static_cast<int>(items.size())))
         {
@@ -52,19 +56,33 @@ namespace ImGuiHelper
         }
     }
 
+    inline static void ShowComponent(Component* component)
+    {
+        if(const auto spriteRenderer = dynamic_cast<SpriteRenderer*>(component))
+        {
+            ShowSpriteRenderer(spriteRenderer);
+        }
+        //else if...
+    }
+    
     inline static void ShowActorComponents(Actor* actor, int index)
     {
-        ImGui::TextColored(ImVec4(0.f, .5f, 1.f, 1.f), "Components");
+        ShowAddComponentBar(actor, index);
+        ImGui::Dummy(ImVec2(0.0f, 5.0f));
+        
+        ImGui::TextColored(ImVec4(0.8f, .8f, .1f, 1.f), "Components");
 
-        const auto listLabel = "##" + std::to_string(index);
-        ImGui::BeginListBox(listLabel.c_str(), ImVec2(300, 50));
-
+        ImGui::Separator();
+        ImGui::Dummy(ImVec2(0.0f, 3.0f));
+        
         for (const auto& component : actor->GetComponents())
         {
-            ImGui::Text(component->GetComponentType().c_str());
-        }
+            if(ImGui::CollapsingHeader(component->GetComponentType().c_str(), ImGuiTreeNodeFlags_DefaultOpen))
+                ShowComponent(component.get());
 
-        ImGui::EndListBox();
+            ImGui::Dummy(ImVec2(0.0f, 3.0f));
+            ImGui::Separator();
+        }
     }
     
 }

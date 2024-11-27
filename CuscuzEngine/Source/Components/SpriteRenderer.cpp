@@ -45,13 +45,13 @@ void SpriteRenderer::Draw()
     m_IndexBuffer.Bind();
     m_SpriteShader.Bind();
 
-    if (const auto& sprite = m_Sprite.lock())
+    if (m_Sprite)
     {
-        sprite->BindTexture();
+        m_Sprite->BindTexture();
         m_SpriteShader.SetUniformI("uTexture", 0);
         
         auto scaleMatrix = glm::mat4(1.0f);
-        scaleMatrix = scale(scaleMatrix, glm::vec3( sprite->GetWidthF(),sprite->GetHeightF(), 1.f));
+        scaleMatrix = scale(scaleMatrix, glm::vec3( m_Sprite->GetWidthF(),m_Sprite->GetHeightF(), 1.f));
 
         const auto actorWorldTransform = m_OwnerActor->GetTransform().GetWorldTransform();
         const auto worldMatrix = actorWorldTransform * scaleMatrix;
@@ -66,7 +66,7 @@ void SpriteRenderer::Draw()
     GLCall(glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, nullptr))
 }
 
-void SpriteRenderer::SetSprite(const std::weak_ptr<Sprite>& newSprite)
+void SpriteRenderer::SetSprite(Sprite* newSprite)
 {
     m_Sprite = newSprite;
 }
@@ -78,8 +78,8 @@ void SpriteRenderer::SetDrawOrder(int drawOrder)
 
 int SpriteRenderer::GetTexHeight() const
 {
-    if (const auto SharedSprite = m_Sprite.lock())
-        return SharedSprite->GetHeight();
+    if (m_Sprite)
+        return m_Sprite->GetHeight();
 
     LOG_WARN("You are trying to get a sprite's Height, but there is no sprite!");
     return 0;
@@ -87,8 +87,8 @@ int SpriteRenderer::GetTexHeight() const
 
 int SpriteRenderer::GetTextWidth() const
 {
-    if (const auto SharedSprite = m_Sprite.lock())
-        return SharedSprite->GetHeight();
+    if (m_Sprite)
+        return m_Sprite->GetHeight();
 
     LOG_WARN("You are trying to get a sprite's Width, but there is no sprite!");
     return 0;

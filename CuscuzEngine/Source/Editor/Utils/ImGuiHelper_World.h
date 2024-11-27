@@ -1,6 +1,7 @@
 ﻿#pragma once
 
-#include "ImGui/imgui.h"
+#include "imgui.h"
+#include "ImGuiHelper_ActorComponents.h"
 #include "World/World.h"
 #include "World/Actor.h"
 
@@ -10,7 +11,7 @@ namespace ImGuiHelper
 
     inline static void ShowActorTransform(Actor* actor)
     {
-        ImGui::Text("Transform");
+        ImGui::TextColored(ImVec4(0.8f, .8f, .1f, 1.f), "Transform");
 
         ImGui::Separator();
         ImGui::Dummy(ImVec2(0.0f, 3.0f));
@@ -67,7 +68,7 @@ namespace ImGuiHelper
 
             if (ImGui::BeginTabItem("Components"))
             {
-                ImGui::Text("TO DO");
+                ShowActorComponents(actor, index);
                 ImGui::EndTabItem();
             }
 
