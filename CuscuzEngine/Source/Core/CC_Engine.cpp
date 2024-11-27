@@ -2,6 +2,8 @@
 #include <SDL.h>
 
 #include "CC_Engine.h"
+
+#include "PhysicsSystem.h"
 #include "Core/Window.h"
 #include "Core/RendererSystem.h"
 #include "Core/Time.h"
@@ -18,7 +20,7 @@ CC_Engine* CC_Engine::s_Instance = nullptr;
 
 CC_Engine::CC_Engine() :
 	CC_Window{ std::make_unique<Window>(SCREEN_WIDTH, SCREEN_HEIGHT) },
-	CC_RendererSystem{ std::make_unique<RendererSystem>() },
+	CC_RendererSystem{ std::make_unique<RendererSystem>() }, CC_PhysicsSystem{ std::make_unique<PhysicsSystem>() },
 	CC_EventSystem{ std::make_unique<EventSystem>() }, CC_World(std::make_unique<World>())
 {
 	Init();

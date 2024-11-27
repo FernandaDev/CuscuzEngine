@@ -1,5 +1,7 @@
 #pragma once
 
+#include <vector>
+
 class IRender;
 
 class RendererSystem

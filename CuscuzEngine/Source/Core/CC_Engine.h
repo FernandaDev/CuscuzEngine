@@ -5,6 +5,7 @@
 #include "Events/WindowEvents.h"
 #include "Layers/LayerStack.h"
 
+class PhysicsSystem;
 class ResourcesManager;
 class ImGuiLayer;
 class EngineLayer;
@@ -18,6 +19,7 @@ class CC_Engine
 public:
 	std::unique_ptr<Window> CC_Window;
 	std::unique_ptr<RendererSystem> CC_RendererSystem;
+	std::unique_ptr<PhysicsSystem> CC_PhysicsSystem;
 	std::unique_ptr<EventSystem> CC_EventSystem;
 	std::unique_ptr<World> CC_World;
 	

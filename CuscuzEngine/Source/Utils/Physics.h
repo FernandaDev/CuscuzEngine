@@ -5,7 +5,7 @@
 
 namespace Physics
 {
-    static bool Intersect(const CircleDetectionComponent& a, const CircleDetectionComponent& b)
+    static bool CheckCollision(IOnOverlap& a, IOnOverlap& b)
     {
         const glm::vec2 diff = a.GetCenter() - b.GetCenter();
         const float distSq = CC_Math::LengthSq(diff.x, diff.y);

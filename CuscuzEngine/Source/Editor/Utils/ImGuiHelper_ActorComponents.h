@@ -4,7 +4,7 @@
 #include <vector>
 
 #include "imgui.h"
-#include "ImGuiHelper_SpriteRenderer.h"
+#include "ImGuiHelper_Resources.h"
 #include "Components/SpriteRenderer.h"
 #include "World/Actor.h"
 #include "Core/ClassRegistry.h"
@@ -55,15 +55,6 @@ namespace ImGuiHelper
             actor->AddComponent(newComponent);
         }
     }
-
-    inline static void ShowComponent(Component* component)
-    {
-        if(const auto spriteRenderer = dynamic_cast<SpriteRenderer*>(component))
-        {
-            ShowSpriteRenderer(spriteRenderer);
-        }
-        //else if...
-    }
     
     inline static void ShowActorComponents(Actor* actor, int index)
     {
@@ -78,7 +69,7 @@ namespace ImGuiHelper
         for (const auto& component : actor->GetComponents())
         {
             if(ImGui::CollapsingHeader(component->GetComponentType().c_str(), ImGuiTreeNodeFlags_DefaultOpen))
-                ShowComponent(component.get());
+                component->ImGuiDisplayComponent();
 
             ImGui::Dummy(ImVec2(0.0f, 3.0f));
             ImGui::Separator();

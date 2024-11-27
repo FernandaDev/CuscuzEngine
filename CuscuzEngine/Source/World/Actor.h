@@ -7,6 +7,7 @@
 #include "Events/EventDefinitions.h"
 #include "Utils/Math.h"
 
+class IPhysics;
 class World;
 
 DECLARE_EVENT(OnComponentAdded, const std::shared_ptr<Component>&)
@@ -49,8 +50,10 @@ protected:
     void OnComponentAdded();
 
 private:
-    void TryRenderComponent(std::shared_ptr<Component> component);
+    void TryAddRenderComponent(std::shared_ptr<Component> component);
+    void TryAddPhysicsComponent(std::shared_ptr<Component> component);
     void TryRemoveRenderComponent();
+    void TryRemovePhysicsComponent();
     void UpdateTransform(float deltaTime) const;
     
     ///////////////TEMPLATES//////////////////

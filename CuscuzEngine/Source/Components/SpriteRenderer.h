@@ -51,7 +51,7 @@ public:
     int GetTextWidth() const;
 
     REGISTER_COMPONENT(SpriteRenderer);
-
+    void ImGuiDisplayComponent() override;        
 protected:
     float GetRotationDegrees() const;
 

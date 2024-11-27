@@ -21,20 +21,19 @@ public:
 
     void Update(float deltaTime) override;
     void OnAdded() override;
+    void ImGuiDisplayComponent() override;
     
     glm::mat4 GetWorldTransform() const  { return m_WorldTransform; }
 
     std::string GetComponentType() const override { return "TransformComponent"; }
     
     void SetPosition(const glm::vec2& newPosition);
-    const glm::vec2& GetPosition() const { return m_Position; }
-    
     void SetRotation(float newRotation);
-    float GetRotation() const { return m_Rotation; }
-
     void SetScale(glm::vec2 newScale);
-    glm::vec2 GetScale() const { return m_Scale; }
     
+    const glm::vec2& GetPosition() const { return m_Position; }
+    float GetRotation() const { return m_Rotation; }
+    glm::vec2 GetScale() const { return m_Scale; }
     glm::vec2 GetForward() const { return {glm::cos(m_Rotation), -glm::sin(m_Rotation)}; }
 
 private:

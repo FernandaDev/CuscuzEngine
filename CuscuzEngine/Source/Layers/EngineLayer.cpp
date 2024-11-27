@@ -6,6 +6,7 @@
 #include "Core/CC_Engine.h"
 #include "Core/EventSystem.h"
 #include "Core/KeyCodes.h"
+#include "Core/PhysicsSystem.h"
 #include "Core/RendererSystem.h"
 #include "Events/KeyEvents.h"
 
@@ -14,6 +15,7 @@ void EngineLayer::OnUpdate(float deltaTime)
     Layer::OnUpdate(deltaTime);
 
     CC_Engine::Get().CC_EventSystem->Update();
+    CC_Engine::Get().CC_PhysicsSystem->Update();
     CC_Engine::Get().CC_RendererSystem->Update();
 }
 

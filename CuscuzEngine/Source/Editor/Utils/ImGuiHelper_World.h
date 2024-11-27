@@ -8,49 +8,6 @@
 namespace ImGuiHelper
 {
     static bool showingActor = false;
-
-    inline static void ShowActorTransform(Actor* actor)
-    {
-        ImGui::TextColored(ImVec4(0.8f, .8f, .1f, 1.f), "Transform");
-
-        ImGui::Separator();
-        ImGui::Dummy(ImVec2(0.0f, 3.0f));
-
-        ImGui::PushItemWidth(100.0f); 
-        
-        ImGui::Text("Position");
-        auto actorPos = actor->GetTransform().GetPosition();
-        
-        ImGui::DragFloat("x##pos", &actorPos.x);
-        ImGui::DragFloat("y##pos", &actorPos.y);
-
-        actor->GetTransform().SetPosition(actorPos);
-
-        ImGui::Dummy(ImVec2(0.0f, 10.0f));
-        
-        ImGui::Text("Rotation");
-
-        auto actorRot = actor->GetTransform().GetRotation();
-
-        ImGui::DragFloat("degrees", &actorRot);
-
-        actor->GetTransform().SetRotation(actorRot);
-        
-        ImGui::Dummy(ImVec2(0.0f, 10.0f));
-        
-        ImGui::Text("Scale");
-        
-        auto actorScale =  actor->GetTransform().GetScale();
-
-        ImGui::DragFloat("x##scale", &actorScale.x);
-        ImGui::DragFloat("y##scale", &actorScale.y);
-        
-        actor->GetTransform().SetScale(actorScale);
-
-        ImGui::PopItemWidth();
-        ImGui::Dummy(ImVec2(0.0f, 3.0f));
-        ImGui::Separator();
-    }
     
     inline static void ShowActor(Actor* actor, int index)
     {
@@ -62,7 +19,7 @@ namespace ImGuiHelper
         {
             if (ImGui::BeginTabItem("Transform"))
             {
-                ShowActorTransform(actor);
+                actor->GetTransform().ImGuiDisplayComponent();
                 ImGui::EndTabItem();
             }
 

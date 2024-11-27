@@ -1,6 +1,7 @@
 ﻿#include "pch.h"
 #include "Simple2DMovementComponent.h"
 
+#include "imgui.h"
 #include "Utils/Math.h"
 #include "World/Actor.h"
 
@@ -37,4 +38,21 @@ void Simple2DMovementComponent::SetForwardSpeed(float speed)
 void Simple2DMovementComponent::SetAngularSpeed(float speed)
 {
     m_AngularSpeed = speed;
+}
+
+void Simple2DMovementComponent::ImGuiDisplayComponent()
+{
+    ImGui::Dummy(ImVec2(0.0f, 3.0f));
+
+    ImGui::Text("Forward Speed:");
+    ImGui::SameLine();
+
+    ImGui::DragFloat("##ForwardSpeed", &m_ForwardSpeed);
+
+    ImGui::Text("Angular Speed:");
+    ImGui::SameLine();
+
+    ImGui::DragFloat("##AngularSpeed", &m_AngularSpeed);
+
+    ImGui::Dummy(ImVec2(0.0f, 3.0f));
 }
