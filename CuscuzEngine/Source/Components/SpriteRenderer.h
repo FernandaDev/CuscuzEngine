@@ -4,7 +4,7 @@
 #include <memory>
 
 #include "vec4.hpp"
-#include "Render/IndexBuffer.h"
+#include "Render/Buffer.h"
 #include "Render/IRender.h"
 #include "World/Component.h"
 #include "Render/Shader.h"
@@ -26,9 +26,9 @@ class SpriteRenderer : public Component, public IRender
         2, 3, 0
     };
 
+    std::unique_ptr<VertexBuffer> m_VertexBuffer;
+    std::unique_ptr<IndexBuffer> m_IndexBuffer;
     VertexArray m_VertexArray;
-    VertexBuffer m_VertexBuffer;
-    IndexBuffer m_IndexBuffer;
     Shader m_SpriteShader;
     
 protected:

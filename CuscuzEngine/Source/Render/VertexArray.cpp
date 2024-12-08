@@ -1,7 +1,7 @@
 ﻿#include "pch.h"
 #include "VertexArray.h"
 #include "GL/glew.h"
-#include "VertexBuffer.h"
+#include "Render/Buffer.h"
 #include "VertexBufferLayout.h"
 
 VertexArray::VertexArray()

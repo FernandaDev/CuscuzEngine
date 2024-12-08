@@ -14,14 +14,15 @@
 CREATE_COMPONENT_REGISTRY(SpriteRenderer);
 
 SpriteRenderer::SpriteRenderer(int drawOrder) :
-    m_VertexBuffer(vertexPositions, 4 * 5 * sizeof(float)),
-    m_IndexBuffer(indexBuffer, 6),
     m_DrawOrder(drawOrder), m_Color(0, 0, 0, 1)
 {
+    m_VertexBuffer.reset(VertexBuffer::Create(vertexPositions,  4 * 5 * sizeof(float)));
+    m_IndexBuffer.reset(IndexBuffer::Create(indexBuffer, 6));
+
     VertexBufferLayout layout;
     layout.Push<float>(3); // position
     layout.Push<float>(2); // uv
-    m_VertexArray.AddBuffer(m_VertexBuffer, layout);
+    m_VertexArray.AddBuffer(*m_VertexBuffer, layout);
     
     LoadShaders();
 }
@@ -44,7 +45,7 @@ bool SpriteRenderer::LoadShaders()
 void SpriteRenderer::Draw()
 {
     m_VertexArray.Bind();
-    m_IndexBuffer.Bind();
+    m_IndexBuffer->Bind();
     m_SpriteShader.Bind();
 
     if (m_Sprite)
