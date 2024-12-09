@@ -1,42 +1,22 @@
 ﻿#include "pch.h"
 #include "VertexArray.h"
-#include "GL/glew.h"
-#include "Render/Buffer.h"
-#include "VertexBufferLayout.h"
 
-VertexArray::VertexArray()
+#include "Renderer.h"
+#include "Platform/OpenGL/OpenGLVertexArray.h"
+
+VertexArray* VertexArray::Create()
 {
-    glGenVertexArrays(1, &m_RendererID);
-}
-
-VertexArray::~VertexArray()
-{
-    glDeleteVertexArrays(1, &m_RendererID);
-}
-
-void VertexArray::AddBuffer(const VertexBuffer& vertexBuffer, const VertexBufferLayout& layout)
-{
-    Bind(); // bind the vertex array
-    vertexBuffer.Bind(); // binds the vertex buffer to setup it's layout
-
-    const auto& elements = layout.GetElements();
-    unsigned int offset = 0;
-    for (unsigned int i = 0; i < elements.size(); i++)
+    switch (Renderer::GetAPI())
     {
-        const auto& element = elements[i];
-        glEnableVertexAttribArray(i); 
-        glVertexAttribPointer(i, element.Count, element.Type,
-            element.Normalized, layout.GetStride(), (const void*)offset);
-        offset += element.Count * VertexBufferElement::GetSizeOfType(element.Type);
+    case RendererAPI::OpenGL:
+        return new OpenGLVertexArray();
+    case RendererAPI::None:
+        {
+            CC_ASSERT(false, "RendererAPI::None is not valid!")
+            return nullptr;
+        }    
     }
-}
 
-void VertexArray::Bind() const
-{
-    glBindVertexArray(m_RendererID);
-}
-
-void VertexArray::Unbind() const
-{
-    glBindVertexArray(0);
+    CC_ASSERT(false, "Unknown Renderer API!")
+    return nullptr;
 }

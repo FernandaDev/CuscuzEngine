@@ -7,6 +7,7 @@
 #include "World/Actor.h"
 #include "GL/glew.h"
 #include "Platform/OpenGL/GLUtils.h"
+#include "Render/VertexArray.h"
 #include "Render/VertexBufferLayout.h"
 #include "imgui.h" //TODO remember to disable on dist
 #include "Editor/Utils/ImGuiHelper_Resources.h"
@@ -16,13 +17,23 @@ CREATE_COMPONENT_REGISTRY(SpriteRenderer);
 SpriteRenderer::SpriteRenderer(int drawOrder) :
     m_DrawOrder(drawOrder), m_Color(0, 0, 0, 1)
 {
-    m_VertexBuffer.reset(VertexBuffer::Create(vertexPositions,  4 * 5 * sizeof(float)));
-    m_IndexBuffer.reset(IndexBuffer::Create(indexBuffer, 6));
+    m_VertexArray.reset(VertexArray::Create());
 
-    VertexBufferLayout layout;
-    layout.Push<float>(3); // position
-    layout.Push<float>(2); // uv
-    m_VertexArray.AddBuffer(*m_VertexBuffer, layout);
+    std::shared_ptr<VertexBuffer> vertexBuffer;
+    vertexBuffer.reset(VertexBuffer::Create(m_Vertices,  4 * 5 * sizeof(float)));
+    std::shared_ptr<IndexBuffer> indexBuffer;
+    indexBuffer.reset(IndexBuffer::Create(m_Indices, 6));
+
+    const BufferLayout layout =
+    {
+        { ShaderDataType::Float3, "inPosition" },
+        { ShaderDataType::Float2, "inTexCoord" }
+    };
+    
+    vertexBuffer->SetLayout(layout);
+    
+    m_VertexArray->AddBuffer(vertexBuffer);
+    m_VertexArray->SetIndexBuffer(indexBuffer);
     
     LoadShaders();
 }
@@ -44,8 +55,7 @@ bool SpriteRenderer::LoadShaders()
 
 void SpriteRenderer::Draw()
 {
-    m_VertexArray.Bind();
-    m_IndexBuffer->Bind();
+    m_VertexArray->Bind();
     m_SpriteShader.Bind();
 
     if (m_Sprite)
@@ -66,7 +76,7 @@ void SpriteRenderer::Draw()
         m_SpriteShader.SetUniformM4("uWorldTransform", m_OwnerActor->GetTransform().GetWorldTransform());
     }
     
-    GLCall(glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, nullptr))
+    GLCall(glDrawElements(GL_TRIANGLES, m_VertexArray->GetIndexBuffer()->GetCount(), GL_UNSIGNED_INT, nullptr))
 }
 
 void SpriteRenderer::SetSprite(Sprite* newSprite)

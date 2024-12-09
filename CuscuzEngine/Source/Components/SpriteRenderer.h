@@ -4,7 +4,6 @@
 #include <memory>
 
 #include "vec4.hpp"
-#include "Render/Buffer.h"
 #include "Render/IRender.h"
 #include "World/Component.h"
 #include "Render/Shader.h"
@@ -14,21 +13,19 @@ class Sprite;
 
 class SpriteRenderer : public Component, public IRender
 {
-    float vertexPositions[20] = {
+    float m_Vertices[20] = {
         -0.5f,  0.5f, 0.0f, 0.0f, 0.0f, // vertex 0 top left
          0.5f,  0.5f, 0.0f, 1.0f, 0.0f, // vertex 1 top right
          0.5f, -0.5f, 0.0f, 1.0f, 1.0f, // vertex 2 bottom right
         -0.5f, -0.5f, 0.0f, 0.0f, 1.0f  // vertex 3 bottom left
     };
 
-    unsigned int indexBuffer[6] = {
+    unsigned int m_Indices[6] = {
         0, 1, 2,
         2, 3, 0
     };
-
-    std::unique_ptr<VertexBuffer> m_VertexBuffer;
-    std::unique_ptr<IndexBuffer> m_IndexBuffer;
-    VertexArray m_VertexArray;
+    
+    std::shared_ptr<VertexArray> m_VertexArray;
     Shader m_SpriteShader;
     
 protected:
