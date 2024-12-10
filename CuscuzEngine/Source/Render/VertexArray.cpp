@@ -2,15 +2,16 @@
 #include "VertexArray.h"
 
 #include "Renderer.h"
+#include "RendererAPI.h"
 #include "Platform/OpenGL/OpenGLVertexArray.h"
 
 VertexArray* VertexArray::Create()
 {
     switch (Renderer::GetAPI())
     {
-    case RendererAPI::OpenGL:
+    case RendererAPI::API::OpenGL:
         return new OpenGLVertexArray();
-    case RendererAPI::None:
+    case RendererAPI::API::None:
         {
             CC_ASSERT(false, "RendererAPI::None is not valid!")
             return nullptr;

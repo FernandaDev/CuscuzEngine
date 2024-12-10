@@ -1,20 +1,14 @@
 #include "pch.h"
-#include "GL/glew.h"
-#include "Utils/Log.h"
-#include "Core/Window.h"
 #include "RendererSystem.h"
 
-#include "CC_Engine.h"
+#include "Utils/Log.h"
 #include "Components/SpriteRenderer.h"
+#include "Render/RenderCommand.h"
+#include "Render/Renderer.h"
 
 RendererSystem::~RendererSystem()
 {
     m_RenderComponents.clear();
-}
-
-void RendererSystem::Init() const
-{
-    Clear();
 }
 
 void RendererSystem::AddRenderComponent(const std::shared_ptr<IRender>& renderComponent)
@@ -48,14 +42,23 @@ void RendererSystem::RemoveRenderComponent(const std::shared_ptr<IRender>& rende
 
 void RendererSystem::Update()
 {
-    Clear();
-
+    RenderCommand::SetClearColor(m_ClearColor);
+    RenderCommand::Clear();
+    
     if (m_RenderComponents.empty())
         return;
 
-    glEnable(GL_BLEND);
-    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+    RenderCommand::EnableBlend();
 
+    Renderer::BeginScene();
+
+    DrawObjects();
+    
+    Renderer::EndScene();
+}
+
+void RendererSystem::DrawObjects()
+{
     auto it = m_RenderComponents.begin();
     while (it != m_RenderComponents.end())
     {
@@ -70,10 +73,3 @@ void RendererSystem::Update()
         }
     }
 }
-
-void RendererSystem::Clear() const
-{
-    glClearColor(0.6f, 0.6f, 0.6f, 1.0f);
-    glClear(GL_COLOR_BUFFER_BIT);
-}
-

@@ -13,7 +13,7 @@ class Sprite;
 
 class SpriteRenderer : public Component, public IRender
 {
-    float m_Vertices[20] = {
+    float m_Vertices[4 * 5] = {
         -0.5f,  0.5f, 0.0f, 0.0f, 0.0f, // vertex 0 top left
          0.5f,  0.5f, 0.0f, 1.0f, 0.0f, // vertex 1 top right
          0.5f, -0.5f, 0.0f, 1.0f, 1.0f, // vertex 2 bottom right
@@ -26,7 +26,7 @@ class SpriteRenderer : public Component, public IRender
     };
     
     std::shared_ptr<VertexArray> m_VertexArray;
-    Shader m_SpriteShader;
+    Shader m_Shader;
     
 protected:
     int m_DrawOrder = 0;
@@ -46,6 +46,8 @@ public:
     int GetDrawOrder() const override { return m_DrawOrder; }
     int GetTexHeight() const;
     int GetTextWidth() const;
+    const std::shared_ptr<VertexArray>& GetVertexArray() const override { return m_VertexArray; }
+    const Shader& GetShader() const override { return m_Shader; }
 
     REGISTER_COMPONENT(SpriteRenderer);
     void ImGuiDisplayComponent() override;        

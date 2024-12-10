@@ -32,7 +32,7 @@ void CC_Engine::Init()
 
 	Log::Init();
 	CC_Window->Init("Cuscuz Engine");
-	CC_RendererSystem->Init();
+	//CC_RendererSystem->Init();
 
 	CC_EventSystem->SetEventCallback(BIND_FUNCTION(this, CC_Engine::OnEvent));
 
