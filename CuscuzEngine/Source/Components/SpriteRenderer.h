@@ -26,7 +26,7 @@ class SpriteRenderer : public Component, public IRender
     };
     
     std::shared_ptr<VertexArray> m_VertexArray;
-    Shader m_Shader;
+    std::shared_ptr<Shader> m_Shader;
     
 protected:
     int m_DrawOrder = 0;
@@ -47,13 +47,10 @@ public:
     int GetTexHeight() const;
     int GetTextWidth() const;
     const std::shared_ptr<VertexArray>& GetVertexArray() const override { return m_VertexArray; }
-    const Shader& GetShader() const override { return m_Shader; }
+    const std::shared_ptr<Shader>& GetShader() const override { return m_Shader; }
 
     REGISTER_COMPONENT(SpriteRenderer);
     void ImGuiDisplayComponent() override;        
 protected:
     float GetRotationDegrees() const;
-
-private:
-    bool LoadShaders();
 };

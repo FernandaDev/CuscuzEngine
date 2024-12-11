@@ -177,7 +177,7 @@ void Shader::SetUniformM4(const char* name, const glm::mat4x4& matrix)
 {
     const auto uniformId = GetUniformID(name);
 
-    glUniformMatrix4fv(uniformId, 1, GL_TRUE, glm::value_ptr(matrix));
+    glUniformMatrix4fv(uniformId, 1, GL_FALSE, glm::value_ptr(matrix));
 }
 
 int Shader::GetUniformID(const char* name)

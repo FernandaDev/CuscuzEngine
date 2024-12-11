@@ -6,6 +6,11 @@
 #include "Render/RenderCommand.h"
 #include "Render/Renderer.h"
 
+RendererSystem::RendererSystem()
+: m_Camera(std::make_unique<OrthographicCamera>(0.0f, static_cast<float>(SCREEN_WIDTH),
+                                                   0.0f,static_cast<float>(SCREEN_HEIGHT)))
+{}
+
 RendererSystem::~RendererSystem()
 {
     m_RenderComponents.clear();
@@ -50,7 +55,7 @@ void RendererSystem::Update()
 
     RenderCommand::EnableBlend();
 
-    Renderer::BeginScene();
+    Renderer::BeginScene(*m_Camera);
 
     DrawObjects();
     

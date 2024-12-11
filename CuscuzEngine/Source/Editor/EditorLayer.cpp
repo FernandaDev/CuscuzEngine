@@ -8,7 +8,7 @@
 #include "Utils/ImGuiHelper_ActorCreation.h"
 #include "Utils/ImGuiHelper_World.h"
 
-EditorLayer::EditorLayer() : m_ShowWorldWindow(true), m_ShowActorCreation(false)
+EditorLayer::EditorLayer() : m_ShowWorldWindow(true)
 {
     m_World = CC_Engine::Get().CC_World.get();
 }
@@ -39,11 +39,16 @@ void EditorLayer::ShowWorldWindow()
 {
     ImGui::Begin("World", &m_ShowWorldWindow, ImGuiWindowFlags_MenuBar);
 
+    static bool showActorCreation = false;
+    static bool showCameraWindow = false;
+
+    
     if (ImGui::BeginMenuBar())
     {
         if(ImGui::BeginMenu("Tools"))
         {
-            ImGui::MenuItem("Create New Actor", NULL, &m_ShowActorCreation);
+            ImGui::MenuItem("Create New Actor", NULL, &showActorCreation);
+            ImGui::MenuItem("Camera", NULL, &showCameraWindow);
 
             ImGui::EndMenu();
         }
@@ -51,8 +56,11 @@ void EditorLayer::ShowWorldWindow()
         ImGui::EndMenuBar();
     }
     
-    if(m_ShowActorCreation)
-        ImGuiHelper::ShowActorCreation(m_ShowActorCreation, m_World);
+    if(showActorCreation)
+        ImGuiHelper::ShowActorCreation(showActorCreation, m_World);
+
+    if(showCameraWindow)
+        ImGuiHelper::ShowCameraWindow(showCameraWindow);
 
     const bool showingActors = ImGui::CollapsingHeader("Hierarchy", ImGuiTreeNodeFlags_DefaultOpen);
     ImGuiHelper::ShowAllActors(showingActors, m_World);

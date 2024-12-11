@@ -14,7 +14,7 @@
 CREATE_COMPONENT_REGISTRY(SpriteRenderer);
 
 SpriteRenderer::SpriteRenderer(int drawOrder) :
-    m_DrawOrder(drawOrder), m_Color(0, 0, 0, 1)
+     m_Shader(std::make_shared<Shader>()), m_DrawOrder(drawOrder), m_Color(0, 0, 0, 1)
 {
     std::shared_ptr<VertexBuffer> vertexBuffer;
     vertexBuffer.reset(VertexBuffer::Create(m_Vertices,  4 * 5 * sizeof(float)));
@@ -33,32 +33,18 @@ SpriteRenderer::SpriteRenderer(int drawOrder) :
     m_VertexArray->AddBuffer(vertexBuffer);
     m_VertexArray->SetIndexBuffer(indexBuffer);
     
-    LoadShaders();
-}
-
-bool SpriteRenderer::LoadShaders()
-{
-    if (!m_Shader.Load("Assets/Shaders/Sprite.glsl"))
-        return false;
-
-    m_Shader.Bind();
-
-    const auto viewProj = glm::ortho(0.0f, static_cast<float>(SCREEN_WIDTH),
-                                                     0.0f,static_cast<float>(SCREEN_HEIGHT),
-                                               -1.0f, 1.0f);
-    m_Shader.SetUniformM4("uViewProjection", viewProj);
-
-    return true;
+    if(!m_Shader->Load("Assets/Shaders/Sprite.glsl"))
+        LOG_ERROR("Could not load Sprite shader!");
 }
 
 void SpriteRenderer::Draw()
 {
-    m_Shader.Bind();
+    m_Shader->Bind();
 
     if (m_Sprite)
     {
         m_Sprite->BindTexture();
-        m_Shader.SetUniformI("uTexture", 0);
+        m_Shader->SetUniformI("u_Texture", 0);
         
         auto scaleMatrix = glm::mat4(1.0f);
         scaleMatrix = scale(scaleMatrix, glm::vec3( m_Sprite->GetWidthF(),m_Sprite->GetHeightF(), 1.f));
@@ -66,14 +52,14 @@ void SpriteRenderer::Draw()
         const auto actorWorldTransform = m_OwnerActor->GetTransform().GetWorldTransform();
         const auto worldMatrix = actorWorldTransform * scaleMatrix;
         
-        m_Shader.SetUniformM4("uWorldTransform", worldMatrix);
+        m_Shader->SetUniformM4("u_WorldTransform", worldMatrix);
     }
     else
     {
-        m_Shader.SetUniformM4("uWorldTransform", m_OwnerActor->GetTransform().GetWorldTransform());
+        m_Shader->SetUniformM4("u_WorldTransform", m_OwnerActor->GetTransform().GetWorldTransform());
     }
 
-    Renderer::Submit(m_VertexArray);
+    Renderer::Submit(m_Shader, m_VertexArray);
 }
 
 void SpriteRenderer::SetSprite(Sprite* newSprite)

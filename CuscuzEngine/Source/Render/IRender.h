@@ -8,5 +8,5 @@ public:
     virtual void Draw() = 0;
     virtual int GetDrawOrder() const = 0;
     virtual const std::shared_ptr<VertexArray>& GetVertexArray() const = 0;
-    virtual const Shader& GetShader() const = 0;
+    virtual const std::shared_ptr<Shader>& GetShader() const = 0;
 };

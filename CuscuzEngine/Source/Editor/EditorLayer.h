@@ -8,7 +8,6 @@ class World;
 class EditorLayer : public Layer
 {
     bool m_ShowWorldWindow;
-    bool m_ShowActorCreation;
     World* m_World;
     
 public:

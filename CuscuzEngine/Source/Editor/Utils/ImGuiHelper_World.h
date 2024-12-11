@@ -2,6 +2,7 @@
 
 #include "imgui.h"
 #include "ImGuiHelper_ActorComponents.h"
+#include "Core/RendererSystem.h"
 #include "World/World.h"
 #include "World/Actor.h"
 
@@ -65,5 +66,14 @@ namespace ImGuiHelper
     
          if(selectedActor && showingActor)
              ShowActor(selectedActor, selectedIndex);
+    }
+
+    inline static void ShowCameraWindow(bool& showCameraWindow)
+    {
+        ImGui::Begin("Camera", &showCameraWindow);
+
+        CC_Engine::Get().CC_RendererSystem->GetCamera()->OnImGuiRender();
+        
+        ImGui::End();
     }
 }
