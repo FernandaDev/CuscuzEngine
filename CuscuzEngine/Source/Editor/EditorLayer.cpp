@@ -6,9 +6,10 @@
 #include "Core/KeyCodes.h"
 #include "Events/KeyEvents.h"
 #include "Utils/ImGuiHelper_ActorCreation.h"
+#include "Utils/ImGuiHelper_Settings.h"
 #include "Utils/ImGuiHelper_World.h"
 
-EditorLayer::EditorLayer() : m_ShowWorldWindow(true)
+EditorLayer::EditorLayer() : m_ShowWorldWindow(true), m_ShowTimeStatsOverlay(false)
 {
     m_World = CC_Engine::Get().CC_World.get();
 }
@@ -17,6 +18,9 @@ void EditorLayer::OnImGuiRender()
 {
     if (m_ShowWorldWindow)
         ShowWorldWindow();
+
+    if(m_ShowTimeStatsOverlay)
+        ImGuiHelper::ShowTimeOverlay(m_ShowTimeStatsOverlay);
 }
 
 void EditorLayer::OnEvent(CC_Event& event)
@@ -41,15 +45,28 @@ void EditorLayer::ShowWorldWindow()
 
     static bool showActorCreation = false;
     static bool showCameraWindow = false;
-
+    static bool showTimeSettingsWindow = false;
     
     if (ImGui::BeginMenuBar())
     {
         if(ImGui::BeginMenu("Tools"))
         {
             ImGui::MenuItem("Create New Actor", NULL, &showActorCreation);
-            ImGui::MenuItem("Camera", NULL, &showCameraWindow);
 
+            ImGui::EndMenu();
+        }
+        
+        if(ImGui::BeginMenu("Camera"))
+        {
+            ImGui::MenuItem("Settings", NULL, &showCameraWindow);
+            
+            ImGui::EndMenu();
+        }
+
+        if(ImGui::BeginMenu("Settings"))
+        {
+            ImGui::MenuItem("Time", NULL, &showTimeSettingsWindow);
+            
             ImGui::EndMenu();
         }
         
@@ -61,6 +78,9 @@ void EditorLayer::ShowWorldWindow()
 
     if(showCameraWindow)
         ImGuiHelper::ShowCameraWindow(showCameraWindow);
+
+    if(showTimeSettingsWindow)
+        ImGuiHelper::ShowTimeSettingsWindow(showTimeSettingsWindow, m_ShowTimeStatsOverlay);
 
     const bool showingActors = ImGui::CollapsingHeader("Hierarchy", ImGuiTreeNodeFlags_DefaultOpen);
     ImGuiHelper::ShowAllActors(showingActors, m_World);

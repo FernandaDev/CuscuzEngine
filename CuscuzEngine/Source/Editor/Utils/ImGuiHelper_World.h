@@ -68,9 +68,9 @@ namespace ImGuiHelper
              ShowActor(selectedActor, selectedIndex);
     }
 
-    inline static void ShowCameraWindow(bool& showCameraWindow)
+    inline static void ShowCameraWindow(bool& showing)
     {
-        ImGui::Begin("Camera", &showCameraWindow);
+        ImGui::Begin("Camera", &showing);
 
         CC_Engine::Get().CC_RendererSystem->GetCamera()->OnImGuiRender();
         

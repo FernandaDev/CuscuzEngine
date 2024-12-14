@@ -8,6 +8,7 @@ class World;
 class EditorLayer : public Layer
 {
     bool m_ShowWorldWindow;
+    bool m_ShowTimeStatsOverlay;
     World* m_World;
     
 public:

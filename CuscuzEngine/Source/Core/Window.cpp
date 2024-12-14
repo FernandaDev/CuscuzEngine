@@ -8,7 +8,7 @@
 
 
 Window::Window(int width, int height):
-    m_Width{width}, m_Height{height}
+    m_Width{width}, m_Height{height}, m_VSync(true)
 {}
 
 Window::~Window()
@@ -45,6 +45,16 @@ void Window::OnEvent(CC_Event& event)
 void Window::Render()
 {
     m_Context->Render();
+}
+
+void Window::SetVSync(bool enable)
+{
+    if(enable)
+        SDL_GL_SetSwapInterval(1);
+    else
+        SDL_GL_SetSwapInterval(0);
+
+    m_VSync = enable;
 }
 
 bool Window::OnWindowResized(const CC_WindowResizeEvent& event)

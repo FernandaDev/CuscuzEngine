@@ -73,10 +73,10 @@ void CC_Engine::Run()
 	
 	while (m_IsRunning)
 	{
-		Time::Instance().Update();
+		Time::Get().Update();
 		
 		for (const auto& layer : m_LayerStack)
-			layer->OnUpdate(Time::Instance().DeltaTime());
+			layer->OnUpdate(Time::Get().DeltaTime());
 
 		m_ImGuiLayer->Begin();
 		for (const auto& layer : m_LayerStack)

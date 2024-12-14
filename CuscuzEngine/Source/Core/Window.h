@@ -9,6 +9,7 @@ class Window
 {
 	int m_Width;
 	int m_Height;
+	bool m_VSync;
 	
 	SDL_Window* m_Window{nullptr};
 	std::unique_ptr<GraphicsContext> m_Context{};
@@ -25,9 +26,10 @@ public:
 	int GetWidth() const { return m_Width; }
 	int GetHeight() const { return m_Height; }
 	SDL_Window* GetWindow() const { return m_Window; }
-
 	GraphicsContext* GetContext() const { return m_Context.get(); }
 
+	void SetVSync(bool enable);
+	bool GetVSync() const { return m_VSync; }
 
 private:
 	bool OnWindowResized(const class CC_WindowResizeEvent& event);
