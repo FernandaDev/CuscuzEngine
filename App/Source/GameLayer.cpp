@@ -10,8 +10,9 @@
 #include "Utils/ResourcesManager.h"
 #include "World/Actor.h"
 
-GameLayer::GameLayer() : m_ActorSprite(new Sprite()),
-m_EnemySprite(new Sprite())
+GameLayer::GameLayer() :
+m_ActorSprite(std::make_shared<Sprite>()),
+m_EnemySprite(std::make_shared<Sprite>())
 {
     m_World = CC_Engine::Get().CC_World.get();
 }

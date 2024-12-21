@@ -20,7 +20,7 @@ public:
         s_RendererAPI->EnableBlend();
     }
     
-    static void DrawIndexed(const std::shared_ptr<VertexArray>& vertexArray)
+    static void DrawIndexed(const CC_AssetRef<VertexArray>& vertexArray)
     {
         s_RendererAPI->DrawIndexed(vertexArray);
     }

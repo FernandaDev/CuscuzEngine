@@ -18,7 +18,7 @@ namespace ImGuiHelper
             if (ImGui::ImageButton((void*)(intptr_t)texture.get().GetRendererId(), ImVec2(64, 64)))
             {
                 LOG_INFO("Selected Texture Name: %s", texture.get().GetName().c_str());
-                const auto sprite = new Sprite();
+                const auto sprite = std::make_shared<Sprite>();
                 sprite->SetTexture(&texture.get());
                 spriteRenderer->SetSprite(sprite);
                 showingAllTextures = false;

@@ -24,21 +24,21 @@ class SpriteRenderer : public Component, public IRender
         2, 3, 0
     };
     
-    std::shared_ptr<VertexArray> m_VertexArray;
-    std::shared_ptr<Shader> m_Shader;
+    CC_AssetRef<VertexArray> m_VertexArray;
+    CC_AssetRef<Shader> m_Shader;
     
 protected:
     int m_DrawOrder = 0;
     glm::vec4 m_Color = {};
-    Sprite* m_Sprite {};
+    CC_AssetRef<Sprite> m_Sprite {};
 
 public:
     SpriteRenderer(int drawOrder = 0);
     ~SpriteRenderer() override = default;
 
     void Draw() override;
-    void SetSprite(Sprite* newSprite);
-    Sprite* GetSprite() const { return m_Sprite; }
+    void SetSprite(const CC_AssetRef<Sprite>& newSprite);
+    const CC_AssetRef<Sprite>& GetSprite() const { return m_Sprite; }
 
     void SetDrawOrder(int drawOrder);
     void SetColor(glm::vec4 color);
@@ -46,8 +46,8 @@ public:
     int GetDrawOrder() const override { return m_DrawOrder; }
     int GetTexHeight() const;
     int GetTextWidth() const;
-    const std::shared_ptr<VertexArray>& GetVertexArray() const override { return m_VertexArray; }
-    const std::shared_ptr<Shader>& GetShader() const override { return m_Shader; }
+    const CC_AssetRef<VertexArray>& GetVertexArray() const override { return m_VertexArray; }
+    const CC_AssetRef<Shader>& GetShader() const override { return m_Shader; }
 
     REGISTER_COMPONENT(SpriteRenderer);
     void ImGuiDisplayComponent() override;        

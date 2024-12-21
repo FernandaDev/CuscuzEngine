@@ -2,6 +2,7 @@
 
 #include <memory>
 
+#include "Core/CC_Core.h"
 #include "Layers/Layer.h"
 #include "Platform/OpenGL/OpenGLTexture.h"
 #include "Render/Sprite.h"
@@ -16,10 +17,10 @@ class GameLayer : public Layer
     bool m_ShowWorldWindow = true;
     World* m_World = nullptr;
     
-    Sprite* m_ActorSprite {};
+    CC_AssetRef<Sprite> m_ActorSprite {};
     Actor* m_MainActor {};
 
-    Sprite* m_EnemySprite {};
+    CC_AssetRef<Sprite> m_EnemySprite {};
     Actor* m_EnemyActor {};
 
 public:

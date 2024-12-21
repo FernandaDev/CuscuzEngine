@@ -24,7 +24,7 @@ void OpenGLRendererAPI::EnableBlend()
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 }
 
-void OpenGLRendererAPI::DrawIndexed(const std::shared_ptr<VertexArray>& vertexArray)
+void OpenGLRendererAPI::DrawIndexed(const CC_AssetRef<VertexArray>& vertexArray)
 {
     glDrawElements(GL_TRIANGLES, vertexArray->GetIndexBuffer()->GetCount(), GL_UNSIGNED_INT, nullptr);
 }

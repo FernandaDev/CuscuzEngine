@@ -13,9 +13,9 @@ CREATE_COMPONENT_REGISTRY(SpriteRenderer);
 SpriteRenderer::SpriteRenderer(int drawOrder) :
      m_DrawOrder(drawOrder), m_Color(1.f, 1.f, 1.f, 1)
 {
-    std::shared_ptr<VertexBuffer> vertexBuffer;
+    CC_AssetRef<VertexBuffer> vertexBuffer;
     vertexBuffer.reset(VertexBuffer::Create(m_Vertices,  4 * 5 * sizeof(float)));
-    std::shared_ptr<IndexBuffer> indexBuffer;
+    CC_AssetRef<IndexBuffer> indexBuffer;
     indexBuffer.reset(IndexBuffer::Create(m_Indices, 6));
 
     const BufferLayout layout =
@@ -60,7 +60,7 @@ void SpriteRenderer::Draw()
     Renderer::Submit(m_Shader, m_VertexArray);
 }
 
-void SpriteRenderer::SetSprite(Sprite* newSprite)
+void SpriteRenderer::SetSprite(const CC_AssetRef<Sprite>& newSprite)
 {
     m_Sprite = newSprite;
 }

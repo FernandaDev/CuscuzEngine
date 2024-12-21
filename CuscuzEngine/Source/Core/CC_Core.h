@@ -1,5 +1,7 @@
 ﻿#pragma once
 
+#include <memory>
+
 #ifdef CC_ENABLE_ASSERT
     #define CC_ASSERT(x, ...) { if(!(x)) { LOG_ERROR("Assertion Failed: {0}", __VA_ARGS__); __debugbreak(); } }
 #else
@@ -15,3 +17,6 @@ enum
     SCREEN_WIDTH = 1280,
     SCREEN_HEIGHT = 720
 };
+
+template<typename T>
+using CC_AssetRef = std::shared_ptr<T>;

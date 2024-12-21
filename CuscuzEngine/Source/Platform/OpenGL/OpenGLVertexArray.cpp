@@ -39,7 +39,7 @@ OpenGLVertexArray::~OpenGLVertexArray()
     glDeleteVertexArrays(1, &m_RendererID);
 }
 
-void OpenGLVertexArray::AddBuffer(const std::shared_ptr<VertexBuffer>& vertexBuffer)
+void OpenGLVertexArray::AddBuffer(const CC_AssetRef<VertexBuffer>& vertexBuffer)
 {
     CC_ASSERT(vertexBuffer->GetLayout().GetElements().size(), "Vertex buffer has no layout!")
 
@@ -64,7 +64,7 @@ void OpenGLVertexArray::AddBuffer(const std::shared_ptr<VertexBuffer>& vertexBuf
     m_VertexBuffers.push_back(vertexBuffer);
 }
 
-void OpenGLVertexArray::SetIndexBuffer(const std::shared_ptr<IndexBuffer>& indexBuffer)
+void OpenGLVertexArray::SetIndexBuffer(const CC_AssetRef<IndexBuffer>& indexBuffer)
 {
     glBindVertexArray(m_RendererID);
     indexBuffer->Bind();
