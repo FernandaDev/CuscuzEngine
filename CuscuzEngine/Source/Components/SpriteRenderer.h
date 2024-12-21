@@ -1,6 +1,5 @@
 ﻿#pragma once
 
-#include <SDL_render.h>
 #include <memory>
 
 #include "vec4.hpp"
@@ -42,6 +41,7 @@ public:
     Sprite* GetSprite() const { return m_Sprite; }
 
     void SetDrawOrder(int drawOrder);
+    void SetColor(glm::vec4 color);
 
     int GetDrawOrder() const override { return m_DrawOrder; }
     int GetTexHeight() const;

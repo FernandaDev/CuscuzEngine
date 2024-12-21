@@ -1,5 +1,6 @@
 ﻿#pragma once
 
+#include <SDL_render.h>
 #include "glm.hpp"
 #include "SpriteRenderer.h"
 

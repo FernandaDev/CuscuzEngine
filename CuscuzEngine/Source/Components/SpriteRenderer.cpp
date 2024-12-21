@@ -1,20 +1,17 @@
 ﻿#include "pch.h"
 #include "SpriteRenderer.h"
-
-#include "ext/matrix_clip_space.hpp"
 #include "ext/matrix_transform.hpp"
 #include "Render/Sprite.h"
 #include "World/Actor.h"
 #include "Render/VertexArray.h"
-#include "Render/VertexBufferLayout.h"
-#include "imgui.h" //TODO remember to disable on dist
 #include "Editor/Utils/ImGuiHelper_Resources.h"
+#include "gtc/type_ptr.inl"
 #include "Render/Renderer.h"
 
 CREATE_COMPONENT_REGISTRY(SpriteRenderer);
 
 SpriteRenderer::SpriteRenderer(int drawOrder) :
-     m_Shader(std::make_shared<Shader>()), m_DrawOrder(drawOrder), m_Color(0, 0, 0, 1)
+     m_DrawOrder(drawOrder), m_Color(1.f, 1.f, 1.f, 1)
 {
     std::shared_ptr<VertexBuffer> vertexBuffer;
     vertexBuffer.reset(VertexBuffer::Create(m_Vertices,  4 * 5 * sizeof(float)));
@@ -32,9 +29,10 @@ SpriteRenderer::SpriteRenderer(int drawOrder) :
     m_VertexArray.reset(VertexArray::Create());
     m_VertexArray->AddBuffer(vertexBuffer);
     m_VertexArray->SetIndexBuffer(indexBuffer);
+
+    m_Shader.reset(Shader::Create("Assets/Shaders/Sprite.glsl"));
     
-    if(!m_Shader->Load("Assets/Shaders/Sprite.glsl"))
-        LOG_ERROR("Could not load Sprite shader!");
+    SetColor(m_Color);
 }
 
 void SpriteRenderer::Draw()
@@ -72,6 +70,13 @@ void SpriteRenderer::SetDrawOrder(int drawOrder)
     m_DrawOrder = drawOrder;
 }
 
+void SpriteRenderer::SetColor(glm::vec4 color)
+{
+    m_Color = color;
+    m_Shader->Bind();
+    m_Shader->SetUniformF4("u_Color", color);
+}
+
 int SpriteRenderer::GetTexHeight() const
 {
     if (m_Sprite)
@@ -97,6 +102,17 @@ float SpriteRenderer::GetRotationDegrees() const
 
 void SpriteRenderer::ImGuiDisplayComponent()
 {
+    ImGui::Text("Color");
+    ImGui::SameLine();
+    
+    static glm::vec4 spriteColor (1.f);
+    ImGui::ColorEdit4("#SpriteColor", glm::value_ptr(spriteColor));
+
+    if(spriteColor != m_Color)
+        SetColor(spriteColor);
+    
+    ImGui::NewLine();
+
     ImGui::Text("Sprite");
     ImGui::SameLine();
 
