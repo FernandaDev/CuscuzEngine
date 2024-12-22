@@ -11,7 +11,6 @@ class ResourcesManager
     static ResourcesManager* s_Instance;
     
     std::unordered_map<unsigned short, std::unique_ptr<Texture>> m_TexturesMap;
-    std::unique_ptr<Texture> m_DefaultTexture;
     
     std::unordered_map<std::string, unsigned short> m_NameToGUIDMap;
     

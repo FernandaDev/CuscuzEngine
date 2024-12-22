@@ -15,7 +15,9 @@
 enum
 {
     SCREEN_WIDTH = 1280,
-    SCREEN_HEIGHT = 720
+    SCREEN_HEIGHT = 720,
+    HALF_SCREEN_WIDTH = SCREEN_WIDTH / 2,
+    HALF_SCREEN_HEIGHT = SCREEN_HEIGHT / 2,
 };
 
 template<typename T>

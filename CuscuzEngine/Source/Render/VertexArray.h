@@ -15,5 +15,5 @@ public:
     virtual const std::vector<CC_AssetRef<VertexBuffer>>& GetVertexBuffers() const = 0;
     virtual const CC_AssetRef<IndexBuffer>& GetIndexBuffer() const = 0;
     
-    static VertexArray* Create();
+    static CC_AssetRef<VertexArray> Create();
 };

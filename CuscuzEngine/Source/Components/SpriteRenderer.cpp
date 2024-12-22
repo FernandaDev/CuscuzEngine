@@ -13,10 +13,8 @@ CREATE_COMPONENT_REGISTRY(SpriteRenderer);
 SpriteRenderer::SpriteRenderer(int drawOrder) :
      m_DrawOrder(drawOrder), m_Color(1.f, 1.f, 1.f, 1)
 {
-    CC_AssetRef<VertexBuffer> vertexBuffer;
-    vertexBuffer.reset(VertexBuffer::Create(m_Vertices,  4 * 5 * sizeof(float)));
-    CC_AssetRef<IndexBuffer> indexBuffer;
-    indexBuffer.reset(IndexBuffer::Create(m_Indices, 6));
+    const CC_AssetRef<VertexBuffer> vertexBuffer = VertexBuffer::Create(m_Vertices,  4 * 5 * sizeof(float));
+    const CC_AssetRef<IndexBuffer> indexBuffer = IndexBuffer::Create(m_Indices, 6);
 
     const BufferLayout layout =
     {
@@ -26,11 +24,11 @@ SpriteRenderer::SpriteRenderer(int drawOrder) :
     
     vertexBuffer->SetLayout(layout);
     
-    m_VertexArray.reset(VertexArray::Create());
+    m_VertexArray = VertexArray::Create();
     m_VertexArray->AddBuffer(vertexBuffer);
     m_VertexArray->SetIndexBuffer(indexBuffer);
 
-    m_Shader.reset(Shader::Create("Assets/Shaders/Sprite.glsl"));
+    m_Shader = Shader::Create("Assets/Shaders/Sprite.glsl");
     
     SetColor(m_Color);
 }
@@ -39,20 +37,20 @@ void SpriteRenderer::Draw()
 {
     m_Shader->Bind();
 
-    if (m_Sprite)
-    {
-        m_Sprite->BindTexture();
-        m_Shader->SetUniformI("u_Texture", 0);
-        
-        auto scaleMatrix = glm::mat4(1.0f);
-        scaleMatrix = scale(scaleMatrix, glm::vec3( m_Sprite->GetWidthF(),m_Sprite->GetHeightF(), 1.f));
-
-        const auto actorWorldTransform = m_OwnerActor->GetTransform().GetWorldTransform();
-        const auto worldMatrix = actorWorldTransform * scaleMatrix;
-        
-        m_Shader->SetUniformM4("u_WorldTransform", worldMatrix);
-    }
-    else
+     if (m_Sprite)
+     {
+         m_Sprite->BindTexture();
+         m_Shader->SetUniformI("u_Texture", 0);
+         
+         auto scaleMatrix = glm::mat4(1.0f);
+         scaleMatrix = scale(scaleMatrix, glm::vec3( m_Sprite->GetWidthF(),m_Sprite->GetHeightF(), 1.f));
+    
+         const auto actorWorldTransform = m_OwnerActor->GetTransform().GetWorldTransform();
+         const auto worldMatrix = actorWorldTransform * scaleMatrix;
+         
+         m_Shader->SetUniformM4("u_WorldTransform", worldMatrix);
+     }
+     else
     {
         m_Shader->SetUniformM4("u_WorldTransform", m_OwnerActor->GetTransform().GetWorldTransform());
     }
@@ -133,7 +131,7 @@ void SpriteRenderer::ImGuiDisplayComponent()
                 ImVec2(initialPoint.x + width + offset, initialPoint.y + height + offset),
                 ImColor(color));
 
-            ImGui::Image((void*)(intptr_t)texture->GetRendererId(),
+            ImGui::Image((void*)(intptr_t)texture->GetRendererID(),
                 {m_Sprite->GetWidthF(), m_Sprite->GetHeightF()});
 
             ImGui::TextColored(ImVec4(0.6f, .6f, .6f, .8f), "Width:%f | Height:%f", width, height);

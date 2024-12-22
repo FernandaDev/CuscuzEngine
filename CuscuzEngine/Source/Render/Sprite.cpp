@@ -4,7 +4,7 @@
 #include "Render/Texture.h"
 #include "Utils/Log.h"
 
-Sprite::Sprite() : m_PixelsDimension(0, 0), m_Pivot(0, 0)
+Sprite::Sprite() : m_Width(0), m_Height(0), m_Pivot(0, 0)
 {}
 
 Sprite::~Sprite()
@@ -12,15 +12,15 @@ Sprite::~Sprite()
     LOG_INFO("Sprite Destroyed!");
 }
 
-void Sprite::SetTexture(Texture* texture)
+void Sprite::SetTexture(const CC_AssetRef<Texture>& texture)
 {
     m_Texture = texture;
 
-    m_PixelsDimension.x = m_Texture->GetWidth();
-    m_PixelsDimension.y = m_Texture->GetHeight();
+    m_Width = m_Texture->GetWidth();
+    m_Height = m_Texture->GetHeight();
 }
 
 void Sprite::BindTexture() const
 {
-    m_Texture->SetActive();
+    m_Texture->Bind();
 }

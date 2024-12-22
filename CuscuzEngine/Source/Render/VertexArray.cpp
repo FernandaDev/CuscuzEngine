@@ -5,12 +5,12 @@
 #include "RendererAPI.h"
 #include "Platform/OpenGL/OpenGLVertexArray.h"
 
-VertexArray* VertexArray::Create()
+CC_AssetRef<VertexArray> VertexArray::Create()
 {
     switch (Renderer::GetAPI())
     {
     case RendererAPI::API::OpenGL:
-        return new OpenGLVertexArray();
+        return std::make_shared<OpenGLVertexArray>();
     case RendererAPI::API::None:
         {
             CC_ASSERT(false, "RendererAPI::None is not valid!")

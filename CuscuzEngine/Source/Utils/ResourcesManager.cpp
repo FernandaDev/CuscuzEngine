@@ -3,7 +3,7 @@
 
 #include <ranges>
 
-#include "Platform/OpenGL/OpenGLTexture.h"
+#include "Platform/OpenGL/OpenGLTexture2D.h"
 
 ResourcesManager* ResourcesManager::s_Instance = nullptr;
 
@@ -11,7 +11,6 @@ unsigned short g_GUID = 1;
 
 void ResourcesManager::Init()
 {
-    m_DefaultTexture = std::make_unique<OpenGLTexture>();
     LoadAllTextures("Assets/Images");
 }
 
@@ -24,27 +23,27 @@ void ResourcesManager::Unload()
 
 void ResourcesManager::LoadAllTextures(const std::string& directory)
 {
-    for (const auto& entry : std::filesystem::directory_iterator(directory))
-    {
-        if (entry.is_regular_file())
-        {
-            std::string path = entry.path().generic_string();
-            
-            if (path.ends_with(".png") || path.ends_with(".jpg") || path.ends_with(".jpeg"))
-            {
-                m_TexturesMap[g_GUID] = std::make_unique<OpenGLTexture>(path.data());
-                m_TexturesMap[g_GUID]->SetGUID(g_GUID);
-                
-                const auto textureName = m_TexturesMap[g_GUID]->GetName();
-                if(m_NameToGUIDMap.contains(textureName))
-                    LOG_ERROR("The {0} texture is duplicated!", textureName);
-                else
-                    m_NameToGUIDMap[textureName] = g_GUID;
-
-                g_GUID++;
-            }
-        }
-    }
+    // for (const auto& entry : std::filesystem::directory_iterator(directory))
+    // {
+    //     if (entry.is_regular_file())
+    //     {
+    //         std::string path = entry.path().generic_string();
+    //         
+    //         if (path.ends_with(".png") || path.ends_with(".jpg") || path.ends_with(".jpeg"))
+    //         {
+    //             m_TexturesMap[g_GUID] = std::make_unique<OpenGLTexture>(path.data());
+    //             m_TexturesMap[g_GUID]->SetGUID(g_GUID);
+    //             
+    //             const auto textureName = m_TexturesMap[g_GUID]->GetName();
+    //             if(m_NameToGUIDMap.contains(textureName))
+    //                 LOG_ERROR("The {0} texture is duplicated!", textureName);
+    //             else
+    //                 m_NameToGUIDMap[textureName] = g_GUID;
+    //
+    //             g_GUID++;
+    //         }
+    //     }
+    // }
 }   
 
 Texture* ResourcesManager::GetTexture(unsigned short GUID)
@@ -52,8 +51,8 @@ Texture* ResourcesManager::GetTexture(unsigned short GUID)
     if(m_TexturesMap.contains(GUID))
         return m_TexturesMap[GUID].get();
 
-    LOG_ERROR("Couldn't find texture: {0}", GUID);
-    return m_DefaultTexture.get();
+    CC_ASSERT(false, "Couldn't find texture: {0}", GUID);
+    return nullptr;
 }
 
 Texture* ResourcesManager::GetTexture(const std::string& name)
@@ -61,8 +60,8 @@ Texture* ResourcesManager::GetTexture(const std::string& name)
     if(m_NameToGUIDMap.contains(name))
         return GetTexture(m_NameToGUIDMap[name]);
     
-    LOG_ERROR("Couldn't find texture: {0}", name);
-    return m_DefaultTexture.get();
+    CC_ASSERT(false, "Couldn't find texture: {0}", name);
+    return nullptr;
 }
 
 std::vector<std::reference_wrapper<Texture>> ResourcesManager::GetAllTextures() const

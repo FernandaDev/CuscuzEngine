@@ -119,7 +119,7 @@ public:
     virtual const BufferLayout& GetLayout() const = 0;
     virtual void SetLayout(const BufferLayout& layout) = 0;
 
-    static VertexBuffer* Create(const void* data, uint32_t size);
+    static CC_AssetRef<VertexBuffer> Create(const void* data, uint32_t size);
 };
 
 
@@ -133,5 +133,5 @@ public:
 
     virtual uint32_t GetCount() const = 0;
 
-    static IndexBuffer* Create(const uint32_t* data, uint32_t count);
+    static CC_AssetRef<IndexBuffer> Create(const uint32_t* data, uint32_t count);
 };

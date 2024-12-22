@@ -6,12 +6,12 @@
 #include "Core/CC_Core.h"
 #include "Platform/OpenGL/OpenGLBuffer.h"
 
-VertexBuffer* VertexBuffer::Create(const void* data, uint32_t size)
+CC_AssetRef<VertexBuffer> VertexBuffer::Create(const void* data, uint32_t size)
 {
     switch (Renderer::GetAPI())
     {
     case RendererAPI::API::OpenGL:
-        return new OpenGLVertexBuffer(data, size);
+        return std::make_shared<OpenGLVertexBuffer>(data, size);
     case RendererAPI::API::None:
         {
             CC_ASSERT(false, "RendererAPI::None is not valid!")
@@ -23,12 +23,12 @@ VertexBuffer* VertexBuffer::Create(const void* data, uint32_t size)
     return nullptr;
 }
 
-IndexBuffer* IndexBuffer::Create(const uint32_t* data, uint32_t count)
+CC_AssetRef<IndexBuffer> IndexBuffer::Create(const uint32_t* data, uint32_t count)
 {
     switch (Renderer::GetAPI())
     {
     case RendererAPI::API::OpenGL:
-        return new OpenGLIndexBuffer(data, count);
+        return std::make_shared<OpenGLIndexBuffer>(data, count);
     case RendererAPI::API::None:
         {
             CC_ASSERT(false, "RendererAPI::None is not valid!")

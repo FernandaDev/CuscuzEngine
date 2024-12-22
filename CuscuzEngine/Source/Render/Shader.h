@@ -2,6 +2,7 @@
 
 #include <string>
 #include "fwd.hpp"
+#include "Core/CC_Core.h"
 
 class Shader
 {
@@ -21,5 +22,5 @@ public:
     virtual void SetUniformI(const char* name, int value) = 0;
     virtual void SetUniformM4(const char* name, const glm::mat4x4& matrix) = 0;
 
-    static Shader* Create(const std::string& shaderFile);
+    static CC_AssetRef<Shader> Create(const std::string& shaderFile);
 };

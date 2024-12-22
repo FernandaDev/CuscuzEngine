@@ -7,8 +7,8 @@
 #include "Render/Renderer.h"
 
 RendererSystem::RendererSystem()
-: m_Camera(std::make_unique<OrthographicCamera>(0.0f, static_cast<float>(SCREEN_WIDTH),
-                                                   0.0f,static_cast<float>(SCREEN_HEIGHT)))
+: m_Camera(std::make_unique<OrthographicCamera>(-static_cast<float>(HALF_SCREEN_WIDTH), static_cast<float>(HALF_SCREEN_WIDTH),
+                                             -static_cast<float>(HALF_SCREEN_HEIGHT),static_cast<float>(HALF_SCREEN_HEIGHT)))
 {}
 
 RendererSystem::~RendererSystem()
