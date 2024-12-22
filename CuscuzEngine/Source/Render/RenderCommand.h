@@ -5,6 +5,11 @@
 class RenderCommand
 {
 public:
+    static void Init()
+    {
+        s_RendererAPI->Init();
+    }
+    
     static void SetClearColor(const glm::vec4& color)
     {
         s_RendererAPI->SetClearColor(color);
@@ -13,11 +18,6 @@ public:
     static void Clear()
     {
         s_RendererAPI->Clear();
-    }
-
-    static void EnableBlend()
-    {
-        s_RendererAPI->EnableBlend();
     }
     
     static void DrawIndexed(const CC_AssetRef<VertexArray>& vertexArray)

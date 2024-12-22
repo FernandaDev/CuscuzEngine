@@ -12,6 +12,7 @@
 #include "GUI/ImGuiLayer.h"
 #include "Layers/EngineLayer.h"
 #include "Layers/Layer.h"
+#include "Render/Renderer.h"
 #include "Utils/Log.h"
 #include "Utils/ResourcesManager.h"
 #include "World/World.h"
@@ -32,7 +33,7 @@ void CC_Engine::Init()
 
 	Log::Init();
 	CC_Window->Init("Cuscuz Engine");
-	//CC_RendererSystem->Init();
+	Renderer::Init();
 
 	CC_EventSystem->SetEventCallback(BIND_FUNCTION(this, CC_Engine::OnEvent));
 

@@ -9,7 +9,8 @@
 RendererSystem::RendererSystem()
 : m_Camera(std::make_unique<OrthographicCamera>(-static_cast<float>(HALF_SCREEN_WIDTH), static_cast<float>(HALF_SCREEN_WIDTH),
                                              -static_cast<float>(HALF_SCREEN_HEIGHT),static_cast<float>(HALF_SCREEN_HEIGHT)))
-{}
+{
+}
 
 RendererSystem::~RendererSystem()
 {
@@ -52,8 +53,6 @@ void RendererSystem::Update()
     
     if (m_RenderComponents.empty())
         return;
-
-    RenderCommand::EnableBlend();
 
     Renderer::BeginScene(*m_Camera);
 

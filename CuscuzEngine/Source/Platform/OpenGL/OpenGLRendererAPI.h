@@ -10,5 +10,5 @@ public:
     void SetClearColor(const glm::vec4& color) override;
     void Clear() override;
     void DrawIndexed(const CC_AssetRef<VertexArray>& vertexArray) override;
-    void EnableBlend() override;
+    void Init() override;
 };
