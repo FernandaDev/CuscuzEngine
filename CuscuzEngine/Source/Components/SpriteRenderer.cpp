@@ -28,7 +28,7 @@ SpriteRenderer::SpriteRenderer(int drawOrder) :
     m_VertexArray->AddBuffer(vertexBuffer);
     m_VertexArray->SetIndexBuffer(indexBuffer);
 
-    m_Shader = Shader::Create("Assets/Shaders/Sprite.glsl");
+    m_Shader = m_ShaderLib.Get("Sprite");
     
     SetColor(m_Color);
 }

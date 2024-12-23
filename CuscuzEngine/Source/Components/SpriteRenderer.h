@@ -26,7 +26,8 @@ class SpriteRenderer : public Component, public IRender
     
     CC_AssetRef<VertexArray> m_VertexArray;
     CC_AssetRef<Shader> m_Shader;
-    
+
+    ShaderLibrary m_ShaderLib; // TODO temp
 protected:
     int m_DrawOrder = 0;
     glm::vec4 m_Color = {};

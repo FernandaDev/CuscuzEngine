@@ -41,16 +41,62 @@ namespace ShaderHelper
             ss[static_cast<int>(ShaderType::FRAGMENT)].str()
         };
     }
+
+    static std::string ExtractNameFromFile(const std::string& source)
+    {
+        //Example:
+        //  "Assets/Shaders/Sprite.glsl"
+
+        size_t nameBegin = source.find_last_of("/\\"); // try to find the last slash or backslash.
+
+        if(nameBegin == std::string::npos) 
+            nameBegin = 0; // we didn't find slashes, so we'll start at the beginning of the string.
+        else
+            nameBegin = nameBegin + 1; // we found a slash and the name starts 1 char after the slash.
+
+        const size_t lastDot = source.rfind('.'); // try to find a dot/file extension.
+        size_t nameCharCount;
+    
+        if(lastDot == std::string::npos) 
+            nameCharCount = source.size() - nameBegin; // if we didn't find a dot, just count from the end of the source.
+        else
+            nameCharCount = lastDot - nameBegin; // otherwise count from the dot that we found.
+
+        return source.substr(nameBegin, nameCharCount);
+    }
 }
 
 OpenGLShader::OpenGLShader(const std::string& shaderFile)
+{
+    if(!PreProcess(shaderFile))
+        return;
+    
+    m_Name = ShaderHelper::ExtractNameFromFile(shaderFile);
+}
+
+OpenGLShader::OpenGLShader(const std::string& name, const std::string& shaderFile)
+{
+    if(!PreProcess(shaderFile))
+        return;
+
+    m_Name = name;
+}
+
+OpenGLShader::~OpenGLShader()
+{
+    glDeleteProgram(m_RendererID);
+    glDeleteShader(m_VertexShader);
+    glDeleteShader(m_FragmentShader);
+}
+
+bool OpenGLShader::PreProcess(const std::string& shaderFile)
 {
     const auto shaderSource = ShaderHelper::ParseShader(shaderFile);
 
     if (!CompileShader(shaderSource.VertexSource, GL_VERTEX_SHADER, m_VertexShader) ||
         !CompileShader(shaderSource.FragmentSource, GL_FRAGMENT_SHADER, m_FragmentShader))
     {
-        return;
+        return false;
     }
 
     m_RendererID = glCreateProgram();
@@ -59,17 +105,12 @@ OpenGLShader::OpenGLShader(const std::string& shaderFile)
     glLinkProgram(m_RendererID);
 
     if (!IsValidProgram())
-        return;
+        return false;
 
     glDetachShader(m_RendererID, m_VertexShader);
     glDetachShader(m_RendererID, m_FragmentShader);
-}
 
-OpenGLShader::~OpenGLShader()
-{
-    glDeleteProgram(m_RendererID);
-    glDeleteShader(m_VertexShader);
-    glDeleteShader(m_FragmentShader);
+    return true;
 }
 
 bool OpenGLShader::CompileShader(const std::string& shaderSource, uint32_t shaderType, uint32_t& outShader)
@@ -177,6 +218,7 @@ void OpenGLShader::SetUniformM4(const char* name, const glm::mat4x4& matrix)
 
     glUniformMatrix4fv(uniformId, 1, GL_FALSE, glm::value_ptr(matrix));
 }
+
 
 int OpenGLShader::GetUniformID(const char* name)
 {
