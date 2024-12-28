@@ -7,10 +7,8 @@
 #include "Render/Renderer.h"
 
 RendererSystem::RendererSystem()
-: m_Camera(std::make_unique<OrthographicCamera>(-static_cast<float>(HALF_SCREEN_WIDTH), static_cast<float>(HALF_SCREEN_WIDTH),
-                                             -static_cast<float>(HALF_SCREEN_HEIGHT),static_cast<float>(HALF_SCREEN_HEIGHT)))
-{
-}
+ : m_Camera(std::make_unique<OrthoCameraController>(static_cast<float>(SCREEN_WIDTH) / static_cast<float>(SCREEN_HEIGHT), true))
+{}
 
 RendererSystem::~RendererSystem()
 {
@@ -46,19 +44,26 @@ void RendererSystem::RemoveRenderComponent(const std::shared_ptr<IRender>& rende
         m_RenderComponents.erase(it);
 }
 
-void RendererSystem::Update()
+void RendererSystem::OnUpdate(float deltaTime)
 {
+    m_Camera->OnUpdate(deltaTime);
+    
     RenderCommand::SetClearColor(m_ClearColor);
     RenderCommand::Clear();
     
     if (m_RenderComponents.empty())
         return;
 
-    Renderer::BeginScene(*m_Camera);
+    Renderer::BeginScene(m_Camera->GetCamera());
 
     DrawObjects();
     
     Renderer::EndScene();
+}
+
+void RendererSystem::OnEvent(CC_Event& event)
+{
+    m_Camera->OnEvent(event);
 }
 
 void RendererSystem::DrawObjects()

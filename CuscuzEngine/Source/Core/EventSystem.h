@@ -17,5 +17,5 @@ public:
 
 	void SetEventCallback(const EventCallbackFn& callback);
 
-	void Update() const;
+	void OnUpdate() const;
 };

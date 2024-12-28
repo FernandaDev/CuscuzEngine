@@ -37,20 +37,23 @@ void SpriteRenderer::Draw()
 {
     m_Shader->Bind();
 
-     if (m_Sprite)
-     {
-         m_Sprite->BindTexture();
-         m_Shader->SetUniformI("u_Texture", 0);
-         
-         auto scaleMatrix = glm::mat4(1.0f);
-         scaleMatrix = scale(scaleMatrix, glm::vec3( m_Sprite->GetWidthF(),m_Sprite->GetHeightF(), 1.f));
-    
-         const auto actorWorldTransform = m_OwnerActor->GetTransform().GetWorldTransform();
-         const auto worldMatrix = actorWorldTransform * scaleMatrix;
-         
-         m_Shader->SetUniformM4("u_WorldTransform", worldMatrix);
-     }
-     else
+    m_Sprite->BindTexture();
+    m_Shader->SetUniformI("u_Texture", 0);
+
+    if (m_Sprite)
+    {
+        m_Sprite->BindTexture();
+        m_Shader->SetUniformI("u_Texture", 0);
+
+        auto scaleMatrix = glm::mat4(1.0f);
+        scaleMatrix = scale(scaleMatrix, glm::vec3(m_Sprite->GetWidthF(), m_Sprite->GetHeightF(), 1.f));
+
+        const auto actorWorldTransform = m_OwnerActor->GetTransform().GetWorldTransform();
+        const auto worldMatrix = actorWorldTransform * scaleMatrix;
+
+        m_Shader->SetUniformM4("u_WorldTransform", worldMatrix);
+    }
+    else
     {
         m_Shader->SetUniformM4("u_WorldTransform", m_OwnerActor->GetTransform().GetWorldTransform());
     }

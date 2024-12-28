@@ -21,7 +21,7 @@ void GameLayer::OnAttach()
 {
     CC_ASSERT(m_World, "The World instance is null!");
     
-    m_MainActor = &m_World->CreateActor("Fer", glm::vec2(30, 100), 1.f);
+    m_MainActor = &m_World->CreateActor("Fer", glm::vec2(0, 0), 1.f);
     m_MainActor->AddComponent<CircleDetectionComponent>(48.f);
     auto& actorSprite = m_MainActor->AddComponent<SpriteRenderer>();
 
@@ -30,14 +30,14 @@ void GameLayer::OnAttach()
 
     actorSprite.SetSprite(m_ActorSprite);
 
-    m_EnemyActor = &m_World->CreateActor("Enemy", glm::vec2(-300, -100), 1.f);
-    auto& enemySprite = m_EnemyActor->AddComponent<SpriteRenderer>();
-    auto enemyTexture = Texture2D::Create("Assets/Images/adventurer.png");
-    m_EnemySprite->SetTexture(enemyTexture);
-    enemySprite.SetSprite(m_EnemySprite);
-    
-    m_EnemyActor->AddComponent<CircleDetectionComponent>(48.f);
-    m_EnemyActor->AddComponent<Simple2DMovementComponent>();
+    // m_EnemyActor = &m_World->CreateActor("Enemy", glm::vec2(-300, -100), 1.f);
+    // auto& enemySprite = m_EnemyActor->AddComponent<SpriteRenderer>();
+    // auto enemyTexture = Texture2D::Create("Assets/Images/adventurer.png");
+    // m_EnemySprite->SetTexture(enemyTexture);
+    // enemySprite.SetSprite(m_EnemySprite);
+    //
+    // m_EnemyActor->AddComponent<CircleDetectionComponent>(48.f);
+    // m_EnemyActor->AddComponent<Simple2DMovementComponent>();
 }
 
 void GameLayer::OnDetach()

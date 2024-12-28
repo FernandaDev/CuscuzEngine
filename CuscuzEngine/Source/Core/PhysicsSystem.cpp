@@ -30,7 +30,7 @@ void PhysicsSystem::RemoveDetectionComponent(const std::shared_ptr<IOnOverlap>& 
         m_DetectionComponents.erase(it);
 }
 
-void PhysicsSystem::Update()
+void PhysicsSystem::OnUpdate()
 {
     if(m_DetectionComponents.size() <= 1)
         return;

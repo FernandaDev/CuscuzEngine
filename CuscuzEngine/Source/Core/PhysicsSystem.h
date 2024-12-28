@@ -20,6 +20,6 @@ public:
     void AddDetectionComponent(const std::shared_ptr<IOnOverlap>& component);
     void RemoveDetectionComponent(const std::shared_ptr<IOnOverlap>& detectionComponent);
 
-    void Update();
+    void OnUpdate();
     
 };

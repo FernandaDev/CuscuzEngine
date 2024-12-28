@@ -10,17 +10,19 @@
 #include "Core/RendererSystem.h"
 #include "Events/KeyEvents.h"
 
-void EngineLayer::OnUpdate(float deltaTime)
+void EngineLayer::OnUpdate(float deltaTime) // TODO move all the main system to here!
 {
     Layer::OnUpdate(deltaTime);
 
-    CC_Engine::Get().CC_EventSystem->Update();
-    CC_Engine::Get().CC_PhysicsSystem->Update();
-    CC_Engine::Get().CC_RendererSystem->Update();
+    CC_Engine::Get().CC_EventSystem->OnUpdate();
+    CC_Engine::Get().CC_PhysicsSystem->OnUpdate();
+    CC_Engine::Get().CC_RendererSystem->OnUpdate(deltaTime);
 }
 
 void EngineLayer::OnEvent(CC_Event& event)
 {
+    CC_Engine::Get().CC_RendererSystem->OnEvent(event);
+    
     CC_EventSingleDispatcher eventDispatcher(event);
     eventDispatcher.Dispatch<CC_KeyDownEvent>(BIND_FUNCTION(this, EngineLayer::TogglePlayWindow));
 }

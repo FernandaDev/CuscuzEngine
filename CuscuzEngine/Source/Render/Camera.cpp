@@ -2,15 +2,19 @@
 #include "Camera.h"
 
 #include "imgui.h"
-#include "ext/matrix_clip_space.hpp"
-#include "ext/matrix_transform.hpp"
+#include "gtc/matrix_transform.hpp"
 #include "Utils/Math.h"
 
 OrthographicCamera::OrthographicCamera(float left, float right, float bottom, float top)
     : m_ViewMatrix(1.0f), m_ProjectionMatrix(glm::ortho(left, right, bottom, top, -1.0f, 1.0f)),
     m_Position(0.f), m_Rotation(0.f)
 {
-    m_ViewProjectionMatrix = m_ProjectionMatrix * m_ViewMatrix;
+    RecalculateViewMatrix();
+}
+
+void OrthographicCamera::SetProjection(float left, float right, float bottom, float top)
+{
+    m_ProjectionMatrix = glm::ortho(left, right, bottom, top, -1.0f, 1.0f);
     RecalculateViewMatrix();
 }
 

@@ -72,7 +72,8 @@ namespace ImGuiHelper
     {
         ImGui::Begin("Camera", &showing);
 
-        CC_Engine::Get().CC_RendererSystem->GetCamera()->OnImGuiRender();
+        OrthographicCamera camera = CC_Engine::Get().CC_RendererSystem->GetCamera();
+        camera.OnImGuiRender();
         
         ImGui::End();
     }

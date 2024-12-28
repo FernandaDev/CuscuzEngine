@@ -14,7 +14,7 @@ void EventSystem::SetEventCallback(const EventCallbackFn& callback)
 	m_EventCallbackFn = callback;
 }
 
-void EventSystem::Update() const
+void EventSystem::OnUpdate() const
 {
 	 SDL_Event event;
 	 while (SDL_PollEvent(&event))
