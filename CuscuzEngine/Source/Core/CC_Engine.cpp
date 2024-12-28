@@ -75,10 +75,15 @@ void CC_Engine::Run()
 	while (m_IsRunning)
 	{
 		Time::Get().Update();
-		
-		for (const auto& layer : m_LayerStack)
-			layer->OnUpdate(Time::Get().DeltaTime());
 
+		CC_EventSystem->OnUpdate();
+
+		if(!CC_Window->IsMinimized())
+		{
+			for (const auto& layer : m_LayerStack)
+				layer->OnUpdate(Time::Get().DeltaTime());
+		}
+		
 		m_ImGuiLayer->Begin();
 		for (const auto& layer : m_LayerStack)
 			layer->OnImGuiRender();

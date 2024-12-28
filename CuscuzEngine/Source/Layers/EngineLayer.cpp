@@ -14,7 +14,6 @@ void EngineLayer::OnUpdate(float deltaTime) // TODO move all the main system to 
 {
     Layer::OnUpdate(deltaTime);
 
-    CC_Engine::Get().CC_EventSystem->OnUpdate();
     CC_Engine::Get().CC_PhysicsSystem->OnUpdate();
     CC_Engine::Get().CC_RendererSystem->OnUpdate(deltaTime);
 }

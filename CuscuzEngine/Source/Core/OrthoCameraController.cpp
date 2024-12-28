@@ -55,7 +55,7 @@ bool OrthoCameraController::OnMouseScrolled(CC_MouseScrolledEvent& event)
 
 bool OrthoCameraController::OnWindowResized(CC_WindowResizeEvent& event)
 {
-    m_aspectRatio -= static_cast<float>(event.GetWidth()) / static_cast<float>(event.GetHeight());
+    m_aspectRatio = static_cast<float>(event.GetWidth()) / static_cast<float>(event.GetHeight());
     m_Camera.SetProjection(-m_aspectRatio * m_ZoomLevel,m_aspectRatio * m_ZoomLevel, -m_ZoomLevel, m_ZoomLevel);
     
     return false;

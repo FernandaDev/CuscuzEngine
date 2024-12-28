@@ -8,7 +8,7 @@
 enum class CC_EventType
 {
 	None = 0,
-	WindowClose, WindowResize, //WindowFocus, WindowLostFocus, WindowMoved,
+	WindowClose, WindowResize, WindowFocused, WindowUnfocused, //WindowMoved,
 	KeyDown, KeyUp,
 	MouseButtonDown, MouseButtonUp, MouseMoved, MouseScrolled,
 	SDLEvent

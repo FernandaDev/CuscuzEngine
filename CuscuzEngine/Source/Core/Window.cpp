@@ -4,11 +4,12 @@
 #include "Events/CC_EventDispatcher.h"
 #include "Events/WindowEvents.h"
 #include "Platform/OpenGL/OpenGLContext.h"
+#include "Render/Renderer.h"
 #include "Utils/Log.h"
 
 
 Window::Window(int width, int height):
-    m_Width{width}, m_Height{height}, m_VSync(true)
+    m_Width{width}, m_Height{height}, m_VSync(true), m_Minimized(false)
 {}
 
 Window::~Window()
@@ -27,7 +28,7 @@ void Window::Init(const char* name)
     m_Window = SDL_CreateWindow(name, SDL_WINDOWPOS_UNDEFINED,
                                 SDL_WINDOWPOS_UNDEFINED,
                                 m_Width, m_Height,
-                                SDL_WINDOW_OPENGL);
+                                SDL_WINDOW_OPENGL | SDL_WINDOW_RESIZABLE);
 
     if (!m_Window)
         LOG_ERROR("Could not create a window.");
@@ -40,6 +41,8 @@ void Window::OnEvent(CC_Event& event)
 {
     CC_EventSingleDispatcher eventDispatcher(event);
     eventDispatcher.Dispatch<CC_WindowResizeEvent>(BIND_FUNCTION(this, Window::OnWindowResized));
+    eventDispatcher.Dispatch<CC_WindowMinimizedEvent>(BIND_FUNCTION(this, Window::OnWindowMinimized));
+    eventDispatcher.Dispatch<CC_WindowRestoredFocusEvent>(BIND_FUNCTION(this, Window::OnWindowRestoredFocus));
 }
 
 void Window::Render()
@@ -62,5 +65,23 @@ bool Window::OnWindowResized(const CC_WindowResizeEvent& event)
     m_Height = event.GetHeight();
     m_Width = event.GetWidth();
 
-    return true;
+    Renderer::OnWindowResize(event.GetWidth(), event.GetHeight());
+    
+    return false;
+}
+
+bool Window::OnWindowMinimized(const CC_WindowMinimizedEvent& event)
+{
+    m_Minimized = true;
+    LOG_INFO("The window has minimized!");
+    
+    return false;
+}
+
+bool Window::OnWindowRestoredFocus(const CC_WindowRestoredFocusEvent& event)
+{
+    m_Minimized = false;
+    LOG_INFO("The window has restored focus!");
+    
+    return false;
 }

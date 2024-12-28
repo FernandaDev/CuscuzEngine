@@ -34,6 +34,16 @@ void EventSystem::OnUpdate() const
 	 				CC_WindowResizeEvent windowResizeEvent(event.window.data1, event.window.data2);
 	 				m_EventCallbackFn(windowResizeEvent);
 	 			}
+	 			else if (event.window.event == SDL_WINDOWEVENT_MINIMIZED)
+	 			{
+	 				CC_WindowMinimizedEvent windowMinimizedEvent;
+	 				m_EventCallbackFn(windowMinimizedEvent);
+	 			}
+	 			else if(event.window.event == SDL_WINDOWEVENT_RESTORED)
+	 			{
+	 				CC_WindowRestoredFocusEvent windowRestoredEvent;
+	 				m_EventCallbackFn(windowRestoredEvent);
+	 			}
 	 		}
 	 		break;
 	 	case SDL_KEYUP:
