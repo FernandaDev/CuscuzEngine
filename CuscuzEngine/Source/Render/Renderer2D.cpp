@@ -48,6 +48,7 @@ void Renderer2D::Init()
     s_Data->SpriteVertexArray->SetIndexBuffer(indexBuffer);
 
     s_Data->SpriteShader = Shader::Create("Sprite","Assets/Shaders/Sprite.glsl");
+    s_Data->SpriteShader->SetUniformI("u_Texture", 0);
 }
 
 void Renderer2D::Shutdown()
@@ -79,23 +80,17 @@ void Renderer2D::DrawQuad(const glm::vec3& position, const glm::vec2& scale, con
     RenderCommand::DrawIndexed(s_Data->SpriteVertexArray);
 }
 
-void Renderer2D::DrawQuad(const glm::mat4& worldTransform, const glm::vec4& color, const CC_AssetRef<Texture>& texture)
+void Renderer2D::DrawQuad(const glm::mat4& worldTransform, const glm::vec4& color, const CC_AssetRef<Texture2D>& texture)
 {
     s_Data->SpriteShader->Bind();
 
-    if(texture != nullptr)
-    {
-        texture->Bind();
-        s_Data->SpriteShader->SetUniformI("u_Texture", 0);
-    }
-    else
-    {
-        s_Data->DefaultSpriteTexture->Bind();
-        s_Data->SpriteShader->SetUniformI("u_Texture", 0);
-    }
-
     s_Data->SpriteShader->SetUniformM4("u_WorldTransform", worldTransform);
     s_Data->SpriteShader->SetUniformF4("u_Color", color);
+
+    if(texture != nullptr)
+        texture->Bind();
+    else
+        s_Data->DefaultSpriteTexture->Bind();
 
     s_Data->SpriteVertexArray->Bind();
     RenderCommand::DrawIndexed(s_Data->SpriteVertexArray);

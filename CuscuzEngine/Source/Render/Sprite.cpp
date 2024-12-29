@@ -12,7 +12,7 @@ Sprite::~Sprite()
     LOG_INFO("Sprite Destroyed!");
 }
 
-void Sprite::SetTexture(const CC_AssetRef<Texture>& texture)
+void Sprite::SetTexture(const CC_AssetRef<Texture2D>& texture)
 {
     m_Texture = texture;
 

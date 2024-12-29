@@ -3,11 +3,11 @@
 #include "vec2.hpp"
 #include "Core/CC_Core.h"
 
-class Texture;
+class Texture2D;
 
 class Sprite
 {
-    CC_AssetRef<Texture> m_Texture{};
+    CC_AssetRef<Texture2D> m_Texture{};
     uint32_t m_Width, m_Height;
     glm::vec2 m_Pivot;
     
@@ -15,8 +15,8 @@ public:
     Sprite();
     ~Sprite();
 
-    void SetTexture(const CC_AssetRef<Texture>& texture);
-    const CC_AssetRef<Texture>& GetTexture() const { return m_Texture; }
+    void SetTexture(const CC_AssetRef<Texture2D>& texture);
+    const CC_AssetRef<Texture2D>& GetTexture() const { return m_Texture; }
 
     void BindTexture() const;
 
