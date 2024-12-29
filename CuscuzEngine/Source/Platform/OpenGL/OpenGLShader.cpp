@@ -66,6 +66,8 @@ namespace ShaderHelper
     }
 }
 
+uint32_t OpenGLShader::s_CurrentProgram = 0; 
+
 OpenGLShader::OpenGLShader(const std::string& shaderFile)
 {
     if(!PreProcess(shaderFile))
@@ -169,11 +171,16 @@ bool OpenGLShader::IsValidProgram() const
 
 void OpenGLShader::Bind() const
 {
+    if(s_CurrentProgram == m_RendererID)
+        return;
+    
+    s_CurrentProgram = m_RendererID;
     glUseProgram(m_RendererID);
 }
 
 void OpenGLShader::Unbind() const
 {
+    s_CurrentProgram = 0;
     glUseProgram(0);
 }
 

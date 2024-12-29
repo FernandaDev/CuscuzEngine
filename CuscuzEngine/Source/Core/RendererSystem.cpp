@@ -4,7 +4,7 @@
 #include "Utils/Log.h"
 #include "Components/SpriteRenderer.h"
 #include "Render/RenderCommand.h"
-#include "Render/Renderer.h"
+#include "Render/Renderer2D.h"
 
 RendererSystem::RendererSystem()
  : m_Camera(std::make_unique<OrthoCameraController>(static_cast<float>(SCREEN_WIDTH) / static_cast<float>(SCREEN_HEIGHT), true))
@@ -54,11 +54,11 @@ void RendererSystem::OnUpdate(float deltaTime)
     if (m_RenderComponents.empty())
         return;
 
-    Renderer::BeginScene(m_Camera->GetCamera());
+    Renderer2D::BeginScene(m_Camera->GetCamera());
 
     DrawObjects();
     
-    Renderer::EndScene();
+    Renderer2D::EndScene();
 }
 
 void RendererSystem::OnEvent(CC_Event& event)

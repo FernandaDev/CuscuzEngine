@@ -107,5 +107,6 @@ bool CC_Engine::Quit(CC_WindowCloseEvent& event)
 {
 	LOG_WARN("Quitting the engine...");
 	m_IsRunning = false;
+	
 	return true;
 }

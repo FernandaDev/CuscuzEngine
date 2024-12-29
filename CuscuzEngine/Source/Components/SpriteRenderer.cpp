@@ -1,64 +1,35 @@
 ﻿#include "pch.h"
 #include "SpriteRenderer.h"
-#include "ext/matrix_transform.hpp"
+#include "gtc/matrix_transform.hpp"
 #include "Render/Sprite.h"
 #include "World/Actor.h"
-#include "Render/VertexArray.h"
 #include "Editor/Utils/ImGuiHelper_Resources.h"
 #include "gtc/type_ptr.inl"
-#include "Render/Renderer.h"
+#include "Render/Renderer2D.h"
 
 CREATE_COMPONENT_REGISTRY(SpriteRenderer);
 
 SpriteRenderer::SpriteRenderer(int drawOrder) :
      m_DrawOrder(drawOrder), m_Color(1.f, 1.f, 1.f, 1)
-{
-    const CC_AssetRef<VertexBuffer> vertexBuffer = VertexBuffer::Create(m_Vertices,  4 * 5 * sizeof(float));
-    const CC_AssetRef<IndexBuffer> indexBuffer = IndexBuffer::Create(m_Indices, 6);
-
-    const BufferLayout layout =
-    {
-        { ShaderDataType::Float3, "inPosition" },
-        { ShaderDataType::Float2, "inTexCoord" }
-    };
-    
-    vertexBuffer->SetLayout(layout);
-    
-    m_VertexArray = VertexArray::Create();
-    m_VertexArray->AddBuffer(vertexBuffer);
-    m_VertexArray->SetIndexBuffer(indexBuffer);
-
-    m_Shader = m_ShaderLib.Get("Sprite");
-    
-    SetColor(m_Color);
-}
+{}
 
 void SpriteRenderer::Draw()
 {
-    m_Shader->Bind();
-
-    m_Sprite->BindTexture();
-    m_Shader->SetUniformI("u_Texture", 0);
-
+    glm::mat4 worldMatrix = m_OwnerActor->GetTransform().GetWorldTransform();
+    
     if (m_Sprite)
     {
-        m_Sprite->BindTexture();
-        m_Shader->SetUniformI("u_Texture", 0);
-
         auto scaleMatrix = glm::mat4(1.0f);
         scaleMatrix = scale(scaleMatrix, glm::vec3(m_Sprite->GetWidthF(), m_Sprite->GetHeightF(), 1.f));
-
+    
         const auto actorWorldTransform = m_OwnerActor->GetTransform().GetWorldTransform();
-        const auto worldMatrix = actorWorldTransform * scaleMatrix;
-
-        m_Shader->SetUniformM4("u_WorldTransform", worldMatrix);
+        worldMatrix = actorWorldTransform * scaleMatrix;
+        Renderer2D::DrawQuad(worldMatrix, m_Color, m_Sprite->GetTexture());
     }
     else
     {
-        m_Shader->SetUniformM4("u_WorldTransform", m_OwnerActor->GetTransform().GetWorldTransform());
+        Renderer2D::DrawQuad(worldMatrix, m_Color);
     }
-
-    Renderer::Submit(m_Shader, m_VertexArray);
 }
 
 void SpriteRenderer::SetSprite(const CC_AssetRef<Sprite>& newSprite)
@@ -74,8 +45,6 @@ void SpriteRenderer::SetDrawOrder(int drawOrder)
 void SpriteRenderer::SetColor(glm::vec4 color)
 {
     m_Color = color;
-    m_Shader->Bind();
-    m_Shader->SetUniformF4("u_Color", color);
 }
 
 int SpriteRenderer::GetTexHeight() const

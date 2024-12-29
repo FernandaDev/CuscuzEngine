@@ -9,6 +9,8 @@ class OpenGLShader : public Shader
     uint32_t m_FragmentShader;
     uint32_t m_RendererID;
     std::string m_Name;
+
+    static uint32_t s_CurrentProgram;
     
 public:
     OpenGLShader(const std::string& shaderFile);
