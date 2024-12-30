@@ -10,7 +10,7 @@ CC_AssetRef<VertexArray> VertexArray::Create()
     switch (Renderer::GetAPI())
     {
     case RendererAPI::API::OpenGL:
-        return std::make_shared<OpenGLVertexArray>();
+        return CreateAssetRef<OpenGLVertexArray>();
     case RendererAPI::API::None:
         {
             CC_ASSERT(false, "RendererAPI::None is not valid!")

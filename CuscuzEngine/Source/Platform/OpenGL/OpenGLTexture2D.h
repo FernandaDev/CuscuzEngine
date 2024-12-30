@@ -1,7 +1,7 @@
 ﻿#pragma once
 
-#include "Render/Texture.h"
 #include <string>
+#include "Render/Texture.h"
 
 class OpenGLTexture2D : public Texture2D
 {
@@ -9,8 +9,10 @@ class OpenGLTexture2D : public Texture2D
     int32_t m_Width, m_Height;
     std::string m_Name;
     std::string m_FilePath;
+    uint32_t m_InternalFormat, m_DataFormat;
     
 public:
+    OpenGLTexture2D(uint32_t width, uint32_t height);
     OpenGLTexture2D(std::string&& filePath);
     ~OpenGLTexture2D() override;
 
@@ -20,5 +22,6 @@ public:
     uint32_t GetWidth() const override { return m_Width; }
     uint32_t GetHeight() const override { return m_Height; }
 
+    void SetData(void* data, uint32_t size) override;
     void Bind(uint32_t slot = 0) override;
 };

@@ -11,7 +11,7 @@ CC_AssetRef<VertexBuffer> VertexBuffer::Create(const void* data, uint32_t size)
     switch (Renderer::GetAPI())
     {
     case RendererAPI::API::OpenGL:
-        return std::make_shared<OpenGLVertexBuffer>(data, size);
+        return CreateAssetRef<OpenGLVertexBuffer>(data, size);
     case RendererAPI::API::None:
         {
             CC_ASSERT(false, "RendererAPI::None is not valid!")
@@ -28,7 +28,7 @@ CC_AssetRef<IndexBuffer> IndexBuffer::Create(const uint32_t* data, uint32_t coun
     switch (Renderer::GetAPI())
     {
     case RendererAPI::API::OpenGL:
-        return std::make_shared<OpenGLIndexBuffer>(data, count);
+        return CreateAssetRef<OpenGLIndexBuffer>(data, count);
     case RendererAPI::API::None:
         {
             CC_ASSERT(false, "RendererAPI::None is not valid!")

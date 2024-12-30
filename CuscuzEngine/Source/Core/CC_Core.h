@@ -22,3 +22,8 @@ enum
 
 template<typename T>
 using CC_AssetRef = std::shared_ptr<T>;
+template<typename T, typename ... Args>
+constexpr CC_AssetRef<T> CreateAssetRef(Args&& ... args)
+{
+    return std::make_shared<T>(std::forward<Args>(args)...);
+}

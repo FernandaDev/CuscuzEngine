@@ -20,7 +20,9 @@ void Renderer2D::Init()
 {
     s_Data = new Renderer2DData();
 
-    s_Data->DefaultSpriteTexture = Texture2D::Create("Assets/Images/default.png");
+    s_Data->DefaultSpriteTexture = Texture2D::Create(1, 1);
+    uint32_t defaultTextureData = 0xffffffff;
+    s_Data->DefaultSpriteTexture->SetData(&defaultTextureData, sizeof(uint32_t));
     
     s_Data->SpriteVertexArray = VertexArray::Create();
     
