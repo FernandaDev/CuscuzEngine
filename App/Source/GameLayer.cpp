@@ -7,7 +7,6 @@
 #include "Core/CC_Engine.h"
 #include "Core/Input.h"
 #include "Core/KeyCodes.h"
-#include "Utils/ResourcesManager.h"
 #include "World/Actor.h"
 
 GameLayer::GameLayer() :
@@ -30,14 +29,14 @@ void GameLayer::OnAttach()
 
     actorSprite.SetSprite(m_ActorSprite);
 
-    // m_EnemyActor = &m_World->CreateActor("Enemy", glm::vec2(150, 0), 1.f);
-    // auto& enemySprite = m_EnemyActor->AddComponent<SpriteRenderer>();
-    // auto enemyTexture = Texture2D::Create("Assets/Images/adventurer.png");
-    // m_EnemySprite->SetTexture(enemyTexture);
-    // enemySprite.SetSprite(m_EnemySprite);
-    //
-    // m_EnemyActor->AddComponent<CircleDetectionComponent>(48.f);
-    // m_EnemyActor->AddComponent<Simple2DMovementComponent>();
+    m_EnemyActor = &m_World->CreateActor("Enemy", glm::vec2(150, 0), 1.f);
+    auto& enemySprite = m_EnemyActor->AddComponent<SpriteRenderer>();
+    auto enemyTexture = Texture2D::Create("Assets/Images/adventurer.png");
+    m_EnemySprite->SetTexture(enemyTexture);
+    enemySprite.SetSprite(m_EnemySprite);
+    
+    m_EnemyActor->AddComponent<CircleDetectionComponent>(48.f);
+    m_EnemyActor->AddComponent<Simple2DMovementComponent>();
 }
 
 void GameLayer::OnDetach()

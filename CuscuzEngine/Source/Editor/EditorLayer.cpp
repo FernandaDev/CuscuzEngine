@@ -9,7 +9,7 @@
 #include "Utils/ImGuiHelper_Settings.h"
 #include "Utils/ImGuiHelper_World.h"
 
-EditorLayer::EditorLayer() : m_ShowWorldWindow(true), m_ShowTimeStatsOverlay(false)
+EditorLayer::EditorLayer() : m_ShowWorldWindow(true), m_ShowTimeStatsOverlay(true)
 {
     m_World = CC_Engine::Get().CC_World.get();
 }

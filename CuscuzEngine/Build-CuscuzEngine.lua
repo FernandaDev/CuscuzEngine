@@ -64,7 +64,7 @@ project "CuscuzEngine"
        defines { "WINDOWS" }
 
    filter "configurations:Debug"
-       defines { "DEBUG", "CC_ENABLE_ASSERT" }
+       defines { "DEBUG", "CC_ENABLE_ASSERT", "CC_PROFILE" }
        runtime "Debug"
        symbols "On"
 

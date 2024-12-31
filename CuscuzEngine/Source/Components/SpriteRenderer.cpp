@@ -75,7 +75,7 @@ void SpriteRenderer::ImGuiDisplayComponent()
     ImGui::Text("Color");
     ImGui::SameLine();
     
-    static glm::vec4 spriteColor (1.f);
+    static glm::vec4 spriteColor = m_Color;
     ImGui::ColorEdit4("#SpriteColor", glm::value_ptr(spriteColor));
 
     if(spriteColor != m_Color)
