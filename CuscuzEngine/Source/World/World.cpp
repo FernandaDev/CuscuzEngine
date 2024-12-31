@@ -25,7 +25,7 @@ void World::Update(float deltaTime)
     HandleDeadActors();
 }
 
-Actor& World::CreateActor(std::string&& name, glm::vec2 position, float scale, float rotation)
+Actor& World::CreateActor(std::string&& name, const glm::vec3& position, float scale, float rotation)
 {
     if(name.empty())
         name = "Actor";

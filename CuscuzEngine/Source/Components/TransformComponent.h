@@ -8,7 +8,7 @@
 
 class TransformComponent : public Component
 {
-    glm::vec2 m_Position;
+    glm::vec3 m_Position;
     glm::vec2 m_Scale;
     float m_Rotation;
     glm::mat4 m_WorldTransform;
@@ -16,7 +16,7 @@ class TransformComponent : public Component
     
 public:
     TransformComponent() = delete;
-    TransformComponent(glm::vec2 position, float scale, float rotation);
+    TransformComponent(const glm::vec3& position, float scale, float rotation);
     ~TransformComponent() override = default;
 
     void Update(float deltaTime) override;
@@ -27,14 +27,14 @@ public:
 
     std::string GetComponentType() const override { return "TransformComponent"; }
     
-    void SetPosition(const glm::vec2& newPosition);
+    void SetPosition(const glm::vec3& newPosition);
     void SetRotation(float newRotation);
     void SetScale(glm::vec2 newScale);
     
-    const glm::vec2& GetPosition() const { return m_Position; }
+    const glm::vec3& GetPosition() const { return m_Position; }
     float GetRotation() const { return m_Rotation; }
     glm::vec2 GetScale() const { return m_Scale; }
-    glm::vec2 GetForward() const { return {glm::cos(m_Rotation), -glm::sin(m_Rotation)}; }
+    glm::vec3 GetForward() const { return {glm::cos(m_Rotation), -glm::sin(m_Rotation), 1.0f}; }
 
 private:
     void ComputeWorldTransform();

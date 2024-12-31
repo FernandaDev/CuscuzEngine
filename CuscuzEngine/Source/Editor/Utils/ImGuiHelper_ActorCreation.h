@@ -20,13 +20,14 @@ namespace ImGuiHelper
         ImGui::Text("Position");
         ImGui::Separator();
         
-        static ImVec2 pos(0,0);
+        static ImVec4 pos(0,0,0,0);
         ImGui::DragFloat("x##pos", &pos.x);
         ImGui::DragFloat("y##pos", &pos.y);
+        ImGui::DragFloat("z##pos", &pos.z);
         
         if (ImGui::Button("Create"))
         {
-            world->CreateActor(newActorName, {pos.x, pos.y});
+            world->CreateActor(newActorName, {pos.x, pos.y, pos.z});
             showing = false;
         }
         

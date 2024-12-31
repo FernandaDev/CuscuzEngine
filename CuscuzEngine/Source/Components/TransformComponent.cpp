@@ -5,7 +5,7 @@
 #include "ext/matrix_transform.hpp"
 #include "Utils/Math.h"
 
-TransformComponent::TransformComponent(glm::vec2 position, float scale, float rotation) :
+TransformComponent::TransformComponent(const glm::vec3& position, float scale, float rotation) :
 m_Position(position), m_Scale(scale), m_Rotation(rotation),
 m_WorldTransform(glm::mat4(1.f)), m_RecomputeWorldTransform(true)
 {}
@@ -15,7 +15,7 @@ void TransformComponent::OnAdded()
     ComputeWorldTransform();
 }
 
-void TransformComponent::SetPosition(const glm::vec2& newPosition)
+void TransformComponent::SetPosition(const glm::vec3& newPosition)
 {
     if(newPosition == m_Position)
         return;
@@ -56,7 +56,7 @@ void TransformComponent::ComputeWorldTransform()
     
     m_WorldTransform = glm::mat4(1.0f); 
     
-    m_WorldTransform = glm::translate(m_WorldTransform, glm::vec3(m_Position.x, m_Position.y, 0.f));
+    m_WorldTransform = glm::translate(m_WorldTransform, glm::vec3(m_Position.x, m_Position.y, m_Position.z));
     m_WorldTransform = glm::rotate(m_WorldTransform, glm::radians(m_Rotation), glm::vec3(0.0f, 0.0f, 1.0f));
     m_WorldTransform = glm::scale(m_WorldTransform, glm::vec3(m_Scale.x, m_Scale.y, 1.0f));
 }
@@ -74,7 +74,10 @@ void TransformComponent::ImGuiDisplayComponent()
     auto pos = m_Position;
     
     ImGui::DragFloat("x##pos", &pos.x);
+    ImGui::SameLine();
     ImGui::DragFloat("y##pos", &pos.y);
+    ImGui::SameLine();
+    ImGui::DragFloat("z##pos", &pos.z);
 
     SetPosition(pos);
 

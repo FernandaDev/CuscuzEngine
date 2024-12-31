@@ -32,7 +32,7 @@ protected:
     std::unique_ptr<TransformComponent> m_Transform;
 
 public:
-    Actor(World* world, std::string&& name, glm::vec2 position,
+    Actor(World* world, std::string&& name, const glm::vec3& position,
         float scale = 1.f, float rotation = CC_Math::PiOver2);
     virtual ~Actor();
 

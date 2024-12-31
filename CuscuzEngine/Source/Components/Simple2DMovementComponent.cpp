@@ -17,7 +17,7 @@ void Simple2DMovementComponent::Update(float deltaTime)
 
     if(!CC_Math::NearZero(m_ForwardSpeed))
     {
-        glm::vec2 position = m_OwnerActor->GetTransform().GetPosition();
+        glm::vec3 position = m_OwnerActor->GetTransform().GetPosition();
         position += m_OwnerActor->GetTransform().GetForward() * m_ForwardSpeed * deltaTime;
         m_OwnerActor->GetTransform().SetPosition(position);
     }

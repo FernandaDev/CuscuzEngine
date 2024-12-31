@@ -8,7 +8,7 @@
 #include "Core/RendererSystem.h"
 #include "Physics/IPhysics.h"
 
-Actor::Actor(World* world, std::string&& name, glm::vec2 position, float scale, float rotation) :
+Actor::Actor(World* world, std::string&& name, const glm::vec3& position, float scale, float rotation) :
  m_Name(std::move(name)), m_State(Active), m_World(world),
 m_Transform(std::make_unique<TransformComponent>(position, scale, rotation))
 { }
