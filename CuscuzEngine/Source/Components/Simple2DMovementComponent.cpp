@@ -22,12 +22,12 @@ void Simple2DMovementComponent::Update(float deltaTime)
         m_OwnerActor->GetTransform().SetPosition(position);
     }
     
-    if(!CC_Math::NearZero(m_AngularSpeed))
-    {
-        float rotation = m_OwnerActor->GetTransform().GetRotation();
-        rotation += m_AngularSpeed * deltaTime;
-        m_OwnerActor->GetTransform().SetRotation(rotation);
-    }
+    // if(!CC_Math::NearZero(m_AngularSpeed))
+    // {
+    //     float rotation = m_OwnerActor->GetTransform().GetRotation();
+    //     rotation += m_AngularSpeed * deltaTime;
+    //     m_OwnerActor->GetTransform().SetRotation(rotation);
+    // }
 }
 
 void Simple2DMovementComponent::SetForwardSpeed(float speed)

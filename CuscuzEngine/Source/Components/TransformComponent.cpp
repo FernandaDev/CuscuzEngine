@@ -5,11 +5,6 @@
 #include "ext/matrix_transform.hpp"
 #include "Utils/Math.h"
 
-TransformComponent::TransformComponent(const glm::vec3& position, float scale, float rotation) :
-m_Position(position), m_Scale(scale), m_Rotation(rotation),
-m_WorldTransform(glm::mat4(1.f)), m_RecomputeWorldTransform(true)
-{}
-
 void TransformComponent::OnAdded()
 {
     ComputeWorldTransform();
@@ -24,16 +19,25 @@ void TransformComponent::SetPosition(const glm::vec3& newPosition)
     m_RecomputeWorldTransform = true;
 }
 
-void TransformComponent::SetRotation(float newRotation)
+void TransformComponent::SetRotation(const glm::vec3& newRotation)
 {
-    if(FLOAT_EQUAL(newRotation, m_Rotation))
+    if(newRotation == GetEuler())
+        return;
+
+    m_Rotation = glm::quat(glm::radians(newRotation));
+    m_RecomputeWorldTransform = true;
+}
+
+void TransformComponent::SetRotation(const glm::quat& newRotation)
+{
+    if(newRotation == m_Rotation)
         return;
 
     m_Rotation = newRotation;
     m_RecomputeWorldTransform = true;
 }
 
-void TransformComponent::SetScale(glm::vec2 newScale)
+void TransformComponent::SetScale(const glm::vec3& newScale)
 {
     if(newScale == m_Scale)
         return;
@@ -53,12 +57,13 @@ void TransformComponent::ComputeWorldTransform()
         return;
 
     m_RecomputeWorldTransform = false;
+    //m_WorldTransform = glm::rotate(m_WorldTransform, glm::radians(m_Rotation), glm::vec3(0.0f, 0.0f, 1.0f));
     
-    m_WorldTransform = glm::mat4(1.0f); 
-    
+    m_WorldTransform = glm::scale(glm::mat4(1.0f), glm::vec3(m_Scale.x, m_Scale.y, m_Scale.z));
+
+    m_WorldTransform *= glm::mat4_cast(m_Rotation);
+
     m_WorldTransform = glm::translate(m_WorldTransform, glm::vec3(m_Position.x, m_Position.y, m_Position.z));
-    m_WorldTransform = glm::rotate(m_WorldTransform, glm::radians(m_Rotation), glm::vec3(0.0f, 0.0f, 1.0f));
-    m_WorldTransform = glm::scale(m_WorldTransform, glm::vec3(m_Scale.x, m_Scale.y, 1.0f));
 }
 
 void TransformComponent::ImGuiDisplayComponent()
@@ -84,12 +89,13 @@ void TransformComponent::ImGuiDisplayComponent()
     ImGui::Dummy(ImVec2(0.0f, 10.0f));
 
     ImGui::Text("Rotation");
-    
-    auto rot = m_Rotation;
 
-    ImGui::DragFloat("degrees", &rot);
-
-    SetRotation(rot);
+    //TODO fix the rotation on ImGui
+    // auto rot = m_Rotation;
+    //
+    // ImGui::DragFloat("degrees", &rot);
+    //
+    // SetRotation(rot);
     
     ImGui::Dummy(ImVec2(0.0f, 10.0f));
         

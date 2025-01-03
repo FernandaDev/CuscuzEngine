@@ -24,16 +24,19 @@ class Actor
     
 protected:
     std::string m_Name;
-    ActorState m_State;
-    std::vector<std::shared_ptr<Component>> m_Components {};
     World* m_World;
+    
+    ActorState m_State = Active;
+    std::unique_ptr<TransformComponent> m_Transform{};
+    std::vector<std::shared_ptr<Component>> m_Components {};
     OnComponentAdded m_OnComponentAddedDelegate {};
-
-    std::unique_ptr<TransformComponent> m_Transform;
 
 public:
     Actor(World* world, std::string&& name, const glm::vec3& position,
-        float scale = 1.f, float rotation = CC_Math::PiOver2);
+        const glm::vec3& rotation, float scale = 1.f) :
+    m_Name(name), m_World(world),
+    m_Transform(std::make_unique<TransformComponent>(position, rotation, glm::vec3(scale))){}
+
     virtual ~Actor();
 
     void Update(float deltaTime);

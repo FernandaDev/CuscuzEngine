@@ -65,11 +65,6 @@ int SpriteRenderer::GetTextWidth() const
     return 0;
 }
 
-float SpriteRenderer::GetRotationDegrees() const
-{
-    return glm::degrees(m_OwnerActor->GetTransform().GetRotation());
-}
-
 void SpriteRenderer::ImGuiDisplayComponent()
 {
     ImGui::Text("Color");

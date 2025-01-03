@@ -25,13 +25,13 @@ void World::Update(float deltaTime)
     HandleDeadActors();
 }
 
-Actor& World::CreateActor(std::string&& name, const glm::vec3& position, float scale, float rotation)
+Actor& World::CreateActor(std::string&& name, const glm::vec3& position, const glm::vec3& rotation, float scale)
 {
     if(name.empty())
         name = "Actor";
 
     const auto& actor = (m_UpdatingActors ? m_PendingActors : m_ActiveActors).emplace_back(
-         std::make_shared<Actor>(this, std::move(name), position, scale, rotation));
+         std::make_shared<Actor>(this, std::move(name), position, rotation, scale));
 
     return *actor;
 }

@@ -20,7 +20,7 @@ void GameLayer::OnAttach()
 {
     CC_ASSERT(m_World, "The World instance is null!");
     
-    m_MainActor = &m_World->CreateActor("Fer", glm::vec3(0, 0, 0), 1.f);
+    m_MainActor = &m_World->CreateActor("Fer", glm::vec3(0, 0, 0));
     m_MainActor->AddComponent<CircleDetectionComponent>(48.f);
     auto& actorSprite = m_MainActor->AddComponent<SpriteRenderer>();
 
@@ -29,7 +29,7 @@ void GameLayer::OnAttach()
 
     actorSprite.SetSprite(m_ActorSprite);
 
-    m_EnemyActor = &m_World->CreateActor("Enemy", glm::vec3(150, 0, 0), 1.f);
+    m_EnemyActor = &m_World->CreateActor("Enemy", glm::vec3(150, 0, 0));
     auto& enemySprite = m_EnemyActor->AddComponent<SpriteRenderer>();
     auto enemyTexture = Texture2D::Create("Assets/Images/adventurer.png");
     m_EnemySprite->SetTexture(enemyTexture);

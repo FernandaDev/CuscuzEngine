@@ -34,6 +34,5 @@ public:
 
     REGISTER_COMPONENT(SpriteRenderer);
     void ImGuiDisplayComponent() override;        
-protected:
-    float GetRotationDegrees() const;
+
 };

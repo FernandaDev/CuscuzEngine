@@ -23,7 +23,7 @@ public:
     
     Actor& CreateActor(std::string&& name,
                     const glm::vec3& position = glm::vec3(0),
-                    float scale = 1, float rotation = 0);
+                    const glm::vec3& rotation = glm::vec3(0), float scale = 1.f);
 
     void DestroyActor(Actor* actor) const;
 
