@@ -1,6 +1,11 @@
 ﻿#pragma once
 
+#include <memory>
+
+#include "Core/CC_Core.h"
 #include "Layers/Layer.h"
+#include "Platform/OpenGL/OpenGLTexture2D.h"
+#include "Render/Sprite.h"
 #include "World/World.h"
 
 class Actor;
@@ -10,7 +15,13 @@ class CC_KeyDownEvent;
 class GameLayer : public Layer
 {
     bool m_ShowWorldWindow = true;
-    std::unique_ptr<World> m_World {};
+    World* m_World = nullptr;
+    
+    CC_AssetRef<Sprite> m_ActorSprite {};
+    Actor* m_MainActor {};
+
+    CC_AssetRef<Sprite> m_EnemySprite {};
+    Actor* m_EnemyActor {};
 
 public:
     GameLayer();
@@ -24,6 +35,5 @@ public:
 
 private:
     // ImGUI
-    bool ToggleWindow(const CC_KeyDownEvent& event);
-    void ShowWorldWindow();
+    
 };

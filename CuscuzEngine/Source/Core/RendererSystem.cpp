@@ -1,60 +1,42 @@
 #include "pch.h"
-//#include "SDL_image.h"
-
-#include "Utils/Log.h"
-#include "Core/Window.h"
 #include "RendererSystem.h"
 
-#include "ResourceManager.h"
-#include "Components/SpriteComponent.h"
+#include "Utils/Log.h"
+#include "Components/SpriteRenderer.h"
+#include "Render/RenderCommand.h"
+#include "Render/Renderer2D.h"
 
-RendererSystem::RendererSystem(Window* window)
-{
-    m_Renderer = SDL_CreateRenderer(window->GetWindow(), -1, 0);
-
-    if (!m_Renderer)
-        LOG_ERROR("Could not create a renderer.");
-
-    SDL_SetRenderDrawColor(m_Renderer, 0xFF, 0xFF, 0xFF, 0xFF);
-
-    // if (IMG_Init(IMG_INIT_PNG | IMG_INIT_JPG) == 0)
-    // {
-    //     LOG_ERROR("Couldn't load SDL image!");
-    // }
-}
+RendererSystem::RendererSystem()
+ : m_Camera(std::make_unique<OrthoCameraController>(static_cast<float>(SCREEN_WIDTH) / static_cast<float>(SCREEN_HEIGHT), true))
+{}
 
 RendererSystem::~RendererSystem()
 {
-    if (m_Renderer)
-        SDL_DestroyRenderer(m_Renderer);
-
-    //IMG_Quit();
-
     m_RenderComponents.clear();
 }
 
-void RendererSystem::AddRenderComponent(std::shared_ptr<IRender> NewRenderComponent)
+void RendererSystem::AddRenderComponent(const std::shared_ptr<IRender>& renderComponent)
 {
-    const int drawOrder = NewRenderComponent->GetDrawOrder();
+    const int drawOrder = renderComponent->GetDrawOrder();
     auto it = m_RenderComponents.begin();
 
     for (; it != m_RenderComponents.end(); ++it)
     {
-        if (const auto sprite = it->lock())
-            if (drawOrder < sprite->GetDrawOrder())
+        if (const auto renderObject = it->lock())
+            if (drawOrder < renderObject->GetDrawOrder())
                 break;
     }
 
-    m_RenderComponents.insert(it, NewRenderComponent);
+    m_RenderComponents.insert(it, renderComponent);
 }
 
-void RendererSystem::RemoveRenderComponent(std::shared_ptr<IRender> renderComponent)
+void RendererSystem::RemoveRenderComponent(const std::shared_ptr<IRender>& renderComponent)
 {
     auto it = std::remove_if(m_RenderComponents.begin(), m_RenderComponents.end(),
-                           [renderComponent](const auto& spriteComponent)
+                           [renderComponent](const auto& component)
                            {
-                               if (const auto sprite = spriteComponent.lock())
-                                   return sprite.get() == renderComponent.get();
+                               if (const auto comp = component.lock())
+                                   return comp.get() == renderComponent.get();
                                return false;
                            });
     
@@ -62,19 +44,36 @@ void RendererSystem::RemoveRenderComponent(std::shared_ptr<IRender> renderCompon
         m_RenderComponents.erase(it);
 }
 
-void RendererSystem::Update()
+void RendererSystem::OnUpdate(float deltaTime)
 {
-    Clear();
-
+    m_Camera->OnUpdate(deltaTime);
+    
+    RenderCommand::SetClearColor(m_ClearColor);
+    RenderCommand::Clear();
+    
     if (m_RenderComponents.empty())
         return;
 
+    Renderer2D::BeginScene(m_Camera->GetCamera());
+
+    DrawObjects();
+    
+    Renderer2D::EndScene();
+}
+
+void RendererSystem::OnEvent(CC_Event& event)
+{
+    m_Camera->OnEvent(event);
+}
+
+void RendererSystem::DrawObjects()
+{
     auto it = m_RenderComponents.begin();
     while (it != m_RenderComponents.end())
     {
-        if (const auto& sprite = it->lock())
+        if (const auto& renderObject = it->lock())
         {
-            sprite->Draw(m_Renderer);
+            renderObject->Draw();
             ++it;
         }
         else
@@ -82,14 +81,4 @@ void RendererSystem::Update()
             it = m_RenderComponents.erase(it);
         }
     }
-}
-
-void RendererSystem::Render() const
-{
-    SDL_RenderPresent(m_Renderer);
-}
-
-void RendererSystem::Clear() const
-{
-    SDL_RenderClear(m_Renderer);
 }

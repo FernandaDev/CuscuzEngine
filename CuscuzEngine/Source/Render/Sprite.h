@@ -1,27 +1,28 @@
 ﻿#pragma once
 
 #include "vec2.hpp"
-#include "Render/Texture.h"
+#include "Core/CC_Core.h"
+
+class Texture2D;
 
 class Sprite
 {
-    std::weak_ptr<Texture> m_Texture;
-    glm::i32vec2 m_PixelsDimension;
+    CC_AssetRef<Texture2D> m_Texture{};
+    uint32_t m_Width, m_Height;
     glm::vec2 m_Pivot;
     
 public:
-    Sprite() = delete;
-    Sprite(std::weak_ptr<Texture> texture);
+    Sprite();
     ~Sprite();
 
-    int GetWidth() const { return m_PixelsDimension.x; }
-    int GetHeight() const { return m_PixelsDimension.y; }
+    void SetTexture(const CC_AssetRef<Texture2D>& texture);
+    const CC_AssetRef<Texture2D>& GetTexture() const { return m_Texture; }
 
-    Texture* GetTexture() const
-    {
-        if (const auto sharedTexture = m_Texture.lock())
-            return sharedTexture.get();
+    void BindTexture() const;
 
-        return nullptr;
-    }
+    uint32_t GetWidth() const { return m_Width; }
+    uint32_t GetHeight() const { return m_Height; }
+    float GetWidthF() const { return static_cast<float>(m_Width); }
+    float GetHeightF() const { return static_cast<float>(m_Height); }
+
 };

@@ -1,32 +1,30 @@
 #pragma once
 
-#include "pch.h"
-#include "Render/Sprite.h"
-#include "SDL.h"
+#include <vector>
+
+#include "vec4.hpp"
+#include "OrthoCameraController.h"
 
 class IRender;
-class SpriteComponent;
 
 class RendererSystem
 {
- 	SDL_Renderer* m_Renderer;
+	std::unique_ptr<OrthoCameraController> m_Camera;
+	
 	std::vector<std::weak_ptr<IRender>> m_RenderComponents;
-
+	glm::vec4 m_ClearColor = {0.6f, 0.6f, 0.6f, 1.0f};
+	
 public:
-	RendererSystem() = delete;
-	RendererSystem(class Window* window);
+	RendererSystem();
 	~RendererSystem();
 
-	SDL_Renderer* GetRenderer() const { return m_Renderer; }
-
-	void AddRenderComponent(std::shared_ptr<IRender> spriteComponent);
-	void RemoveRenderComponent(std::shared_ptr<IRender> renderComponent);
-
-	void Update();
-	void Render() const;
+	void OnUpdate(float deltaTime);
+	void OnEvent(CC_Event& event);
 	
-private:
-	void Blit(const Sprite& sprite) const;
-	void Clear() const;
+	void AddRenderComponent(const std::shared_ptr<IRender>& renderComponent);
+	void RemoveRenderComponent(const std::shared_ptr<IRender>& renderComponent);
+	void DrawObjects();
+
+	const OrthographicCamera& GetCamera() const { return m_Camera->GetCamera(); }
 };
 

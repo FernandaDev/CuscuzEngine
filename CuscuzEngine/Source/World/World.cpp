@@ -15,7 +15,9 @@ void World::Update(float deltaTime)
     if(!m_PendingActors.empty())
     {
         for (auto& pendingActor : m_PendingActors)
+        {
             m_ActiveActors.emplace_back(pendingActor);
+        }
         
         m_PendingActors.clear();
     }
@@ -23,12 +25,7 @@ void World::Update(float deltaTime)
     HandleDeadActors();
 }
 
-// void World::AddActor(Actor* NewActor)
-// {
-//     (m_UpdatingActors ? m_PendingActors : m_ActiveActors).emplace_back(NewActor);
-// }
-
-Actor& World::CreateActor(std::string&& name, glm::vec2 position, float scale, float rotation)
+Actor& World::CreateActor(std::string&& name, const glm::vec3& position, float scale, float rotation)
 {
     if(name.empty())
         name = "Actor";
@@ -43,7 +40,6 @@ void World::DestroyActor(Actor* actor) const
 {
     actor->Destroy();
 }
-
 
 void World::HandleDeadActors()
 {

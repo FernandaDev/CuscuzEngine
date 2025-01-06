@@ -1,6 +1,5 @@
 ﻿#pragma once
 
-
 #include "Core/ClassRegistry.h"
 
 class Actor;
@@ -36,8 +35,11 @@ public:
     int GetUpdateOrder() const { return m_UpdateOrder; }
 
     void SetOwner(Actor* ownerActor);
+    Actor* GetOwner() const { return m_OwnerActor; }
 
     virtual void Update(float deltaTime);
     virtual void OnAdded() {}
     virtual void OnRemoved() {}
+    virtual void OnTransformUpdate() {}
+    virtual void ImGuiDisplayComponent() {}
 };

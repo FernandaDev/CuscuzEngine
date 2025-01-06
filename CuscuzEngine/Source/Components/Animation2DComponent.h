@@ -1,7 +1,10 @@
 ﻿#pragma once
-#include "SpriteComponent.h"
 
-class Animation2DComponent : public SpriteComponent
+#include <SDL_render.h>
+#include "glm.hpp"
+#include "SpriteRenderer.h"
+
+class Animation2DComponent : public SpriteRenderer
 {
     int m_FrameCount;
     float m_AnimFPS;
@@ -14,11 +17,11 @@ class Animation2DComponent : public SpriteComponent
     
 public:
     Animation2DComponent() = default;
-    Animation2DComponent(int frameCount, int drawOrder = 0, SDL_BlendMode blendMode = SDL_BLENDMODE_NONE);
+    Animation2DComponent(int frameCount, int drawOrder = 0);
     ~Animation2DComponent() override = default;
     
     void Update(float deltaTime) override;
-    void Draw(SDL_Renderer* renderer) override;
+    void Draw() override;
 
     float GetAnimFPS() const { return m_AnimFPS; }
     void SetAnimFPS(float fps) { m_AnimFPS = fps; }

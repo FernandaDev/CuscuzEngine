@@ -1,5 +1,8 @@
 ﻿#pragma once
 
+#include <vector>
+#include <functional>
+
 #include "CC_Event.h"
 
 template <typename EventType> //TODO Review this

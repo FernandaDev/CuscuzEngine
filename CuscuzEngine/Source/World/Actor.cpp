@@ -3,12 +3,15 @@
 
 #include "World.h"
 #include "Core/CC_Engine.h"
-#include "Components/SpriteComponent.h"
+#include "Components/SpriteRenderer.h"
+#include "Core/PhysicsSystem.h"
 #include "Core/RendererSystem.h"
+#include "Physics/IPhysics.h"
 
-Actor::Actor(World* world, std::string&& name, glm::vec2 position, float scale, float rotation) :
- m_Name(std::move(name)), m_State(Active), m_Position(position), m_Scale(scale), m_Rotation(rotation),
-m_World(world) { }
+Actor::Actor(World* world, std::string&& name, const glm::vec3& position, float scale, float rotation) :
+ m_Name(std::move(name)), m_State(Active), m_World(world),
+m_Transform(std::make_unique<TransformComponent>(position, scale, rotation))
+{ }
 
 Actor::~Actor()
 {
@@ -17,24 +20,37 @@ Actor::~Actor()
     m_Components.clear();
 }
 
-void Actor::Update(float deltaTime)
-{    
-    UpdateComponents(deltaTime);
-    UpdateActor(deltaTime);
-}
-
 void Actor::Destroy()
 {
     m_State = Dead;
 
     TryRemoveRenderComponent();
+    TryRemovePhysicsComponent();
+}
+
+void Actor::Update(float deltaTime)
+{
+    UpdateTransform(deltaTime);
+    
+    UpdateComponents(deltaTime);
+    UpdateActor(deltaTime);
+
+    UpdateTransform(deltaTime);
+}
+
+void Actor::UpdateTransform(float deltaTime) const
+{
+    m_Transform->Update(deltaTime);
+    
+    for (const auto& component : m_Components)
+        component->OnTransformUpdate();
 }
 
 void Actor::UpdateComponents(float deltaTime) const
 {
     if(m_Components.empty())
         return;
-    
+
     for (const auto& component : m_Components)
         component->Update(deltaTime);
 }
@@ -44,17 +60,15 @@ void Actor::OnComponentAdded()
     const auto latestComponent = m_Components.back();
 
     m_OnComponentAddedDelegate.Broadcast(latestComponent);
-    
-    TryRenderComponent(latestComponent);
-}
 
-void Actor::TryRenderComponent(std::shared_ptr<Component> component)
-{
-    const auto renderComponent = std::dynamic_pointer_cast<IRender>(component);
-    if (!renderComponent)
-        return;
-    
-    CC_Engine::Get().CC_RendererSystem->AddRenderComponent(renderComponent);
+    if(const auto renderComponent = std::dynamic_pointer_cast<IRender>(latestComponent))
+    {
+        CC_Engine::Get().CC_RendererSystem->AddRenderComponent(renderComponent);
+    }
+    else if(const auto physicsComponent = std::dynamic_pointer_cast<IOnOverlap>(latestComponent))
+    {
+        CC_Engine::Get().CC_PhysicsSystem->AddDetectionComponent(physicsComponent);
+    }
 }
 
 void Actor::TryRemoveRenderComponent()
@@ -66,5 +80,17 @@ void Actor::TryRemoveRenderComponent()
             continue;
     
         CC_Engine::Get().CC_RendererSystem->RemoveRenderComponent(renderComponent);
+    }
+}
+
+void Actor::TryRemovePhysicsComponent()
+{
+    for (const auto& component : m_Components)
+    {
+        const auto detectionComponent = std::dynamic_pointer_cast<IOnOverlap>(component);
+        if (!detectionComponent)
+            continue;
+    
+        CC_Engine::Get().CC_PhysicsSystem->RemoveDetectionComponent(detectionComponent);
     }
 }

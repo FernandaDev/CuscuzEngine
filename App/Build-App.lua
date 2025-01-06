@@ -9,8 +9,12 @@ project "App"
    { 
     "Source/**.h", 
     "Source/**.cpp",
-    "%{includedir.glm}/**.hpp",
-    "%{includedir.glm}/**.inl",
+    "Assets/**.glsl",
+    "Assets/**.png",
+    "Assets/**.bmp",
+    "Assets/**.jpeg",
+    -- "%{includedir.glm}/**.hpp",
+    -- "%{includedir.glm}/**.inl",
    }
 
    includedirs
@@ -20,10 +24,9 @@ project "App"
 
       "%{wks.location}/CuscuzEngine/Source",
       "%{wks.location}/CuscuzEngine/Vendor",
-      "%{wks.location}/Vendor/Log/include",
 
+      "%{includedir.SPD_Log}",
       "%{includedir.SDL2}",
-      "%{includedir.SDL2_image}",
       "%{includedir.glm}",
    }
 
@@ -45,7 +48,7 @@ project "App"
    filter "system:windows"
        systemversion "latest"
        defines { "WINDOWS", "_SILENCE_STDEXT_ARR_ITERS_DEPRECATION_WARNING" }
-       linkoptions { "/WHOLEARCHIVE:CuscuzEngine.lib", "/ENTRY:mainCRTStartup"}
+       --linkoptions { "/WHOLEARCHIVE:CuscuzEngine.lib", "/ENTRY:mainCRTStartup"}
 
    filter "configurations:Debug"
        defines { "DEBUG" }

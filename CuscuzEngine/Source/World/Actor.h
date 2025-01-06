@@ -3,9 +3,11 @@
 #include "vec2.hpp"
 #include "Utils/Log.h"
 #include "Component.h"
+#include "Components/TransformComponent.h"
 #include "Events/EventDefinitions.h"
 #include "Utils/Math.h"
 
+class IPhysics;
 class World;
 
 DECLARE_EVENT(OnComponentAdded, const std::shared_ptr<Component>&)
@@ -21,55 +23,26 @@ class Actor
 {
     
 protected:
-    //ID?
     std::string m_Name;
     ActorState m_State;
-    glm::vec2 m_Position;
-    float m_Scale;
-    float m_Rotation;
-    std::vector<std::shared_ptr<Component>> m_Components;
+    std::vector<std::shared_ptr<Component>> m_Components {};
     World* m_World;
-    OnComponentAdded m_OnComponentAddedDelegate;
+    OnComponentAdded m_OnComponentAddedDelegate {};
+
+    std::unique_ptr<TransformComponent> m_Transform;
 
 public:
-    Actor(World* world, std::string&& name, glm::vec2 position,
-        float scale = 1.f, float rotation = 0);
-    Actor(const Actor& other):
-    m_Name(other.m_Name), m_State(other.m_State), m_Position(other.m_Position)
-    , m_Scale(other.m_Scale), m_Rotation(other.m_Rotation),
-    m_Components(other.m_Components), m_World(other.m_World)
-    { }
-    Actor& operator=(const Actor& other)
-    {
-        if(this != &other)
-        {
-            m_Name = other.m_Name;
-            m_State = other.m_State;
-            m_Position = other.m_Position;
-            m_Scale = other.m_Scale;
-            m_Rotation = other.m_Rotation;
-            m_Components = other.m_Components;
-            m_World = other.m_World;
-        }
-        
-        return *this;
-    }
+    Actor(World* world, std::string&& name, const glm::vec3& position,
+        float scale = 1.f, float rotation = CC_Math::PiOver2);
     virtual ~Actor();
 
     void Update(float deltaTime);
     void Destroy();
 
     const std::string& GetName() const { return m_Name; }
-    ActorState         GetState() const { return m_State; }
-    const glm::vec2&   GetPosition() const { return m_Position; }
-    float              GetScale() const { return m_Scale; }
-    float              GetRotation() const { return m_Rotation; }
-    glm::vec2          GetForward() const { return {CC_Math::Cos(m_Rotation), -CC_Math::Sin(m_Rotation)}; }
-
+    ActorState GetState() const { return m_State; }
+    TransformComponent& GetTransform() const { return *m_Transform; }
     const std::vector<std::shared_ptr<Component>>& GetComponents() const { return m_Components; }
-
-    void SetPosition(const glm::vec2& newPosition) { m_Position = newPosition; }
-    void SetRotation(float newRotation) { m_Rotation = newRotation; }
 
 protected:
     void UpdateComponents(float deltaTime) const;
@@ -77,8 +50,11 @@ protected:
     void OnComponentAdded();
 
 private:
-    void TryRenderComponent(std::shared_ptr<Component> component);
+    void TryAddRenderComponent(std::shared_ptr<Component> component);
+    void TryAddPhysicsComponent(std::shared_ptr<Component> component);
     void TryRemoveRenderComponent();
+    void TryRemovePhysicsComponent();
+    void UpdateTransform(float deltaTime) const;
     
     ///////////////TEMPLATES//////////////////
 public:

@@ -1,8 +1,10 @@
 ﻿#pragma once
+#include "Shader.h"
+#include "VertexArray.h"
 
 class IRender
 {
 public:
-    void virtual Draw(SDL_Renderer* renderer) = 0; // TODO create an abstraction for a Renderer!
-    int virtual GetDrawOrder() const = 0;
+    virtual void Draw() = 0;
+    virtual int GetDrawOrder() const = 0;
 };

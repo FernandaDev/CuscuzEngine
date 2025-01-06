@@ -1,5 +1,10 @@
 ﻿#pragma once
-#include "vec2.hpp"
+
+#include <memory>
+#include <vector>
+#include <string>
+
+#include "vec3.hpp"
 
 class Actor;
 class Component;
@@ -17,7 +22,7 @@ public:
     void Update(float deltaTime);
     
     Actor& CreateActor(std::string&& name,
-                    glm::vec2 position = glm::vec2(0,0),
+                    const glm::vec3& position = glm::vec3(0),
                     float scale = 1, float rotation = 0);
 
     void DestroyActor(Actor* actor) const;

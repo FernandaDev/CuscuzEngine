@@ -12,6 +12,7 @@ public:
     Simple2DMovementComponent(float forwardSpeed, float angularSpeed, int updateOrder = 10);
 
     void Update(float deltaTime) override;
+    void ImGuiDisplayComponent() override;
 
     float GetForwardSpeed() const { return m_ForwardSpeed; }
     float GetAngularSpeed() const { return m_AngularSpeed; }

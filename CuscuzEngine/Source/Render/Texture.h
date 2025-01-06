@@ -1,27 +1,21 @@
 ﻿#pragma once
-
-//#include <SDL_image.h>
-#include "SDL.h"
-#include "Utils/Log.h"
+#include "Core/CC_Core.h"
 
 class Texture
 {
-    SDL_Texture* m_Texture;
-    
 public:
-   Texture(SDL_Renderer* renderer, std::string filePath) : m_Texture(nullptr)
-   {
-       //m_Texture = IMG_LoadTexture(renderer, filePath.c_str());
+    virtual ~Texture() = default;
 
-       if(!m_Texture)
-           LOG_ERROR("Couldn't load the texture!");
-   }
+    virtual void Bind(unsigned int slot = 0) = 0;
+    virtual uint32_t GetWidth() const = 0;
+    virtual uint32_t GetHeight() const = 0;
+    virtual uint32_t GetRendererID() const = 0;
+    virtual void SetData(void* data, uint32_t size) = 0;
+};
 
-   ~Texture()
-   {
-       SDL_DestroyTexture(m_Texture);
-       LOG_INFO("Destroyed texture!");
-   }
-
-    SDL_Texture* SDLPtr() const { return m_Texture; }
+class Texture2D : public Texture
+{
+public:
+    static CC_AssetRef<Texture2D> Create(std::string&& filepath);
+    static CC_AssetRef<Texture2D> Create(uint32_t width, uint32_t height);
 };

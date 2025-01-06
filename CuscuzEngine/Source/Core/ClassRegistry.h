@@ -1,5 +1,10 @@
 ﻿#pragma once
 
+#include <functional>
+#include <optional>
+
+#include <Utils/Log.h>
+
 struct ClassType
 {
     std::string Name;
@@ -38,13 +43,13 @@ public:
     {
         for (const auto& registry : GetRegistry())
         {
-            std::cout << registry.second.Name << std::endl;
+            LOG_INFO(registry.second.Name);
         }
     }
 };
 
 #define REGISTER_CLASS(type)\
-    struct [[nodiscard]] type##_Registry { \
+    struct type##_Registry { \
     type##_Registry() { ClassRegistry::RegisterClass(#type, sizeof(type), []() -> void* { return new type(); }); } \
     }
 
@@ -55,7 +60,7 @@ public:
 
 #define CREATE_COMPONENT_REGISTRY(type)\
     namespace _HIDDEN{\
-    type::type##_Registry [[nodiscard]] type##_Registry_Instance {}; }
+    type::type##_Registry type##_Registry_Instance {}; }
 
 static std::string GetCleanTypeName(const std::string& name)
 {
