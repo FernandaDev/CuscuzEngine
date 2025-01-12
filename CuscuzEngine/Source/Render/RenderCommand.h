@@ -25,9 +25,9 @@ public:
         s_RendererAPI->Clear();
     }
     
-    static void DrawIndexed(const CC_AssetRef<VertexArray>& vertexArray)
+    static void DrawIndexed(const CC_AssetRef<VertexArray>& vertexArray, uint32_t count = 0)
     {
-        s_RendererAPI->DrawIndexed(vertexArray);
+        s_RendererAPI->DrawIndexed(vertexArray, count);
     }
     
 private:

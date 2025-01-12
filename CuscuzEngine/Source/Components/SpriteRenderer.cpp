@@ -15,21 +15,28 @@ SpriteRenderer::SpriteRenderer(int drawOrder) :
 
 void SpriteRenderer::Draw()
 {
-    glm::mat4 worldMatrix = m_OwnerActor->GetTransform().GetWorldTransform();
+    if(!m_Sprite)
+        return;
+
+    const auto pos = m_OwnerActor->GetTransform().GetPosition();
+    const auto scale = m_OwnerActor->GetTransform().GetScale();
+    Renderer2D::DrawQuad(pos, scale, m_Color);
     
-    if (m_Sprite)
-    {
-        auto scaleMatrix = glm::mat4(1.0f);
-        scaleMatrix = scale(scaleMatrix, glm::vec3(m_Sprite->GetWidthF(), m_Sprite->GetHeightF(), 1.f));
+    //glm::mat4 worldMatrix = m_OwnerActor->GetTransform().GetWorldTransform();
     
-        const auto actorWorldTransform = m_OwnerActor->GetTransform().GetWorldTransform();
-        worldMatrix = actorWorldTransform * scaleMatrix;
-        Renderer2D::DrawQuad(worldMatrix, m_Color, m_Sprite->GetTexture());
-    }
-    else
-    {
-        Renderer2D::DrawQuad(worldMatrix, m_Color);
-    }
+    // if (m_Sprite)
+    // {
+        // auto scaleMatrix = glm::mat4(1.0f);
+        // scaleMatrix = scale(scaleMatrix, glm::vec3(m_Sprite->GetWidthF(), m_Sprite->GetHeightF(), 1.f));
+        //
+        // const auto actorWorldTransform = m_OwnerActor->GetTransform().GetWorldTransform();
+        // worldMatrix = actorWorldTransform * scaleMatrix;
+        //Renderer2D::DrawQuad(worldMatrix, m_Color, m_Sprite->GetTexture());
+    // }
+    // else
+    // {
+        //Renderer2D::DrawQuad(worldMatrix, m_Color);
+    //}
 }
 
 void SpriteRenderer::SetSprite(const CC_AssetRef<Sprite>& newSprite)

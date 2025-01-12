@@ -20,9 +20,6 @@ class GameLayer : public Layer
     CC_AssetRef<Sprite> m_ActorSprite {};
     Actor* m_MainActor {};
 
-    CC_AssetRef<Sprite> m_EnemySprite {};
-    Actor* m_EnemyActor {};
-
 public:
     GameLayer();
     ~GameLayer() override = default;
@@ -32,8 +29,4 @@ public:
     void OnUpdate(float deltaTime) override;
     void OnImGuiRender() override;
     void OnEvent(CC_Event& event) override;
-
-private:
-    // ImGUI
-    
 };

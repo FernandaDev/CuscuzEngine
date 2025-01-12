@@ -25,6 +25,6 @@ public:
 	void RemoveRenderComponent(const std::shared_ptr<IRender>& renderComponent);
 	void DrawObjects();
 
-	const OrthographicCamera& GetCamera() const { return m_Camera->GetCamera(); }
+	OrthoCameraController& GetCameraController() const { return *m_Camera; }
 };
 

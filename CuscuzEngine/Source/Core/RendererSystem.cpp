@@ -4,6 +4,7 @@
 #include "Utils/Log.h"
 #include "Components/SpriteRenderer.h"
 #include "Render/RenderCommand.h"
+#include "Render/Renderer.h"
 #include "Render/Renderer2D.h"
 
 RendererSystem::RendererSystem()
@@ -55,9 +56,11 @@ void RendererSystem::OnUpdate(float deltaTime)
         return;
 
     Renderer2D::BeginScene(m_Camera->GetCamera());
+    //Renderer::BeginScene(m_Camera->GetCamera()); for 3D objects
 
     DrawObjects();
-    
+
+    //Renderer::EndScene();
     Renderer2D::EndScene();
 }
 

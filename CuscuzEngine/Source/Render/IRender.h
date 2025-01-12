@@ -1,6 +1,4 @@
 ﻿#pragma once
-#include "Shader.h"
-#include "VertexArray.h"
 
 class IRender
 {

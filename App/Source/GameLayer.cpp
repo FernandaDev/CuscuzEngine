@@ -9,9 +9,23 @@
 #include "Core/KeyCodes.h"
 #include "World/Actor.h"
 
-GameLayer::GameLayer() :
-m_ActorSprite(std::make_shared<Sprite>()),
-m_EnemySprite(std::make_shared<Sprite>())
+static void DrawGrid(const glm::ivec2& gridSize, World* world)
+{
+    const float offset = 0.1f;
+    for (int x = 0; x < gridSize.x; ++x)
+    {
+        for (int y = 0; y < gridSize.y; ++y)
+        {
+            auto pos = glm::vec3(x + x * offset, y + y * offset, 0.f);
+            const auto actor = &world->CreateActor(std::format("tile_%i_%i", x, y), pos, 1.f);
+            auto& sr = actor->AddComponent<SpriteRenderer>();
+            sr.SetSprite(std::make_shared<Sprite>());
+            sr.SetColor({ (float)x / (float)gridSize.x, (float)x / (float)gridSize.x, (float)y / (float)gridSize.y, 1.0f});
+        }
+    }
+}
+
+GameLayer::GameLayer()
 {
     m_World = CC_Engine::Get().CC_World.get();
 }
@@ -20,23 +34,16 @@ void GameLayer::OnAttach()
 {
     CC_ASSERT(m_World, "The World instance is null!");
     
-    m_MainActor = &m_World->CreateActor("Fer", glm::vec3(0, 0, 0), 1.f);
-    m_MainActor->AddComponent<CircleDetectionComponent>(48.f);
-    auto& actorSprite = m_MainActor->AddComponent<SpriteRenderer>();
+    // m_MainActor = &m_World->CreateActor("Fer", glm::vec3(0, 0, 0), 1.f);
+    // m_MainActor->AddComponent<CircleDetectionComponent>(48.f);
+    // auto& actorSprite = m_MainActor->AddComponent<SpriteRenderer>();
+    //
+    // const auto texture = Texture2D::Create("Assets/Images/player.png");
+    // m_ActorSprite->SetTexture(texture);
+    //
+    // actorSprite.SetSprite(m_ActorSprite);
 
-    const auto texture = Texture2D::Create("Assets/Images/player.png");
-    m_ActorSprite->SetTexture(texture);
-
-    actorSprite.SetSprite(m_ActorSprite);
-
-    m_EnemyActor = &m_World->CreateActor("Enemy", glm::vec3(150, 0, 0), 1.f);
-    auto& enemySprite = m_EnemyActor->AddComponent<SpriteRenderer>();
-    auto enemyTexture = Texture2D::Create("Assets/Images/adventurer.png");
-    m_EnemySprite->SetTexture(enemyTexture);
-    enemySprite.SetSprite(m_EnemySprite);
-    
-    //m_EnemyActor->AddComponent<CircleDetectionComponent>(48.f);
-    //m_EnemyActor->AddComponent<Simple2DMovementComponent>();
+    DrawGrid({50, 50}, m_World);
 }
 
 void GameLayer::OnDetach()
@@ -50,18 +57,18 @@ void GameLayer::OnUpdate(float deltaTime)
     
     m_World->Update(deltaTime);
 
-    auto pos = m_MainActor->GetTransform().GetPosition();
-
-    if(Input::IsKeyPressed(CC_KEYCODE_W))
-        pos.y += MoveSpeed * deltaTime;
-    if(Input::IsKeyPressed(CC_KEYCODE_S))
-        pos.y -= MoveSpeed * deltaTime;
-    if(Input::IsKeyPressed(CC_KEYCODE_A))
-        pos.x -= MoveSpeed * deltaTime;
-    if(Input::IsKeyPressed(CC_KEYCODE_D))
-        pos.x += MoveSpeed * deltaTime;
-
-    m_MainActor->GetTransform().SetPosition(pos);
+    // auto pos = m_MainActor->GetTransform().GetPosition();
+    //
+    // if(Input::IsKeyPressed(CC_KEYCODE_W))
+    //     pos.y += MoveSpeed * deltaTime;
+    // if(Input::IsKeyPressed(CC_KEYCODE_S))
+    //     pos.y -= MoveSpeed * deltaTime;
+    // if(Input::IsKeyPressed(CC_KEYCODE_A))
+    //     pos.x -= MoveSpeed * deltaTime;
+    // if(Input::IsKeyPressed(CC_KEYCODE_D))
+    //     pos.x += MoveSpeed * deltaTime;
+    //
+    // m_MainActor->GetTransform().SetPosition(pos);
 }
 
 void GameLayer::OnEvent(CC_Event& event)

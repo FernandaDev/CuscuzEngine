@@ -72,7 +72,7 @@ namespace ImGuiHelper
     {
         ImGui::Begin("Camera", &showing);
 
-        OrthographicCamera camera = CC_Engine::Get().CC_RendererSystem->GetCamera();
+        OrthoCameraController& camera = CC_Engine::Get().CC_RendererSystem->GetCameraController();
         camera.OnImGuiRender();
         
         ImGui::End();

@@ -44,32 +44,3 @@ void OrthographicCamera::RecalculateViewMatrix()
     m_ViewMatrix = glm::inverse(transformMatrix);
     m_ViewProjectionMatrix = m_ProjectionMatrix * m_ViewMatrix;
 }
-
-void OrthographicCamera::OnImGuiRender()
-{
-    ImGui::TextColored(ImVec4(0.8f, .8f, .1f, 1.f), "Camera");
-
-    ImGui::Separator();
-
-    ImGui::PushItemWidth(100.0f); 
-        
-    ImGui::Text("Position");
-
-    auto pos = m_Position;
-    
-    ImGui::DragFloat("x##pos", &pos.x);
-    ImGui::DragFloat("y##pos", &pos.y);
-
-    SetPosition(pos);
-
-    ImGui::Dummy(ImVec2(0.0f, 10.0f));
-
-    ImGui::Text("Rotation");
-    
-    auto rot = m_Rotation;
-
-    ImGui::DragFloat("degrees", &rot);
-
-    SetRotation(rot);
-    
-}
