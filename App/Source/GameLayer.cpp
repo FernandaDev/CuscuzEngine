@@ -33,7 +33,6 @@ static void DrawGrid(const glm::ivec2& gridSize, World* world)
             auto sprite = std::make_shared<Sprite>();
 
             auto randomIndex = random.GetRandomNumber(0, 2);
-            LOG_INFO("Random number: {0}", randomIndex);
             
             auto texture = floors[randomIndex];
             sprite->SetTexture(texture);
@@ -51,16 +50,16 @@ void GameLayer::OnAttach()
 {
     CC_ASSERT(m_World, "The World instance is null!");
 
-    m_MainActor = &m_World->CreateActor("Fer", glm::vec3(0, 0, 0), 1.f);
-    m_MainActor->AddComponent<CircleDetectionComponent>(48.f);
-    auto& actorSprite = m_MainActor->AddComponent<SpriteRenderer>();
-    
-    const auto texture = Texture2D::Create("Assets/Images/player.png");
-    m_ActorSprite->SetTexture(texture);
-    
-    actorSprite.SetSprite(m_ActorSprite);
+    // m_MainActor = &m_World->CreateActor("Fer", glm::vec3(0, 0, 0), 1.f);
+    // m_MainActor->AddComponent<CircleDetectionComponent>(48.f);
+    // auto& actorSprite = m_MainActor->AddComponent<SpriteRenderer>();
+    //
+    // const auto texture = Texture2D::Create("Assets/Images/player.png");
+    // m_ActorSprite->SetTexture(texture);
+    //
+    // actorSprite.SetSprite(m_ActorSprite);
 
-    DrawGrid({50, 50}, m_World);
+    DrawGrid({150, 150}, m_World);
 }
 
 void GameLayer::OnDetach()
@@ -74,18 +73,18 @@ void GameLayer::OnUpdate(float deltaTime)
     
     m_World->Update(deltaTime);
 
-    auto pos = m_MainActor->GetTransform().GetPosition();
-    
-    if(Input::IsKeyPressed(CC_KEYCODE_W))
-        pos.y += MoveSpeed * deltaTime;
-    if(Input::IsKeyPressed(CC_KEYCODE_S))
-        pos.y -= MoveSpeed * deltaTime;
-    if(Input::IsKeyPressed(CC_KEYCODE_A))
-        pos.x -= MoveSpeed * deltaTime;
-    if(Input::IsKeyPressed(CC_KEYCODE_D))
-        pos.x += MoveSpeed * deltaTime;
-    
-    m_MainActor->GetTransform().SetPosition(pos);
+    // auto pos = m_MainActor->GetTransform().GetPosition();
+    //
+    // if(Input::IsKeyPressed(CC_KEYCODE_W))
+    //     pos.y += MoveSpeed * deltaTime;
+    // if(Input::IsKeyPressed(CC_KEYCODE_S))
+    //     pos.y -= MoveSpeed * deltaTime;
+    // if(Input::IsKeyPressed(CC_KEYCODE_A))
+    //     pos.x -= MoveSpeed * deltaTime;
+    // if(Input::IsKeyPressed(CC_KEYCODE_D))
+    //     pos.x += MoveSpeed * deltaTime;
+    //
+    // m_MainActor->GetTransform().SetPosition(pos);
 }
 
 void GameLayer::OnEvent(CC_Event& event)

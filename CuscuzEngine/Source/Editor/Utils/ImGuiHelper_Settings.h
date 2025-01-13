@@ -1,6 +1,7 @@
 ﻿#pragma once
 #include "Core/Time.h"
 #include "Core/Window.h"
+#include "Render/Renderer2D.h"
 
 namespace ImGuiHelper
 {
@@ -31,9 +32,9 @@ namespace ImGuiHelper
         ImGui::End();
     }
     
-    static void ShowTimeSettingsWindow(bool& showing, bool& showTimeStats)
+    static void ShowTimeStatsWindow(bool& showing, bool& showTimeStats)
     {
-        ImGui::Begin("Time", &showing);
+        ImGui::Begin("Time Stats", &showing);
         
         ImGui::TextColored(ImVec4(0.8f, .8f, .1f, 1.f), "Time");
 
@@ -49,5 +50,19 @@ namespace ImGuiHelper
         ImGui::End();
     }
 
-    
+    static void ShowRendererStatsWindow(bool& showing)
+    {
+        ImGui::Begin("Renderer Stats", &showing);
+        
+        ImGui::TextColored(ImVec4(0.8f, .8f, .1f, 1.f), "Renderer 2D Statistics:");
+        ImGui::Separator();
+
+        const auto stats = Renderer2D::GetStats();
+        ImGui::Text("Draw Calls: %d", stats.DrawCalls);
+        ImGui::Text("Quads: %d", stats.QuadCount);
+        ImGui::Text("Vertices: %d", stats.GetTotalVertexCount());
+        ImGui::Text("Indices: %d", stats.GetTotalIndexCount());
+
+        ImGui::End();
+    }
 };

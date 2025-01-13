@@ -45,7 +45,8 @@ void EditorLayer::ShowWorldWindow()
 
     static bool showActorCreation = false;
     static bool showCameraWindow = false;
-    static bool showTimeSettingsWindow = false;
+    static bool showTimeStatsWindow = false;
+    static bool showRendererStatsWindow = true;
     
     if (ImGui::BeginMenuBar())
     {
@@ -63,9 +64,10 @@ void EditorLayer::ShowWorldWindow()
             ImGui::EndMenu();
         }
 
-        if(ImGui::BeginMenu("Settings"))
+        if(ImGui::BeginMenu("Stats"))
         {
-            ImGui::MenuItem("Time", NULL, &showTimeSettingsWindow);
+            ImGui::MenuItem("Time", NULL, &showTimeStatsWindow);
+            ImGui::MenuItem("Renderer", NULL, &showRendererStatsWindow);
             
             ImGui::EndMenu();
         }
@@ -79,8 +81,11 @@ void EditorLayer::ShowWorldWindow()
     if(showCameraWindow)
         ImGuiHelper::ShowCameraWindow(showCameraWindow);
 
-    if(showTimeSettingsWindow)
-        ImGuiHelper::ShowTimeSettingsWindow(showTimeSettingsWindow, m_ShowTimeStatsOverlay);
+    if(showTimeStatsWindow)
+        ImGuiHelper::ShowTimeStatsWindow(showTimeStatsWindow, m_ShowTimeStatsOverlay);
+
+    if(showRendererStatsWindow)
+        ImGuiHelper::ShowRendererStatsWindow(showRendererStatsWindow);
 
     const bool showingActors = ImGui::CollapsingHeader("Hierarchy", ImGuiTreeNodeFlags_DefaultOpen);
     ImGuiHelper::ShowAllActors(showingActors, m_World);

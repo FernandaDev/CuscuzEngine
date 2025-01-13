@@ -11,7 +11,7 @@ CC_AssetRef<Shader> Shader::Create(const std::string& shaderFile)
     case RendererAPI::API::OpenGL :
         return CreateAssetRef<OpenGLShader>(shaderFile);
     case RendererAPI::API::None:
-        CC_ASSERT(false, "Unknown renderer API!")
+        CC_ASSERT(false, "Unknown renderer API!");
     }
 
     CC_ASSERT(false, "Unknown renderer API!")
@@ -25,7 +25,7 @@ CC_AssetRef<Shader> Shader::Create(const std::string& name, const std::string& s
     case RendererAPI::API::OpenGL :
         return CreateAssetRef<OpenGLShader>(name, shaderFile);
     case RendererAPI::API::None:
-        CC_ASSERT(false, "Unknown renderer API!")
+        CC_ASSERT(false, "Unknown renderer API!");
     }
 
     CC_ASSERT(false, "Unknown renderer API!")

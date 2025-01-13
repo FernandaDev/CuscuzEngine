@@ -48,6 +48,8 @@ void RendererSystem::RemoveRenderComponent(const std::shared_ptr<IRender>& rende
 void RendererSystem::OnUpdate(float deltaTime)
 {
     m_Camera->OnUpdate(deltaTime);
+
+    Renderer2D::ResetStats();
     
     RenderCommand::SetClearColor(m_ClearColor);
     RenderCommand::Clear();
