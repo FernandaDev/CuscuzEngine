@@ -6,6 +6,7 @@
 #include "Shader.h"
 #include "Texture.h"
 #include "VertexArray.h"
+#include "Components/TransformComponent.h"
 
 struct QuadVertex
 {
@@ -35,6 +36,8 @@ struct Renderer2DData
 
     std::array<CC_AssetRef<Texture2D>, MaxTextureSlotsPerDraw> TextureSlots;
     uint32_t TextureSlotIndex = 1;
+
+    glm::vec4 QuadVertexPositions[4];
 };
 
 static Renderer2DData s_Data;
@@ -90,6 +93,11 @@ void Renderer2D::Init()
     s_Data.SpriteShader->SetIntArray("u_Textures", samplers, Renderer2DData::MaxTextureSlotsPerDraw);
 
     s_Data.TextureSlots[0] = s_Data.DefaultQuadTexture;
+
+    s_Data.QuadVertexPositions[0] = { -0.5f, -0.5f, 0.0f, 1.0f };
+    s_Data.QuadVertexPositions[1] = { 0.5f, -0.5f, 0.0f, 1.0f };
+    s_Data.QuadVertexPositions[2] = { 0.5f, 0.5f, 0.0f, 1.0f };
+    s_Data.QuadVertexPositions[3] = { -0.5f, 0.5f, 0.0f, 1.0f };
 }
 
 void Renderer2D::Shutdown()
@@ -122,35 +130,32 @@ void Renderer2D::Flush()
     RenderCommand::DrawIndexed(s_Data.QuadVertexArray, s_Data.QuadIndexCount);
 }
 
-void Renderer2D::DrawQuad(const glm::vec2& position, const glm::vec2& scale, const glm::vec4& color)
+void Renderer2D::DrawQuad(const TransformComponent& transform, const glm::vec4& color)
 {
-    DrawQuad({position.x, position.y, 0.0f}, scale, color);
-}
-
-void Renderer2D::DrawQuad(const glm::vec3& position, const glm::vec2& scale, const glm::vec4& color)
-{
-    s_Data.QuadVertexBufferPtr->Position = position;
+    const auto worldTransform = transform.GetWorldTransform(); 
+    
+    s_Data.QuadVertexBufferPtr->Position =  worldTransform * s_Data.QuadVertexPositions[0];
     s_Data.QuadVertexBufferPtr->Color = color;
     s_Data.QuadVertexBufferPtr->TexCoord = { 0.0f, 0.0f };
     s_Data.QuadVertexBufferPtr->TexIndex = 0.0f;
     s_Data.QuadVertexBufferPtr->TilingOffset = {1.0f, 1.0f};
     s_Data.QuadVertexBufferPtr++;
 
-    s_Data.QuadVertexBufferPtr->Position = { position.x + scale.x, position.y, 0.0f };
+    s_Data.QuadVertexBufferPtr->Position =  worldTransform * s_Data.QuadVertexPositions[1];
     s_Data.QuadVertexBufferPtr->Color = color;
     s_Data.QuadVertexBufferPtr->TexCoord = { 1.0f, 0.0f };
     s_Data.QuadVertexBufferPtr->TexIndex = 0.0f;
     s_Data.QuadVertexBufferPtr->TilingOffset = {1.0f, 1.0f};
     s_Data.QuadVertexBufferPtr++;
 
-    s_Data.QuadVertexBufferPtr->Position = { position.x + scale.x, position.y + scale.y, 0.0f };
+    s_Data.QuadVertexBufferPtr->Position =  worldTransform * s_Data.QuadVertexPositions[2];
     s_Data.QuadVertexBufferPtr->Color = color;
     s_Data.QuadVertexBufferPtr->TexCoord = { 1.0f, 1.0f };
     s_Data.QuadVertexBufferPtr->TexIndex = 0.0f;
     s_Data.QuadVertexBufferPtr->TilingOffset = {1.0f, 1.0f};
     s_Data.QuadVertexBufferPtr++;
 
-    s_Data.QuadVertexBufferPtr->Position = { position.x, position.y + scale.y, 0.0f };
+    s_Data.QuadVertexBufferPtr->Position =  worldTransform * s_Data.QuadVertexPositions[3];
     s_Data.QuadVertexBufferPtr->Color = color;
     s_Data.QuadVertexBufferPtr->TexCoord = { 0.0f, 1.0f };
     s_Data.QuadVertexBufferPtr->TexIndex = 0.0f;
@@ -160,14 +165,7 @@ void Renderer2D::DrawQuad(const glm::vec3& position, const glm::vec2& scale, con
     s_Data.QuadIndexCount += 6;
 }
 
-void Renderer2D::DrawQuad(const glm::vec2& position, const glm::vec2& scale, const glm::vec4& color, const CC_AssetRef<Texture2D>& texture,
-     const glm::vec2& tilingOffset)
-{
-    DrawQuad({position.x, position.y, 0.0f}, scale, color, texture, tilingOffset);
-}
-
-void Renderer2D::DrawQuad(const glm::vec3& position, const glm::vec2& scale, const glm::vec4& color, const CC_AssetRef<Texture2D>& texture,
-    const glm::vec2& tilingOffset)
+void Renderer2D::DrawQuad(const TransformComponent& transform, const glm::vec4& color, const CC_AssetRef<Texture2D>& texture, const glm::vec2& tilingOffset)
 {
     float textureIndex = 0.0f;
 
@@ -186,29 +184,31 @@ void Renderer2D::DrawQuad(const glm::vec3& position, const glm::vec2& scale, con
         s_Data.TextureSlots[s_Data.TextureSlotIndex] = texture;
         s_Data.TextureSlotIndex++;
     }
+
+    const auto worldTransform = transform.GetWorldTransform(); 
     
-    s_Data.QuadVertexBufferPtr->Position = position;
+    s_Data.QuadVertexBufferPtr->Position = worldTransform * s_Data.QuadVertexPositions[0];
     s_Data.QuadVertexBufferPtr->Color = color;
     s_Data.QuadVertexBufferPtr->TexCoord = { 0.0f, 0.0f };
     s_Data.QuadVertexBufferPtr->TexIndex = textureIndex;
     s_Data.QuadVertexBufferPtr->TilingOffset = tilingOffset;
     s_Data.QuadVertexBufferPtr++;
 
-    s_Data.QuadVertexBufferPtr->Position = { position.x + scale.x, position.y, 0.0f };
+    s_Data.QuadVertexBufferPtr->Position =  worldTransform * s_Data.QuadVertexPositions[1];
     s_Data.QuadVertexBufferPtr->Color = color;
     s_Data.QuadVertexBufferPtr->TexCoord = { 1.0f, 0.0f };
     s_Data.QuadVertexBufferPtr->TexIndex = textureIndex;
     s_Data.QuadVertexBufferPtr->TilingOffset = tilingOffset;
     s_Data.QuadVertexBufferPtr++;
 
-    s_Data.QuadVertexBufferPtr->Position = { position.x + scale.x, position.y + scale.y, 0.0f };
+    s_Data.QuadVertexBufferPtr->Position = worldTransform * s_Data.QuadVertexPositions[2];
     s_Data.QuadVertexBufferPtr->Color = color;
     s_Data.QuadVertexBufferPtr->TexCoord = { 1.0f, 1.0f };
     s_Data.QuadVertexBufferPtr->TexIndex = textureIndex;
     s_Data.QuadVertexBufferPtr->TilingOffset = tilingOffset;
     s_Data.QuadVertexBufferPtr++;
 
-    s_Data.QuadVertexBufferPtr->Position = { position.x, position.y + scale.y, 0.0f };
+    s_Data.QuadVertexBufferPtr->Position =  worldTransform * s_Data.QuadVertexPositions[3];
     s_Data.QuadVertexBufferPtr->Color = color;
     s_Data.QuadVertexBufferPtr->TexCoord = { 0.0f, 1.0f };
     s_Data.QuadVertexBufferPtr->TexIndex = textureIndex;
@@ -217,4 +217,3 @@ void Renderer2D::DrawQuad(const glm::vec3& position, const glm::vec2& scale, con
 
     s_Data.QuadIndexCount += 6;
 }
-
