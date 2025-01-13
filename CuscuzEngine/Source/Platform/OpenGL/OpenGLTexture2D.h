@@ -16,6 +16,11 @@ public:
     OpenGLTexture2D(std::string&& filePath);
     ~OpenGLTexture2D() override;
 
+    bool operator==(const Texture& other) const override
+    {
+        return m_RendererID == other.GetRendererID();
+    }
+
     const std::string& GetName() const { return m_Name; } 
     std::string_view GetPath() const { return m_FilePath; }
     uint32_t GetRendererID() const override { return m_RendererID; }

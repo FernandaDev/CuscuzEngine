@@ -4,7 +4,6 @@
 
 #include "Core/CC_Core.h"
 #include "Layers/Layer.h"
-#include "Platform/OpenGL/OpenGLTexture2D.h"
 #include "Render/Sprite.h"
 #include "World/World.h"
 

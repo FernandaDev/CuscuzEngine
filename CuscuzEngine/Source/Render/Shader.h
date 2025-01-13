@@ -18,17 +18,17 @@ public:
 
     virtual const std::string& GetName() const = 0;
 
-    virtual void SetUniformF1(const char* name, float value) = 0;
-    virtual void SetUniformF2(const char* name, const glm::vec2& value) = 0;
-    virtual void SetUniformF3(const char* name, const glm::vec3& value) = 0;
-    virtual void SetUniformF4(const char* name, const glm::vec4& value) = 0;
-    virtual void SetUniformI(const char* name, int value) = 0;
-    virtual void SetUniformM4(const char* name, const glm::mat4x4& matrix) = 0;
+    virtual void SetFloat(const char* name, float value) = 0;
+    virtual void SetFloat2(const char* name, const glm::vec2& value) = 0;
+    virtual void SetFloat3(const char* name, const glm::vec3& value) = 0;
+    virtual void SetFloat4(const char* name, const glm::vec4& value) = 0;
+    virtual void SetInt(const char* name, int value) = 0;
+    virtual void SetIntArray(const char* name, int* values, int32_t count) = 0;
+    virtual void SetMatrix4(const char* name, const glm::mat4x4& matrix) = 0;
 
     static CC_AssetRef<Shader> Create(const std::string& shaderFile);
     static CC_AssetRef<Shader> Create(const std::string& name, const std::string& shaderFile);
 };
-
 
 class ShaderLibrary
 {

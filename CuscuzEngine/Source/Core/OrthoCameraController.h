@@ -15,7 +15,7 @@ class OrthoCameraController
     float m_Rotation;
     float m_MovementSpeed = 20.f;
     float m_RotationSpeed = 180.f;
-    float m_ZoomStep = 5.f;
+    float m_ZoomStep = .5f;
 
     const float MaxZoomAmount = 0.25f;
     

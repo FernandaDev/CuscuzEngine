@@ -8,7 +8,7 @@
 #include "Utils/Math.h"
 
 OrthoCameraController::OrthoCameraController(float aspectRatio, bool rotate) :
-m_aspectRatio(aspectRatio), m_ZoomLevel(15.0f),
+m_aspectRatio(aspectRatio), m_ZoomLevel(4.0f),
 m_Camera(-m_aspectRatio * m_ZoomLevel,m_aspectRatio * m_ZoomLevel, -m_ZoomLevel, m_ZoomLevel),
 m_CanRotate(rotate), m_Position(0), m_Rotation(0)
 { }

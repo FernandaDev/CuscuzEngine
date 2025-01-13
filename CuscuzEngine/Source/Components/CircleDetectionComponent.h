@@ -1,6 +1,6 @@
 ﻿#pragma once
 
-#include "vec2.hpp"
+#include "vec3.hpp"
 #include "Physics/IPhysics.h"
 #include "World/Component.h"
 
@@ -17,7 +17,7 @@ public:
     void SetRadius(float newRadius);
     float GetRadius() const override { return m_Radius; }
 
-    const glm::vec2& GetCenter() const override;
+    const glm::vec3& GetCenter() const override;
     Actor* GetActor() const override { return GetOwner(); }
     
     void OnOverlapping(Actor* other) override;

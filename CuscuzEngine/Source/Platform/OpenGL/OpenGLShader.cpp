@@ -184,42 +184,49 @@ void OpenGLShader::Unbind() const
     glUseProgram(0);
 }
 
-void OpenGLShader::SetUniformF1(const char* name, float value)
+void OpenGLShader::SetFloat(const char* name, float value)
 {
     const auto uniformId = GetUniformID(name);
 
     glUniform1f(uniformId, value);
 }
 
-void OpenGLShader::SetUniformF2(const char* name, const glm::vec2& value)
+void OpenGLShader::SetFloat2(const char* name, const glm::vec2& value)
 {
     const auto uniformId = GetUniformID(name);
 
     glUniform2f(uniformId, value.x, value.y);
 }
 
-void OpenGLShader::SetUniformF3(const char* name, const glm::vec3& value)
+void OpenGLShader::SetFloat3(const char* name, const glm::vec3& value)
 {
     const auto uniformId = GetUniformID(name);
 
     glUniform3f(uniformId, value.x, value.y, value.z);
 }
 
-void OpenGLShader::SetUniformF4(const char* name, const glm::vec4& value)
+void OpenGLShader::SetFloat4(const char* name, const glm::vec4& value)
 {
     const auto uniformId = GetUniformID(name);
 
     glUniform4f(uniformId, value.x, value.y, value.z, value.w);
 }
 
-void OpenGLShader::SetUniformI(const char* name, int value)
+void OpenGLShader::SetInt(const char* name, int value)
 {
     const auto uniformId = GetUniformID(name);
 
     glUniform1i(uniformId, value);
 }
 
-void OpenGLShader::SetUniformM4(const char* name, const glm::mat4x4& matrix)
+void OpenGLShader::SetIntArray(const char* name, int* values, int32_t count)
+{
+    const auto uniformId = GetUniformID(name);
+    
+    glUniform1iv(uniformId, count, values);
+}
+
+void OpenGLShader::SetMatrix4(const char* name, const glm::mat4x4& matrix)
 {
     const auto uniformId = GetUniformID(name);
 

@@ -34,7 +34,7 @@ void Renderer::EndScene()
 void Renderer::Submit(const CC_AssetRef<Shader>& shader, const CC_AssetRef<VertexArray>& vertexArray)
 {
     shader->Bind();
-    shader->SetUniformM4("u_ViewProjection", s_SceneData->ViewProjectionMatrix);
+    shader->SetMatrix4("u_ViewProjection", s_SceneData->ViewProjectionMatrix);
     
     vertexArray->Bind();
     RenderCommand::DrawIndexed(vertexArray);

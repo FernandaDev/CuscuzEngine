@@ -14,7 +14,7 @@ void CircleDetectionComponent::SetRadius(float newRadius)
     m_Radius = newRadius;
 }
 
-const glm::vec2& CircleDetectionComponent::GetCenter() const
+const glm::vec3& CircleDetectionComponent::GetCenter() const
 {
     return m_OwnerActor->GetTransform().GetPosition();
 }

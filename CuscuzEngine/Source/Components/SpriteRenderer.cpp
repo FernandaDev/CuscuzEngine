@@ -20,23 +20,11 @@ void SpriteRenderer::Draw()
 
     const auto pos = m_OwnerActor->GetTransform().GetPosition();
     const auto scale = m_OwnerActor->GetTransform().GetScale();
-    Renderer2D::DrawQuad(pos, scale, m_Color);
-    
-    //glm::mat4 worldMatrix = m_OwnerActor->GetTransform().GetWorldTransform();
-    
-    // if (m_Sprite)
-    // {
-        // auto scaleMatrix = glm::mat4(1.0f);
-        // scaleMatrix = scale(scaleMatrix, glm::vec3(m_Sprite->GetWidthF(), m_Sprite->GetHeightF(), 1.f));
-        //
-        // const auto actorWorldTransform = m_OwnerActor->GetTransform().GetWorldTransform();
-        // worldMatrix = actorWorldTransform * scaleMatrix;
-        //Renderer2D::DrawQuad(worldMatrix, m_Color, m_Sprite->GetTexture());
-    // }
-    // else
-    // {
-        //Renderer2D::DrawQuad(worldMatrix, m_Color);
-    //}
+
+    if(const auto texture = m_Sprite->GetTexture())
+        Renderer2D::DrawQuad(pos, scale, m_Color, texture);
+    else
+        Renderer2D::DrawQuad(pos, scale, m_Color);
 }
 
 void SpriteRenderer::SetSprite(const CC_AssetRef<Sprite>& newSprite)

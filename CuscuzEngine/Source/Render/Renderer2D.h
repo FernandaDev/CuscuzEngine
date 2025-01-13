@@ -16,5 +16,8 @@ public:
     
     static void DrawQuad(const glm::vec2& position, const glm::vec2& scale, const glm::vec4& color);
     static void DrawQuad(const glm::vec3& position, const glm::vec2& scale, const glm::vec4& color);
-    static void DrawQuad(const glm::mat4& worldTransform, const glm::vec4& color, const CC_AssetRef<Texture2D>& texture = nullptr);
+    static void DrawQuad(const glm::vec2& position, const glm::vec2& scale, const glm::vec4& color,
+        const CC_AssetRef<Texture2D>& texture, const glm::vec2& tilingOffset = glm::vec2(1.0f));
+    static void DrawQuad(const glm::vec3& position, const glm::vec2& scale, const glm::vec4& color,
+        const CC_AssetRef<Texture2D>& texture, const glm::vec2& tilingOffset = glm::vec2(1.0f));
 };
