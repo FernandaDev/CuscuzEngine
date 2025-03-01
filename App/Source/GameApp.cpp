@@ -1,8 +1,7 @@
-﻿#include <Core/EntryPoint.h>
-
+﻿#include <Cuscuz/Core/EntryPoint.h>
 #include "GameLayer.h"
 
-class GameApp : public CC_Engine
+class GameApp : public Cuscuz::Engine
 {
 public:
     GameApp()
@@ -14,4 +13,4 @@ public:
 };
 
 
-CC_Engine* CreateApplication() { return new GameApp(); }
+Cuscuz::Engine* Cuscuz::CreateApplication() { return new GameApp(); }

@@ -2,21 +2,21 @@
 
 #include <memory>
 
-#include "Core/CC_Core.h"
-#include "Layers/Layer.h"
-#include "Render/Sprite.h"
-#include "World/World.h"
+#include "Cuscuz/Core/Core.h"
+#include "Cuscuz/Layers/Layer.h"
+#include "Cuscuz/Render/Sprite.h"
+#include "Cuscuz/World/World.h"
 
 class Actor;
 class CC_Game;
 class CC_KeyDownEvent;
 
-class GameLayer : public Layer
+class GameLayer : public Cuscuz::Layer
 {
     bool m_ShowWorldWindow = true;
-    World* m_World = nullptr;
+    Cuscuz::World* m_World = nullptr;
     
-    CC_AssetRef<Sprite> m_ActorSprite {};
+    Cuscuz::CC_AssetRef<Cuscuz::Sprite> m_ActorSprite {};
     Actor* m_MainActor {};
 
 public:
@@ -27,5 +27,5 @@ public:
     void OnDetach() override;
     void OnUpdate(float deltaTime) override;
     void OnImGuiRender() override;
-    void OnEvent(CC_Event& event) override;
+    void OnEvent(Cuscuz::CC_Event& event) override;
 };

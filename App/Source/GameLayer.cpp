@@ -1,23 +1,24 @@
 ﻿#include "pch.h"
 #include "GameLayer.h"
 
-#include "Components/CircleDetectionComponent.h"
-#include "Components/Simple2DMovementComponent.h"
-#include "Components/SpriteRenderer.h"
-#include "Core/CC_Engine.h"
-#include "Core/Input.h"
-#include "Core/KeyCodes.h"
-#include "Render/Texture.h"
-#include "World/Actor.h"
-#include "Utils/Random.h"
+#include "Cuscuz/Components/CircleDetectionComponent.h"
+#include "Cuscuz/Components/Simple2DMovementComponent.h"
+#include "Cuscuz/Components/SpriteRenderer.h"
+#include "Cuscuz/Core/Engine.h"
+#include "Cuscuz/Core/Input.h"
+#include "Cuscuz/Core/KeyCodes.h"
+#include "Cuscuz/Render/Texture.h"
+#include "Cuscuz/World/Actor.h"
+#include "Cuscuz/Utils/Random.h"
 
-static void DrawGrid(const glm::ivec2& gridSize, World* world)
+
+static void DrawGrid(const glm::ivec2& gridSize, Cuscuz::World* world)
 {
-    CC_AssetRef<Texture2D> floors[3];
+    Cuscuz::CC_AssetRef<Cuscuz::Texture2D> floors[3];
     
-    floors[0] = Texture2D::Create("Assets/Images/Floor1.png");
-    floors[1] = Texture2D::Create("Assets/Images/Floor2.png");
-    floors[2] = Texture2D::Create("Assets/Images/Floor3.png");
+    floors[0] = Cuscuz::Texture2D::Create("Assets/Images/Floor1.png");
+    floors[1] = Cuscuz::Texture2D::Create("Assets/Images/Floor2.png");
+    floors[2] = Cuscuz::Texture2D::Create("Assets/Images/Floor3.png");
 
     Random& random = Random::Get();
     float halfGridX = gridSize.x * 0.5f;
@@ -29,8 +30,8 @@ static void DrawGrid(const glm::ivec2& gridSize, World* world)
         {
             auto pos = glm::vec3(x - halfGridX , y - halfGridY, 0.f);
             const auto actor = &world->CreateActor(std::format("tile_{}_{}", x, y), pos, 1.f);
-            auto& sr = actor->AddComponent<SpriteRenderer>();
-            auto sprite = std::make_shared<Sprite>();
+            auto& sr = actor->AddComponent<Cuscuz::SpriteRenderer>();
+            auto sprite = std::make_shared<Cuscuz::Sprite>();
 
             auto randomIndex = random.GetRandomNumber(0, 2);
             
@@ -41,9 +42,9 @@ static void DrawGrid(const glm::ivec2& gridSize, World* world)
     }
 }
 
-GameLayer::GameLayer() : m_ActorSprite(std::make_shared<Sprite>())
+GameLayer::GameLayer() : m_ActorSprite(std::make_shared<Cuscuz::Sprite>())
 {
-    m_World = CC_Engine::Get().CC_World.get();
+    m_World = Cuscuz::Engine::Get().CC_World.get();
 }
 
 void GameLayer::OnAttach()
@@ -59,7 +60,7 @@ void GameLayer::OnAttach()
     //
     // actorSprite.SetSprite(m_ActorSprite);
 
-    DrawGrid({150, 150}, m_World);
+    DrawGrid({10, 10}, m_World);
 }
 
 void GameLayer::OnDetach()
@@ -87,7 +88,7 @@ void GameLayer::OnUpdate(float deltaTime)
     // m_MainActor->GetTransform().SetPosition(pos);
 }
 
-void GameLayer::OnEvent(CC_Event& event)
+void GameLayer::OnEvent(Cuscuz::CC_Event& event)
 {
 }
 

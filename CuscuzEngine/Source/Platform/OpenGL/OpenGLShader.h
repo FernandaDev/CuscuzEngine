@@ -1,9 +1,9 @@
 ﻿#pragma once
 
 #include <string>
-#include "Render/Shader.h"
+#include "Cuscuz/Render/Shader.h"
 
-class OpenGLShader : public Shader
+class OpenGLShader : public Cuscuz::Shader
 {
     uint32_t m_VertexShader;
     uint32_t m_FragmentShader;

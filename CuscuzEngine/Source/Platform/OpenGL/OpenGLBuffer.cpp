@@ -1,6 +1,6 @@
 ﻿#include "pch.h"
-#include "OpenGLBuffer.h"
 
+#include "OpenGLBuffer.h"
 #include "GL/glew.h"
 
 /////////////// VERTEX BUFFER ///////////////

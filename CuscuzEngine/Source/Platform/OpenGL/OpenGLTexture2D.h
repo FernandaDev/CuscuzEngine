@@ -1,9 +1,9 @@
 ﻿#pragma once
 
 #include <string>
-#include "Render/Texture.h"
+#include "Cuscuz/Render/Texture.h"
 
-class OpenGLTexture2D : public Texture2D
+class OpenGLTexture2D : public Cuscuz::Texture2D
 {
     uint32_t m_RendererID;
     int32_t m_Width, m_Height;
