@@ -20,7 +20,7 @@ namespace Cuscuz
 
     public:
         SpriteRenderer(int drawOrder = 0);
-        ~SpriteRenderer() override = default;
+        ~SpriteRenderer() override;
 
         void Draw() override;
         void SetSprite(const CC_AssetRef<Sprite>& newSprite);
@@ -34,7 +34,7 @@ namespace Cuscuz
         int GetTextWidth() const;
 
         REGISTER_COMPONENT(SpriteRenderer);
-        void ImGuiDisplayComponent() override;        
+        //void ImGuiDisplayComponent() override;        
     protected:
         float GetRotationDegrees() const;
     };

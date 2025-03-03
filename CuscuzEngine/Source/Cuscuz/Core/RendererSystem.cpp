@@ -68,7 +68,7 @@ namespace Cuscuz
         Renderer2D::EndScene();
     }
 
-    void RendererSystem::OnEvent(CC_Event& event)
+    void RendererSystem::OnEvent(CuscuzEvent& event)
     {
         m_Camera->OnEvent(event);
     }

@@ -20,7 +20,7 @@ namespace Cuscuz
         ~RendererSystem();
 
         void OnUpdate(float deltaTime);
-        void OnEvent(CC_Event& event);
+        void OnEvent(CuscuzEvent& event);
 
         void AddRenderComponent(const std::shared_ptr<IRender>& renderComponent);
         void RemoveRenderComponent(const std::shared_ptr<IRender>& renderComponent);

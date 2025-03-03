@@ -1,6 +1,6 @@
 ﻿#pragma once
 
-#include "Cuscuz/Events/CC_Event.h"
+#include "Cuscuz/Events/CuscuzEvent.h"
 #include "Cuscuz/Events/KeyEvents.h"
 #include "Cuscuz/Layers/Layer.h"
 
@@ -21,7 +21,7 @@ namespace Cuscuz
         void OnAttach() override;
         void OnDetach() override;
         void OnImGuiRender() override;
-        void OnEvent(CC_Event& event) override;
+        void OnEvent(CuscuzEvent& event) override;
 
         void Begin();
         void End();

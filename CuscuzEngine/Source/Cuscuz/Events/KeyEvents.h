@@ -1,10 +1,10 @@
 ﻿#pragma once
 
-#include "CC_Event.h"
+#include "CuscuzEvent.h"
 
 namespace Cuscuz
 {
-    class CC_KeyDownEvent : public CC_Event
+    class CC_KeyDownEvent : public CuscuzEvent
     {
         int m_KeyCode;
     
@@ -14,8 +14,8 @@ namespace Cuscuz
     
         int GetKeyCode() const { return m_KeyCode; }
 
-        static CC_EventType GetStaticType() { return CC_EventType::KeyDown; }
-        CC_EventType GetEventType() const override { return GetStaticType(); }
+        static CuscuzEventType GetStaticType() { return CuscuzEventType::KeyDown; }
+        CuscuzEventType GetEventType() const override { return GetStaticType(); }
         const char* GetName() const override { return "KeyDown"; }
 
         int GetCategoryFlags() const override
@@ -29,7 +29,7 @@ namespace Cuscuz
         }
     };
 
-    class CC_KeyUpEvent : public CC_Event
+    class CC_KeyUpEvent : public CuscuzEvent
     {
         int m_KeyCode;
     
@@ -39,8 +39,8 @@ namespace Cuscuz
     
         int GetKeyCode() const { return m_KeyCode; }
 
-        static CC_EventType GetStaticType() { return CC_EventType::KeyUp; }
-        CC_EventType GetEventType() const override { return GetStaticType(); }
+        static CuscuzEventType GetStaticType() { return CuscuzEventType::KeyUp; }
+        CuscuzEventType GetEventType() const override { return GetStaticType(); }
         const char* GetName() const override { return "KeyUp"; }
 
         int GetCategoryFlags() const override

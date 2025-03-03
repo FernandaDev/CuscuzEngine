@@ -2,14 +2,14 @@
 
 #include <vector>
 #include <functional>
-#include "CC_Event.h"
+#include "CuscuzEvent.h"
 
 namespace Cuscuz
 {
     template <typename EventType> //TODO Review this
-    class CC_EventDispatcher
+    class EventDispatcher
     {
-        using EventFunc = std::function<void(CC_Event&)>;
+        using EventFunc = std::function<void(CuscuzEvent&)>;
         std::unordered_map<EventType, std::vector<EventFunc>> m_Listeners;
 
     public:
@@ -34,7 +34,7 @@ namespace Cuscuz
             }
         }
 
-        void SendEvent(const CC_Event& event)
+        void SendEvent(const CuscuzEvent& event)
         {
             if (m_Listeners.find(event.GetEventType()) == m_Listeners.end())
                 return;
@@ -47,14 +47,14 @@ namespace Cuscuz
         }
     };
 
-    class CC_EventSingleDispatcher
+    class EventSingleDispatcher
     {
         template<typename T>
         using EventFunction = std::function<bool(T&)>;
-        CC_Event& m_Event;
+        CuscuzEvent& m_Event;
     
     public:
-        CC_EventSingleDispatcher(CC_Event& event)
+        EventSingleDispatcher(CuscuzEvent& event)
         : m_Event(event){}
     
         template<typename T>

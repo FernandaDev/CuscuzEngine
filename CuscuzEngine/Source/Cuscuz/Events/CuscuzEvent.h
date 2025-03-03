@@ -6,7 +6,7 @@
 
 namespace Cuscuz
 {
-    enum class CC_EventType
+    enum class CuscuzEventType
     {
         None = 0,
         WindowClose,
@@ -33,16 +33,16 @@ namespace Cuscuz
         EventCategoryMouseButton = BIT(4),
     };
 
-    class CC_Event
+    class CuscuzEvent
     {
-        friend class CC_EventSingleDispatcher;
+        friend class EventSingleDispatcher;
 
     protected:
-        virtual ~CC_Event() = default;
+        virtual ~CuscuzEvent() = default;
         bool m_Handled = false;
 
     public:
-        virtual CC_EventType GetEventType() const = 0;
+        virtual CuscuzEventType GetEventType() const = 0;
         virtual const char* GetName() const = 0;
         virtual int GetCategoryFlags() const = 0;
         virtual std::string ToString() const { return GetName(); }
@@ -55,7 +55,7 @@ namespace Cuscuz
         bool Handled() const { return m_Handled; }
     };
 
-    inline std::ostream& operator<<(std::ostream& os, const CC_Event& e)
+    inline std::ostream& operator<<(std::ostream& os, const CuscuzEvent& e)
     {
         return os << e.ToString();
     }

@@ -108,16 +108,16 @@ namespace Cuscuz
             return x * x + y * y;
         }
 
-        static void PrintMatrix(const glm::mat4& matrix)
-        {
-            for (int row = 0; row < 4; ++row)
-            {
-                for (int col = 0; col < 4; ++col)
-                {
-                    std::cout << matrix[row][col] << " ";
-                }
-                std::cout << std::endl;
-            }
-        }
+        // static void PrintMatrix(const glm::mat4& matrix)
+        // {
+        //     for (int row = 0; row < 4; ++row)
+        //     {
+        //         for (int col = 0; col < 4; ++col)
+        //         {
+        //             std::cout << matrix[row][col] << " ";
+        //         }
+        //         std::cout << std::endl;
+        //     }
+        // }
     }
 }

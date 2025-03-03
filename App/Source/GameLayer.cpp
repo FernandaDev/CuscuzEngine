@@ -1,16 +1,4 @@
-﻿#include "pch.h"
-#include "GameLayer.h"
-
-#include "Cuscuz/Components/CircleDetectionComponent.h"
-#include "Cuscuz/Components/Simple2DMovementComponent.h"
-#include "Cuscuz/Components/SpriteRenderer.h"
-#include "Cuscuz/Core/Engine.h"
-#include "Cuscuz/Core/Input.h"
-#include "Cuscuz/Core/KeyCodes.h"
-#include "Cuscuz/Render/Texture.h"
-#include "Cuscuz/World/Actor.h"
-#include "Cuscuz/Utils/Random.h"
-
+﻿#include "GameLayer.h"
 
 static void DrawGrid(const glm::ivec2& gridSize, Cuscuz::World* world)
 {
@@ -42,10 +30,9 @@ static void DrawGrid(const glm::ivec2& gridSize, Cuscuz::World* world)
     }
 }
 
-GameLayer::GameLayer() : m_ActorSprite(std::make_shared<Cuscuz::Sprite>())
-{
-    m_World = Cuscuz::Engine::Get().CC_World.get();
-}
+GameLayer::GameLayer() : m_World(std::make_unique<Cuscuz::World>()),
+    m_ActorSprite(std::make_shared<Cuscuz::Sprite>())
+{}
 
 void GameLayer::OnAttach()
 {
@@ -88,7 +75,7 @@ void GameLayer::OnUpdate(float deltaTime)
     // m_MainActor->GetTransform().SetPosition(pos);
 }
 
-void GameLayer::OnEvent(Cuscuz::CC_Event& event)
+void GameLayer::OnEvent(Cuscuz::CuscuzEvent& event)
 {
 }
 

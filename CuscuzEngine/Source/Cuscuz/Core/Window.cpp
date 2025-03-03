@@ -1,7 +1,11 @@
 #include "pch.h"
 #include "Window.h"
 
-#include "Cuscuz/Events/CC_EventDispatcher.h"
+#include "EventSystem.h"
+#include "PhysicsSystem.h"
+#include "RendererSystem.h"
+#include "Time.h"
+#include "Cuscuz/Events/EventDispatcher.h"
 #include "Cuscuz/Events/WindowEvents.h"
 #include "Platform/OpenGL/OpenGLContext.h"
 #include "Cuscuz/Render/Renderer.h"
@@ -38,16 +42,26 @@ namespace Cuscuz
         m_Context->Init();
     }
 
-    void Window::OnEvent(CC_Event& event)
+    void Window::OnEvent(CuscuzEvent& event)
     {
-        CC_EventSingleDispatcher eventDispatcher(event);
+        EventSingleDispatcher eventDispatcher(event);
         eventDispatcher.Dispatch<CC_WindowResizeEvent>(BIND_FUNCTION(this, Window::OnWindowResized));
         eventDispatcher.Dispatch<CC_WindowMinimizedEvent>(BIND_FUNCTION(this, Window::OnWindowMinimized));
         eventDispatcher.Dispatch<CC_WindowRestoredFocusEvent>(BIND_FUNCTION(this, Window::OnWindowRestoredFocus));
+
+        CC_RendererSystem->OnEvent(event);
     }
 
-    void Window::Render()
+    void Window::SetEventCallback(const EventCallbackFn& callback)
     {
+        CC_EventSystem->SetEventCallback(callback);
+    }
+
+    void Window::Update()
+    {
+        CC_PhysicsSystem->OnUpdate();
+        CC_RendererSystem->OnUpdate(Time::Get().DeltaTime());
+        
         m_Context->Render();
     }
 

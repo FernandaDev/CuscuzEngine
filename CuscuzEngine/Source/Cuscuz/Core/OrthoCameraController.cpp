@@ -4,7 +4,7 @@
 #include "imgui.h"
 #include "KeyCodes.h"
 #include "Cuscuz/core/Input.h"
-#include "Cuscuz/Events/CC_EventDispatcher.h"
+#include "Cuscuz/Events/EventDispatcher.h"
 #include "Cuscuz/Utils/Math.h"
 
 namespace Cuscuz
@@ -41,9 +41,9 @@ namespace Cuscuz
         m_Camera.SetRotation(m_Rotation);
     }
 
-    void OrthoCameraController::OnEvent(CC_Event& event)
+    void OrthoCameraController::OnEvent(CuscuzEvent& event)
     {
-        CC_EventSingleDispatcher dispatcher(event);
+        EventSingleDispatcher dispatcher(event);
         dispatcher.Dispatch<CC_MouseScrolledEvent>(BIND_FUNCTION(this, OrthoCameraController::OnMouseScrolled));
         dispatcher.Dispatch<CC_WindowResizeEvent>(BIND_FUNCTION(this, OrthoCameraController::OnWindowResized));
     }

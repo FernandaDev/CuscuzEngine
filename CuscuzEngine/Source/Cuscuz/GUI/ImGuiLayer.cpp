@@ -52,11 +52,11 @@ namespace Cuscuz
         Layer::OnDetach();
     }
 
-    void ImGuiLayer::OnEvent(CC_Event& event)
+    void ImGuiLayer::OnEvent(CuscuzEvent& event)
     {
         Layer::OnEvent(event);
     
-        CC_EventSingleDispatcher eventDispatcher(event);
+        EventSingleDispatcher eventDispatcher(event);
         eventDispatcher.Dispatch<CC_SDLEvent>(BIND_FUNCTION(this, ImGuiLayer::OnSDLEvent));
         eventDispatcher.Dispatch<CC_KeyDownEvent>(BIND_FUNCTION(this, ImGuiLayer::OnKeyDown));
     }

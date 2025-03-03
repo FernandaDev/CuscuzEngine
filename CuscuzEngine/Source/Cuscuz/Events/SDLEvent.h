@@ -1,11 +1,11 @@
 ﻿#pragma once
 
 #include <SDL_events.h>
-#include "CC_Event.h"
+#include "CuscuzEvent.h"
 
 namespace Cuscuz
 {
-    class CC_SDLEvent : public CC_Event
+    class CC_SDLEvent : public CuscuzEvent
     {
         SDL_Event m_SDLEvent;
 
@@ -15,8 +15,8 @@ namespace Cuscuz
 
         const SDL_Event& GetSDLEvent() const { return m_SDLEvent; }
 
-        static CC_EventType GetStaticType() { return CC_EventType::SDLEvent; }
-        CC_EventType GetEventType() const override { return GetStaticType(); }
+        static CuscuzEventType GetStaticType() { return CuscuzEventType::SDLEvent; }
+        CuscuzEventType GetEventType() const override { return GetStaticType(); }
         const char* GetName() const override { return "SDLEvent"; }
 
         int GetCategoryFlags() const override

@@ -1,10 +1,10 @@
 ﻿#pragma once
 
-#include "CC_Event.h"
+#include "CuscuzEvent.h"
 
 namespace Cuscuz
 {
-    class CC_MouseMovedEvent : public CC_Event
+    class CC_MouseMovedEvent : public CuscuzEvent
     {
         int m_X, m_Y;
     
@@ -15,8 +15,8 @@ namespace Cuscuz
         int GetX() const { return m_X; }
         int GetY() const { return m_Y; }
 
-        static CC_EventType GetStaticType() { return CC_EventType::MouseMoved; }
-        CC_EventType GetEventType() const override { return GetStaticType(); }
+        static CuscuzEventType GetStaticType() { return CuscuzEventType::MouseMoved; }
+        CuscuzEventType GetEventType() const override { return GetStaticType(); }
         const char* GetName() const override { return "MouseMoved"; }
 
         int GetCategoryFlags() const override
@@ -30,7 +30,7 @@ namespace Cuscuz
         }
     };
 
-    class CC_MouseButtonDownEvent : public CC_Event
+    class CC_MouseButtonDownEvent : public CuscuzEvent
     {
         int m_Button;
     
@@ -40,8 +40,8 @@ namespace Cuscuz
     
         int GetButton() const { return m_Button; }
 
-        static CC_EventType GetStaticType() { return CC_EventType::MouseButtonDown; }
-        CC_EventType GetEventType() const override { return GetStaticType(); }
+        static CuscuzEventType GetStaticType() { return CuscuzEventType::MouseButtonDown; }
+        CuscuzEventType GetEventType() const override { return GetStaticType(); }
         const char* GetName() const override { return "MouseButtonDown"; }
 
         int GetCategoryFlags() const override
@@ -55,7 +55,7 @@ namespace Cuscuz
         }
     };
 
-    class CC_MouseButtonUpEvent : public CC_Event
+    class CC_MouseButtonUpEvent : public CuscuzEvent
     {
         int m_Button;
     
@@ -65,8 +65,8 @@ namespace Cuscuz
     
         int GetButton() const { return m_Button; }
 
-        static CC_EventType GetStaticType() { return CC_EventType::MouseButtonUp; }
-        CC_EventType GetEventType() const override { return GetStaticType(); }
+        static CuscuzEventType GetStaticType() { return CuscuzEventType::MouseButtonUp; }
+        CuscuzEventType GetEventType() const override { return GetStaticType(); }
         const char* GetName() const override { return "MouseButtonUp"; }
 
         int GetCategoryFlags() const override
@@ -80,7 +80,7 @@ namespace Cuscuz
         }
     };
 
-    class CC_MouseScrolledEvent : public CC_Event
+    class CC_MouseScrolledEvent : public CuscuzEvent
     {
         float m_X, m_Y;
     
@@ -91,8 +91,8 @@ namespace Cuscuz
         float GetX() const { return m_X; }
         float GetY() const { return m_Y; }
 
-        static CC_EventType GetStaticType() { return CC_EventType::MouseScrolled; }
-        CC_EventType GetEventType() const override { return GetStaticType(); }
+        static CuscuzEventType GetStaticType() { return CuscuzEventType::MouseScrolled; }
+        CuscuzEventType GetEventType() const override { return GetStaticType(); }
         const char* GetName() const override { return "MouseScrolled"; }
 
         int GetCategoryFlags() const override

@@ -45,6 +45,8 @@ namespace Cuscuz
         TransformComponent& GetTransform() const { return *m_Transform; }
         const std::vector<std::shared_ptr<Component>>& GetComponents() const { return m_Components; }
 
+        OnComponentAdded OnComponentAddedDelegate() { return m_OnComponentAddedDelegate; }
+
     protected:
         void UpdateComponents(float deltaTime) const;
 
@@ -55,10 +57,10 @@ namespace Cuscuz
         void OnComponentAdded();
 
     private:
-        void TryAddRenderComponent(std::shared_ptr<Component> component);
-        void TryAddPhysicsComponent(std::shared_ptr<Component> component);
-        void TryRemoveRenderComponent();
-        void TryRemovePhysicsComponent();
+        // void TryAddRenderComponent(std::shared_ptr<Component> component);
+        // void TryAddPhysicsComponent(std::shared_ptr<Component> component);
+        // void TryRemoveRenderComponent();
+        // void TryRemovePhysicsComponent();
         void UpdateTransform(float deltaTime) const;
 
         ///////////////TEMPLATES//////////////////

@@ -1,12 +1,17 @@
 #pragma once
 
 #include "SDL.h"
-#include "Cuscuz/Events/CC_Event.h"
+#include "Cuscuz/Events/CuscuzEvent.h"
 
 namespace Cuscuz
 {
+	class PhysicsSystem;
+	class EventSystem;
+	class RendererSystem;
 	class GraphicsContext;
 	
+	using EventCallbackFn = std::function<void(CuscuzEvent&)>;
+
 	class Window
 	{
 		int m_Width;
@@ -16,15 +21,21 @@ namespace Cuscuz
 	
 		SDL_Window* m_Window{nullptr};
 		std::unique_ptr<GraphicsContext> m_Context{};
-	
+		std::unique_ptr<EventSystem> CC_EventSystem;
+	public:
+		std::unique_ptr<RendererSystem> CC_RendererSystem;
+		std::unique_ptr<PhysicsSystem> CC_PhysicsSystem;
+
 	public:
 		Window() = delete;
 		Window(int width, int height);
 		~Window();
 
 		void Init(const char* name);
-		void OnEvent(CC_Event& event);
-		void Render();
+		void Update();
+		
+		void OnEvent(CuscuzEvent& event);
+		void SetEventCallback(const EventCallbackFn& callback);
 
 		int GetWidth() const { return m_Width; }
 		int GetHeight() const { return m_Height; }

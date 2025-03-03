@@ -7,7 +7,7 @@ namespace Cuscuz
     class EventSystem
     {
     public:
-        using EventCallbackFn = std::function<void(CC_Event&)>;
+        using EventCallbackFn = std::function<void(CuscuzEvent&)>;
 
     private:
         EventCallbackFn m_EventCallbackFn;

@@ -2,19 +2,15 @@
 #include "Actor.h"
 
 #include "World.h"
-#include "Cuscuz/Core/Engine.h"
 #include "Cuscuz/Components/SpriteRenderer.h"
-#include "Cuscuz/Core/PhysicsSystem.h"
 #include "Cuscuz/Core/RendererSystem.h"
-#include "Cuscuz/Physics/IPhysics.h"
 
 namespace Cuscuz
 {
     Actor::Actor(World* world, std::string&& name, const glm::vec3& position, float scale, float rotation) :
         m_Name(std::move(name)), m_State(Active), m_World(world),
         m_Transform(std::make_unique<TransformComponent>(position, scale, rotation))
-    {
-    }
+    {}
 
     Actor::~Actor()
     {
@@ -27,8 +23,7 @@ namespace Cuscuz
     {
         m_State = Dead;
 
-        TryRemoveRenderComponent();
-        TryRemovePhysicsComponent();
+        //TODO remove the components from the systems!
     }
 
     void Actor::Update(float deltaTime)
@@ -64,37 +59,13 @@ namespace Cuscuz
 
         m_OnComponentAddedDelegate.Broadcast(latestComponent);
 
-        if (const auto renderComponent = std::dynamic_pointer_cast<IRender>(latestComponent))
-        {
-            Engine::Get().CC_RendererSystem->AddRenderComponent(renderComponent);
-        }
-        else if (const auto physicsComponent = std::dynamic_pointer_cast<IOnOverlap>(latestComponent))
-        {
-            Engine::Get().CC_PhysicsSystem->AddDetectionComponent(physicsComponent);
-        }
-    }
-
-    void Actor::TryRemoveRenderComponent()
-    {
-        for (const auto& component : m_Components)
-        {
-            const auto renderComponent = std::dynamic_pointer_cast<IRender>(component);
-            if (!renderComponent)
-                continue;
-
-            Engine::Get().CC_RendererSystem->RemoveRenderComponent(renderComponent);
-        }
-    }
-
-    void Actor::TryRemovePhysicsComponent()
-    {
-        for (const auto& component : m_Components)
-        {
-            const auto detectionComponent = std::dynamic_pointer_cast<IOnOverlap>(component);
-            if (!detectionComponent)
-                continue;
-
-            Engine::Get().CC_PhysicsSystem->RemoveDetectionComponent(detectionComponent);
-        }
+        // if (const auto renderComponent = std::dynamic_pointer_cast<IRender>(latestComponent))
+        // {
+        //     Engine::Get().CC_RendererSystem->AddRenderComponent(renderComponent);
+        // }
+        // else if (const auto physicsComponent = std::dynamic_pointer_cast<IOnOverlap>(latestComponent))
+        // {
+        //     Engine::Get().CC_PhysicsSystem->AddDetectionComponent(physicsComponent);
+        // }
     }
 }

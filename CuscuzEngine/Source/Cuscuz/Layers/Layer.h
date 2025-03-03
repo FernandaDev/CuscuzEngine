@@ -4,7 +4,7 @@
 
 namespace Cuscuz
 {
-    class CC_Event;
+    class CuscuzEvent;
     
     class Layer
     {
@@ -20,7 +20,7 @@ namespace Cuscuz
         virtual void OnDetach(){}
         virtual void OnUpdate(float deltaTime){}
         virtual void OnImGuiRender(){}
-        virtual void OnEvent(CC_Event& event){}
+        virtual void OnEvent(CuscuzEvent& event){}
 
         inline const std::string& GetName() const { return m_DebugName; }
     };

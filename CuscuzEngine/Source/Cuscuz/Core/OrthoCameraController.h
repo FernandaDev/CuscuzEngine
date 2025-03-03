@@ -25,7 +25,7 @@ namespace Cuscuz
         OrthoCameraController(float aspectRatio, bool rotate = false);
 
         void OnUpdate(float deltaTime);
-        void OnEvent(CC_Event& event);
+        void OnEvent(CuscuzEvent& event);
         void OnImGuiRender();
 
         const OrthographicCamera& GetCamera() const { return m_Camera; }

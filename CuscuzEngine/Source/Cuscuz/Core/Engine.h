@@ -1,7 +1,7 @@
 #pragma once
 
 #include "Cuscuz/Core/EventSystem.h"
-#include "Cuscuz/Events/CC_Event.h"
+#include "Cuscuz/Events/CuscuzEvent.h"
 #include "Cuscuz/Events/WindowEvents.h"
 #include "Cuscuz/Layers/LayerStack.h"
 
@@ -22,10 +22,6 @@ namespace Cuscuz
 	{
 	public:
 		std::unique_ptr<Window> CC_Window;
-		std::unique_ptr<RendererSystem> CC_RendererSystem;
-		std::unique_ptr<PhysicsSystem> CC_PhysicsSystem;
-		std::unique_ptr<EventSystem> CC_EventSystem;
-		std::unique_ptr<World> CC_World;
 	
 	private:
 		static Engine* s_Instance;
@@ -43,9 +39,7 @@ namespace Cuscuz
 	
 		void Run();
 	
-		virtual void Start();
-
-		void OnEvent(CC_Event& event);
+		void OnEvent(CuscuzEvent& event);
 	
 		void PushLayer(std::shared_ptr<Layer> layer);
 		void PushOverlay(std::shared_ptr<Layer> layer);

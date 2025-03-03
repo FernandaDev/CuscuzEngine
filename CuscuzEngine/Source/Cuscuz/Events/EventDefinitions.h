@@ -1,6 +1,6 @@
 ﻿#pragma once
 
-#include "CC_EventDispatcher.h"
+#include "EventDispatcher.h"
 
 namespace Cuscuz
 {
