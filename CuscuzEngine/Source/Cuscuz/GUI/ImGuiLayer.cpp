@@ -25,8 +25,9 @@ namespace Cuscuz
         ImGui::StyleColorsDark();
     
         ImGuiIO& io = ImGui::GetIO();
-        io.BackendFlags |= ImGuiBackendFlags_HasMouseCursors;
-        io.BackendFlags |= ImGuiBackendFlags_HasSetMousePos;
+        io.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard;
+        io.ConfigFlags |= ImGuiConfigFlags_DockingEnable;
+        io.ConfigFlags |= ImGuiConfigFlags_ViewportsEnable;
 
         GraphicsContext* context = window.GetContext();
         const auto openGlContext = (OpenGLContext*)context;
@@ -79,11 +80,20 @@ namespace Cuscuz
     void ImGuiLayer::End()
     {
         ImGuiIO& io = ImGui::GetIO();
+        const Engine& engine = Engine::Get();
+        io.DisplaySize = ImVec2(engine.CC_Window->GetWidth(), engine.CC_Window->GetHeight());
+
         ImGui::Render();
-    
-        glViewport(0, 0, (int)io.DisplaySize.x, (int)io.DisplaySize.y);
-    
         ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
+
+        if (io.ConfigFlags & ImGuiConfigFlags_ViewportsEnable)
+        {
+            SDL_Window* backup_current_window = SDL_GL_GetCurrentWindow();
+            SDL_GLContext backup_current_context = SDL_GL_GetCurrentContext();
+            ImGui::UpdatePlatformWindows();
+            ImGui::RenderPlatformWindowsDefault();
+            SDL_GL_MakeCurrent(backup_current_window, backup_current_context);
+        }
     }
 
 

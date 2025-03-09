@@ -60,8 +60,8 @@ void EditorLayer::MoveActor(float deltaTime)
 
 void EditorLayer::OnImGuiRender()
 {
-    // if (m_ShowWorldWindow)
-    //     ShowWorldWindow();
+    if (m_ShowWorldWindow)
+        ShowWorldWindow();
 
     if (m_ShowTimeStatsOverlay)
         ImGuiHelper::ShowTimeOverlay(m_ShowTimeStatsOverlay);
