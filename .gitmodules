@@ -1,9 +1,6 @@
 [submodule "Vendor/Log"]
 	path = Vendor/Log
 	url = https://github.com/gabime/spdlog.git
-[submodule "CuscuzEngine/Vendor/ImGui"]
-	path = CuscuzEngine/Vendor/ImGui
-	url = https://github.com/TheCherno/imgui.git
 [submodule "CuscuzEngine/Vendor/yaml"]
 	path = CuscuzEngine/Vendor/yaml
 	url = https://github.com/TheCherno/yaml-cpp.git
