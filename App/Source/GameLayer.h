@@ -1,27 +1,17 @@
 ﻿#pragma once
 
 #include <memory>
+#include "Cuscuz.h"
 
-#include "Core/CC_Core.h"
-#include "Layers/Layer.h"
-#include "Platform/OpenGL/OpenGLTexture2D.h"
-#include "Render/Sprite.h"
-#include "World/World.h"
-
-class Actor;
 class CC_Game;
 class CC_KeyDownEvent;
 
-class GameLayer : public Layer
+class GameLayer : public Cuscuz::Layer
 {
     bool m_ShowWorldWindow = true;
-    World* m_World = nullptr;
-    
-    CC_AssetRef<Sprite> m_ActorSprite {};
-    Actor* m_MainActor {};
-
-    CC_AssetRef<Sprite> m_EnemySprite {};
-    Actor* m_EnemyActor {};
+    std::unique_ptr<Cuscuz::World> m_World {};
+    Cuscuz::CC_AssetRef<Cuscuz::Sprite> m_ActorSprite {};
+    Cuscuz::Actor* m_MainActor {};
 
 public:
     GameLayer();
@@ -31,9 +21,5 @@ public:
     void OnDetach() override;
     void OnUpdate(float deltaTime) override;
     void OnImGuiRender() override;
-    void OnEvent(CC_Event& event) override;
-
-private:
-    // ImGUI
-    
+    void OnEvent(Cuscuz::CuscuzEvent& event) override;
 };

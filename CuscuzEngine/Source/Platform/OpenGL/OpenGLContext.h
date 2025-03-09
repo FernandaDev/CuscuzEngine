@@ -1,9 +1,9 @@
 ﻿#pragma once
+
 #include <SDL_video.h>
+#include "Cuscuz/Render/GraphicsContext.h"
 
-#include "Render/GraphicsContext.h"
-
-class OpenGLContext : public GraphicsContext
+class OpenGLContext : public Cuscuz::GraphicsContext
 {
     SDL_Window* m_Window{};
     SDL_GLContext m_Context {};

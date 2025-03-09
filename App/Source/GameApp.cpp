@@ -1,17 +1,18 @@
-﻿#include <Core/EntryPoint.h>
+﻿#include <Cuscuz/Core/EntryPoint.h>
 
 #include "GameLayer.h"
+#include "Editor/EditorLayer.h"
 
-class GameApp : public CC_Engine
+class GameApp : public Cuscuz::Engine
 {
 public:
     GameApp()
     {
-        PushLayer(std::make_shared<GameLayer>());
+        PushLayer(std::make_shared<EditorLayer>());
     }
 
     ~GameApp() override = default;
 };
 
 
-CC_Engine* CreateApplication() { return new GameApp(); }
+Cuscuz::Engine* Cuscuz::CreateApplication() { return new GameApp(); }

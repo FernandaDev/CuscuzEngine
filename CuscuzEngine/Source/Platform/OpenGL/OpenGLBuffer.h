@@ -1,23 +1,26 @@
 ﻿#pragma once
-#include "Render/Buffer.h"
+#include "Cuscuz/Render/Buffer.h"
 
-class OpenGLVertexBuffer : public VertexBuffer
+class OpenGLVertexBuffer : public Cuscuz::VertexBuffer
 {
-    uint32_t m_RendererID;
-    BufferLayout m_Layout;
+    uint32_t m_RendererID = 0;
+    Cuscuz::BufferLayout m_Layout = {};
     
 public:
+    OpenGLVertexBuffer(uint32_t size);
     OpenGLVertexBuffer(const void* data, uint32_t size);
     ~OpenGLVertexBuffer() override;
 
     void Bind() const override;
     void Unbind() const override;
     
-    const BufferLayout& GetLayout() const override { return m_Layout;}
-    void SetLayout(const BufferLayout& layout) override { m_Layout = layout; }
+    void SetData(const void* data, uint32_t size) override;
+
+    const Cuscuz::BufferLayout& GetLayout() const override { return m_Layout;}
+    void SetLayout(const Cuscuz::BufferLayout& layout) override { m_Layout = layout; }
 };
 
-class OpenGLIndexBuffer : public IndexBuffer
+class OpenGLIndexBuffer : public Cuscuz::IndexBuffer
 {
     uint32_t m_RendererID;
     uint32_t m_Count;

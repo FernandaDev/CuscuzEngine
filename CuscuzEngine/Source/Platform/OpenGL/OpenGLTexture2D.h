@@ -1,9 +1,9 @@
 ﻿#pragma once
 
 #include <string>
-#include "Render/Texture.h"
+#include "Cuscuz/Render/Texture.h"
 
-class OpenGLTexture2D : public Texture2D
+class OpenGLTexture2D : public Cuscuz::Texture2D
 {
     uint32_t m_RendererID;
     int32_t m_Width, m_Height;
@@ -15,6 +15,11 @@ public:
     OpenGLTexture2D(uint32_t width, uint32_t height);
     OpenGLTexture2D(std::string&& filePath);
     ~OpenGLTexture2D() override;
+
+    bool operator==(const Texture& other) const override
+    {
+        return m_RendererID == other.GetRendererID();
+    }
 
     const std::string& GetName() const { return m_Name; } 
     std::string_view GetPath() const { return m_FilePath; }

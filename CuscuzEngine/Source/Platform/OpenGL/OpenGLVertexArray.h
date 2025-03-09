@@ -1,25 +1,25 @@
 ﻿#pragma once
 
-#include "Render/Buffer.h"
-#include "Render/VertexArray.h"
+#include "Cuscuz/Render/Buffer.h"
+#include "Cuscuz/Render/VertexArray.h"
 
-class OpenGLVertexArray : public VertexArray
+class OpenGLVertexArray : public Cuscuz::VertexArray
 {
     uint32_t m_RendererID;
 
-    std::vector<CC_AssetRef<VertexBuffer>> m_VertexBuffers;
-    CC_AssetRef<IndexBuffer> m_IndexBuffer;
+    std::vector<Cuscuz::CC_AssetRef<Cuscuz::VertexBuffer>> m_VertexBuffers;
+    Cuscuz::CC_AssetRef<Cuscuz::IndexBuffer> m_IndexBuffer;
     
 public:
     OpenGLVertexArray();
     ~OpenGLVertexArray() override;
 
-    void AddBuffer(const CC_AssetRef<VertexBuffer>& vertexBuffer) override;
-    void SetIndexBuffer(const CC_AssetRef<IndexBuffer>& indexBuffer) override;
+    void AddBuffer(const Cuscuz::CC_AssetRef<Cuscuz::VertexBuffer>& vertexBuffer) override;
+    void SetIndexBuffer(const Cuscuz::CC_AssetRef<Cuscuz::IndexBuffer>& indexBuffer) override;
     
     void Bind() const override;
     void Unbind() const override;
 
-    const std::vector<CC_AssetRef<VertexBuffer>>& GetVertexBuffers() const override { return m_VertexBuffers; };
-    const CC_AssetRef<IndexBuffer>& GetIndexBuffer() const override { return m_IndexBuffer; }
+    const std::vector<Cuscuz::CC_AssetRef<Cuscuz::VertexBuffer>>& GetVertexBuffers() const override { return m_VertexBuffers; };
+    const Cuscuz::CC_AssetRef<Cuscuz::IndexBuffer>& GetIndexBuffer() const override { return m_IndexBuffer; }
 };

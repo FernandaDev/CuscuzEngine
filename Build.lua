@@ -20,9 +20,9 @@ includedir["yaml"] = "%{wks.location}/CuscuzEngine/Vendor/yaml/include/yaml-cpp"
 includedir["glew"] = "%{wks.location}/CuscuzEngine/Vendor/glew/include"
 includedir["stb_image"] = "%{wks.location}/CuscuzEngine/Vendor/stb_image"
 
-include "CuscuzEngine/Vendor/ImGui"
 include "CuscuzEngine/Vendor/yaml"
 include "CuscuzEngine/Vendor/glew"
 
+include "CuscuzEngine/Vendor/Build-ImGui.lua"
 include "CuscuzEngine/Build-CuscuzEngine.lua"
 include "App/Build-App.lua"
