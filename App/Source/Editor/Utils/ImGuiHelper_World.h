@@ -72,8 +72,8 @@ namespace ImGuiHelper
     {
         ImGui::Begin("Camera", &showing);
 
-        Cuscuz::OrthoCameraController& camera = Cuscuz::Engine::Get().CC_RendererSystem->GetCameraController();
-        camera.OnImGuiRender();
+        //Cuscuz::OrthoCameraController& camera = Cuscuz::Engine::Get().CC_RendererSystem->GetCameraController();
+        //camera.OnImGuiRender();
         
         ImGui::End();
     }

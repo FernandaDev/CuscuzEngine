@@ -7,6 +7,8 @@ namespace Cuscuz
 {
     void World::Update(float deltaTime)
     {
+        CC_PROFILE_FUNCTION();
+        
         m_UpdatingActors = true;
         for (const auto& actor : m_ActiveActors)
         {

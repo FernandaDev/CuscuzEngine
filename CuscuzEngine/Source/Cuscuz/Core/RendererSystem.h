@@ -6,13 +6,13 @@
 
 namespace Cuscuz
 {
-    class IRender;
+    class IDrawable;
 
     class RendererSystem
     {
         std::unique_ptr<OrthoCameraController> m_Camera;
 
-        std::vector<std::weak_ptr<IRender>> m_RenderComponents;
+        std::vector<std::weak_ptr<IDrawable>> m_RenderComponents;
         glm::vec4 m_ClearColor = {0.6f, 0.6f, 0.6f, 1.0f};
 
     public:
@@ -22,8 +22,8 @@ namespace Cuscuz
         void OnUpdate(float deltaTime);
         void OnEvent(CuscuzEvent& event);
 
-        void AddRenderComponent(const std::shared_ptr<IRender>& renderComponent);
-        void RemoveRenderComponent(const std::shared_ptr<IRender>& renderComponent);
+        void AddRenderComponent(const std::shared_ptr<IDrawable>& renderComponent);
+        void RemoveRenderComponent(const std::shared_ptr<IDrawable>& renderComponent);
         void DrawObjects();
 
         OrthoCameraController& GetCameraController() const { return *m_Camera; }

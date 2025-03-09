@@ -1,6 +1,5 @@
 ﻿#pragma once
 
-#include "vec2.hpp"
 #include "Cuscuz/Utils/Log.h"
 #include "Component.h"
 #include "Cuscuz/Components/TransformComponent.h"
@@ -11,8 +10,6 @@ namespace Cuscuz
 {
     class IPhysics;
     class World;
-
-    DECLARE_EVENT(OnComponentAdded, const std::shared_ptr<Component>&)
 
     enum ActorState
     {
@@ -27,10 +24,8 @@ namespace Cuscuz
         std::string m_Name;
         ActorState m_State;
         std::vector<std::shared_ptr<Component>> m_Components{};
-        World* m_World;
-        OnComponentAdded m_OnComponentAddedDelegate{};
-
         std::unique_ptr<TransformComponent> m_Transform;
+        World* m_World;
 
     public:
         Actor(World* world, std::string&& name, const glm::vec3& position,
@@ -45,22 +40,11 @@ namespace Cuscuz
         TransformComponent& GetTransform() const { return *m_Transform; }
         const std::vector<std::shared_ptr<Component>>& GetComponents() const { return m_Components; }
 
-        OnComponentAdded OnComponentAddedDelegate() { return m_OnComponentAddedDelegate; }
-
     protected:
         void UpdateComponents(float deltaTime) const;
-
-        virtual void UpdateActor(float deltaTime)
-        {
-        }
-
-        void OnComponentAdded();
+        virtual void UpdateActor(float deltaTime) {}
 
     private:
-        // void TryAddRenderComponent(std::shared_ptr<Component> component);
-        // void TryAddPhysicsComponent(std::shared_ptr<Component> component);
-        // void TryRemoveRenderComponent();
-        // void TryRemovePhysicsComponent();
         void UpdateTransform(float deltaTime) const;
 
         ///////////////TEMPLATES//////////////////
@@ -72,7 +56,7 @@ namespace Cuscuz
 
             auto& newComponent = m_Components.emplace_back(std::make_shared<T>(std::forward<Args>(args)...));
             newComponent->SetOwner(this);
-            OnComponentAdded();
+            newComponent->OnAdded();
             LOG_INFO("{0} was added to {1}.", T::GetStaticComponentType(), m_Name);
             return *std::static_pointer_cast<T>(newComponent);
         }
@@ -81,8 +65,8 @@ namespace Cuscuz
         {
             const auto& newComponent = m_Components.emplace_back(component);
             newComponent->SetOwner(this);
+            newComponent->OnAdded();
             LOG_INFO("{0} was added to {1}.", newComponent->GetComponentType(), m_Name);
-            OnComponentAdded();
         }
 
         template <typename T>

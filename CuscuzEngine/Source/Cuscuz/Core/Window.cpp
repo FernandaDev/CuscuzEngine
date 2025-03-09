@@ -14,7 +14,8 @@
 namespace Cuscuz
 {
     Window::Window(int width, int height):
-        m_Width{width}, m_Height{height}, m_VSync(true), m_Minimized(false)
+        m_Width{width}, m_Height{height}, m_VSync(true), m_Minimized(false),
+        CC_EventSystem(std::make_unique<EventSystem>()), CC_PhysicsSystem(std::make_unique<PhysicsSystem>())
     {}
 
     Window::~Window()
@@ -48,8 +49,6 @@ namespace Cuscuz
         eventDispatcher.Dispatch<CC_WindowResizeEvent>(BIND_FUNCTION(this, Window::OnWindowResized));
         eventDispatcher.Dispatch<CC_WindowMinimizedEvent>(BIND_FUNCTION(this, Window::OnWindowMinimized));
         eventDispatcher.Dispatch<CC_WindowRestoredFocusEvent>(BIND_FUNCTION(this, Window::OnWindowRestoredFocus));
-
-        CC_RendererSystem->OnEvent(event);
     }
 
     void Window::SetEventCallback(const EventCallbackFn& callback)
@@ -59,9 +58,7 @@ namespace Cuscuz
 
     void Window::Update()
     {
-        CC_PhysicsSystem->OnUpdate();
-        CC_RendererSystem->OnUpdate(Time::Get().DeltaTime());
-        
+        CC_EventSystem->OnUpdate();
         m_Context->Render();
     }
 

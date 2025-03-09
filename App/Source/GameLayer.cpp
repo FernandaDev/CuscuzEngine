@@ -38,16 +38,16 @@ void GameLayer::OnAttach()
 {
     CC_ASSERT(m_World, "The World instance is null!");
 
-    // m_MainActor = &m_World->CreateActor("Fer", glm::vec3(0, 0, 0), 1.f);
-    // m_MainActor->AddComponent<CircleDetectionComponent>(48.f);
-    // auto& actorSprite = m_MainActor->AddComponent<SpriteRenderer>();
-    //
-    // const auto texture = Texture2D::Create("Assets/Images/player.png");
-    // m_ActorSprite->SetTexture(texture);
-    //
-    // actorSprite.SetSprite(m_ActorSprite);
+    m_MainActor = &m_World->CreateActor("Fer", glm::vec3(0, 0, 0), 1.f);
+    m_MainActor->AddComponent<Cuscuz::CircleDetectionComponent>(48.f);
+    auto& actorSprite = m_MainActor->AddComponent<Cuscuz::SpriteRenderer>();
+    
+    const auto texture = Cuscuz::Texture2D::Create("Assets/Images/player.png");
+    m_ActorSprite->SetTexture(texture);
+    
+    actorSprite.SetSprite(m_ActorSprite);
 
-    DrawGrid({10, 10}, m_World);
+    //DrawGrid({10, 10}, m_World);
 }
 
 void GameLayer::OnDetach()
@@ -59,7 +59,7 @@ void GameLayer::OnUpdate(float deltaTime)
 {
     CC_ASSERT(m_World, "The World instance is null!");
     
-    m_World->Update(deltaTime);
+    
 
     // auto pos = m_MainActor->GetTransform().GetPosition();
     //

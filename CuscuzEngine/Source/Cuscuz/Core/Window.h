@@ -23,7 +23,6 @@ namespace Cuscuz
 		std::unique_ptr<GraphicsContext> m_Context{};
 		std::unique_ptr<EventSystem> CC_EventSystem;
 	public:
-		std::unique_ptr<RendererSystem> CC_RendererSystem;
 		std::unique_ptr<PhysicsSystem> CC_PhysicsSystem;
 
 	public:

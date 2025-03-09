@@ -18,8 +18,8 @@ namespace Cuscuz
         static void EndScene();
         static void Flush();
     
-        static void DrawQuad(const TransformComponent& transform, const glm::vec4& color);
-        static void DrawQuad(const TransformComponent& transform, const glm::vec4& color,
+        static void DrawQuad(const glm::mat4& worldTransform, const glm::vec4& color);
+        static void DrawQuad(const glm::mat4& worldTransform, const glm::vec4& color,
             const CC_AssetRef<Texture2D>& texture, const glm::vec2& tilingOffset = glm::vec2(1.0f));
 
         struct Statistics

@@ -2,40 +2,46 @@
 
 #include <memory>
 #include "vec4.hpp"
-#include "Cuscuz/Render/IRender.h"
+#include "Cuscuz/Render/IDrawable.h"
 #include "Cuscuz/World/Component.h"
-#include "Cuscuz/Render/Shader.h"
-#include "Cuscuz/Render/VertexArray.h"
+#include "Cuscuz/World/Actor.h"
 
 namespace Cuscuz
 {
     class Sprite;
     
-    class SpriteRenderer : public Component, public IRender
+    class SpriteRenderer : public Component, public IDrawable
     {
     protected:
-        int m_DrawOrder = 0;
+        uint32_t m_DrawOrder = 0;
         glm::vec4 m_Color = {};
         CC_AssetRef<Sprite> m_Sprite {};
+        //SpriteRendererProxy* m_Proxy{};
 
     public:
         SpriteRenderer(int drawOrder = 0);
-        ~SpriteRenderer() override;
+        ~SpriteRenderer() override = default;
 
-        void Draw() override;
+        void OnAdded() override;
+        void OnRemoved() override;
+        
         void SetSprite(const CC_AssetRef<Sprite>& newSprite);
         const CC_AssetRef<Sprite>& GetSprite() const { return m_Sprite; }
 
-        void SetDrawOrder(int drawOrder);
+        void SetDrawOrder(uint32_t drawOrder);
         void SetColor(glm::vec4 color);
 
-        int GetDrawOrder() const override { return m_DrawOrder; }
-        int GetTexHeight() const;
-        int GetTextWidth() const;
+        TransformComponent& GetTransform() const { return m_OwnerActor->GetTransform(); }
+        const glm::vec4& GetColor() const { return m_Color; }
+
+        uint32_t GetDrawOrder() const override { return m_DrawOrder; }
+        uint32_t GetTexHeight() const;
+        uint32_t GetTextWidth() const;
 
         REGISTER_COMPONENT(SpriteRenderer);
         //void ImGuiDisplayComponent() override;        
     protected:
+        void Draw() override;
         float GetRotationDegrees() const;
     };
 }

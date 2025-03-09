@@ -1,21 +1,67 @@
 ﻿#include "EditorLayer.h"
 
+#include "Cuscuz/core/Input.h"
+#include "Cuscuz/Utils/Instrumentor.h"
 #include "ImGui/imgui.h"
-#include "Cuscuz.h"
 #include "Utils/ImGuiHelper_ActorCreation.h"
 #include "Utils/ImGuiHelper_Settings.h"
 #include "Utils/ImGuiHelper_World.h"
 
 
-EditorLayer::EditorLayer() : m_ShowWorldWindow(true), m_ShowTimeStatsOverlay(true)
+EditorLayer::EditorLayer() :
+m_Camera(std::make_unique<Cuscuz::OrthoCameraController>(static_cast<float>(SCREEN_WIDTH) / static_cast<float>(SCREEN_HEIGHT), true)),
+m_EditorWorld(std::make_unique<Cuscuz::World>()),
+m_EditorScene(std::make_unique<Cuscuz::Scene>()),
+m_ActorSprite(std::make_shared<Cuscuz::Sprite>()),
+m_ShowWorldWindow(true), m_ShowTimeStatsOverlay(true)
+{  }
+
+void EditorLayer::OnAttach()
 {
-    //m_World = Cuscuz::Engine::Get().CC_World.get();
+    CC_PROFILE_FUNCTION();
+    
+    m_MainActor = &m_EditorWorld->CreateActor("Fer", glm::vec3(0, 0, 0), 1.f);
+    m_MainActor->AddComponent<Cuscuz::CircleDetectionComponent>(48.f);
+    auto& actorSprite = m_MainActor->AddComponent<Cuscuz::SpriteRenderer>();
+    
+    m_ActorTexture = Cuscuz::Texture2D::Create("Assets/Images/player.png");
+    m_ActorSprite->SetTexture(m_ActorTexture);
+    
+    actorSprite.SetSprite(m_ActorSprite);
+}
+
+void EditorLayer::OnUpdate(float deltaTime)
+{
+    CC_PROFILE_FUNCTION();
+    
+    m_Camera->OnUpdate(deltaTime);
+    
+    m_EditorWorld->Update(deltaTime); // Game thread
+    MoveActor(deltaTime);
+    
+    m_EditorScene->OnRender(m_Camera.get()); // Render Thread
+}
+
+void EditorLayer::MoveActor(float deltaTime)
+{
+    auto pos = m_MainActor->GetTransform().GetPosition();
+    
+    if(Cuscuz::Input::IsKeyPressed(Cuscuz::CC_KEYCODE_W))
+        pos.y += MoveSpeed * deltaTime;
+    if(Cuscuz::Input::IsKeyPressed(Cuscuz::CC_KEYCODE_S))
+        pos.y -= MoveSpeed * deltaTime;
+    if(Cuscuz::Input::IsKeyPressed(Cuscuz::CC_KEYCODE_A))
+        pos.x -= MoveSpeed * deltaTime;
+    if(Cuscuz::Input::IsKeyPressed(Cuscuz::CC_KEYCODE_D))
+        pos.x += MoveSpeed * deltaTime;
+    
+    m_MainActor->GetTransform().SetPosition(pos);
 }
 
 void EditorLayer::OnImGuiRender()
 {
-    if (m_ShowWorldWindow)
-        ShowWorldWindow();
+    // if (m_ShowWorldWindow)
+    //     ShowWorldWindow();
 
     if (m_ShowTimeStatsOverlay)
         ImGuiHelper::ShowTimeOverlay(m_ShowTimeStatsOverlay);

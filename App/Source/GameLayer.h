@@ -3,7 +3,6 @@
 #include <memory>
 #include "Cuscuz.h"
 
-class Actor;
 class CC_Game;
 class CC_KeyDownEvent;
 
@@ -12,7 +11,7 @@ class GameLayer : public Cuscuz::Layer
     bool m_ShowWorldWindow = true;
     std::unique_ptr<Cuscuz::World> m_World {};
     Cuscuz::CC_AssetRef<Cuscuz::Sprite> m_ActorSprite {};
-    Actor* m_MainActor {};
+    Cuscuz::Actor* m_MainActor {};
 
 public:
     GameLayer();

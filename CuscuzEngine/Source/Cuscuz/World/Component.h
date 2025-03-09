@@ -10,10 +10,10 @@ namespace Cuscuz
     {
     protected:
         Actor* m_OwnerActor;
-        int m_UpdateOrder;
+        uint32_t m_UpdateOrder;
     
     public:
-        Component(int updateOrder = 100) :
+        Component(uint32_t updateOrder = 100) :
         m_OwnerActor(nullptr), m_UpdateOrder(updateOrder)
         {}
 
@@ -34,7 +34,7 @@ namespace Cuscuz
             return *this;
         }
 
-        int GetUpdateOrder() const { return m_UpdateOrder; }
+        uint32_t GetUpdateOrder() const { return m_UpdateOrder; }
 
         void SetOwner(Actor* ownerActor);
         Actor* GetOwner() const { return m_OwnerActor; }

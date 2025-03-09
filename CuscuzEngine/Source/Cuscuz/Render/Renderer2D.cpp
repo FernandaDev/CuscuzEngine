@@ -145,12 +145,10 @@ namespace Cuscuz
         s_Data.QuadVertexBufferPtr = s_Data.QuadVertexBufferBase;
     }
 
-    void Renderer2D::DrawQuad(const TransformComponent& transform, const glm::vec4& color)
+    void Renderer2D::DrawQuad(const glm::mat4& worldTransform, const glm::vec4& color)
     {
         if(s_Data.QuadIndexCount >= Renderer2DData::MaxIndicesPerDraw)
             StartNewBatch();
-    
-        const auto worldTransform = transform.GetWorldTransform(); 
     
         s_Data.QuadVertexBufferPtr->Position =  worldTransform * s_Data.QuadVertexPositions[0];
         s_Data.QuadVertexBufferPtr->Color = color;
@@ -184,7 +182,7 @@ namespace Cuscuz
         s_Data.Stats.QuadCount++;
     }
 
-    void Renderer2D::DrawQuad(const TransformComponent& transform, const glm::vec4& color, const CC_AssetRef<Texture2D>& texture, const glm::vec2& tilingOffset)
+    void Renderer2D::DrawQuad(const glm::mat4& worldTransform, const glm::vec4& color, const CC_AssetRef<Texture2D>& texture, const glm::vec2& tilingOffset)
     {
         if(s_Data.QuadIndexCount >= Renderer2DData::MaxIndicesPerDraw)
             StartNewBatch();
@@ -206,8 +204,6 @@ namespace Cuscuz
             s_Data.TextureSlots[s_Data.TextureSlotIndex] = texture;
             s_Data.TextureSlotIndex++;
         }
-
-        const auto worldTransform = transform.GetWorldTransform(); 
     
         s_Data.QuadVertexBufferPtr->Position = worldTransform * s_Data.QuadVertexPositions[0];
         s_Data.QuadVertexBufferPtr->Color = color;

@@ -8,13 +8,17 @@
 namespace Cuscuz
 {
     Actor::Actor(World* world, std::string&& name, const glm::vec3& position, float scale, float rotation) :
-        m_Name(std::move(name)), m_State(Active), m_World(world),
-        m_Transform(std::make_unique<TransformComponent>(position, scale, rotation))
+    m_Name(std::move(name)), m_State(Active),
+    m_Transform(std::make_unique<TransformComponent>(position, scale, rotation)),
+    m_World(world)
     {}
 
     Actor::~Actor()
     {
         LOG_INFO("Actor being destroyed!");
+
+        for (const auto& component : m_Components)
+            component->OnRemoved();
 
         m_Components.clear();
     }
@@ -22,8 +26,6 @@ namespace Cuscuz
     void Actor::Destroy()
     {
         m_State = Dead;
-
-        //TODO remove the components from the systems!
     }
 
     void Actor::Update(float deltaTime)
@@ -51,21 +53,5 @@ namespace Cuscuz
 
         for (const auto& component : m_Components)
             component->Update(deltaTime);
-    }
-
-    void Actor::OnComponentAdded()
-    {
-        const auto latestComponent = m_Components.back();
-
-        m_OnComponentAddedDelegate.Broadcast(latestComponent);
-
-        // if (const auto renderComponent = std::dynamic_pointer_cast<IRender>(latestComponent))
-        // {
-        //     Engine::Get().CC_RendererSystem->AddRenderComponent(renderComponent);
-        // }
-        // else if (const auto physicsComponent = std::dynamic_pointer_cast<IOnOverlap>(latestComponent))
-        // {
-        //     Engine::Get().CC_PhysicsSystem->AddDetectionComponent(physicsComponent);
-        // }
     }
 }

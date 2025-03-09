@@ -2,7 +2,7 @@
 
 #include "RendererSystem.h"
 
-#include "Cuscuz/Render/IRender.h"
+#include "Cuscuz/Render/IDrawable.h"
 #include "Cuscuz/Utils/Log.h"
 #include "Cuscuz/Render/RenderCommand.h"
 #include "Cuscuz/Render/Renderer2D.h"
@@ -18,7 +18,7 @@ namespace Cuscuz
         m_RenderComponents.clear();
     }
 
-    void RendererSystem::AddRenderComponent(const std::shared_ptr<IRender>& renderComponent)
+    void RendererSystem::AddRenderComponent(const std::shared_ptr<IDrawable>& renderComponent)
     {
         const int drawOrder = renderComponent->GetDrawOrder();
         auto it = m_RenderComponents.begin();
@@ -33,7 +33,7 @@ namespace Cuscuz
         m_RenderComponents.insert(it, renderComponent);
     }
 
-    void RendererSystem::RemoveRenderComponent(const std::shared_ptr<IRender>& renderComponent)
+    void RendererSystem::RemoveRenderComponent(const std::shared_ptr<IDrawable>& renderComponent)
     {
         auto it = std::remove_if(m_RenderComponents.begin(), m_RenderComponents.end(),
                                [renderComponent](const auto& component)

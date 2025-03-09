@@ -29,7 +29,7 @@ namespace Cuscuz
         io.BackendFlags |= ImGuiBackendFlags_HasSetMousePos;
 
         GraphicsContext* context = window.GetContext();
-        const auto openGlContext = dynamic_cast<OpenGLContext*>(context);
+        const auto openGlContext = (OpenGLContext*)context;
     
         ImGui_ImplSDL2_InitForOpenGL(window.GetWindow(), openGlContext->GetContext());
         ImGui_ImplOpenGL3_Init("#version 330");

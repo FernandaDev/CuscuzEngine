@@ -6,22 +6,27 @@
 #include "Cuscuz/Render/Sprite.h"
 #include "Cuscuz/World/Actor.h"
 //#include "Cuscuz/Editor/Utils/ImGuiHelper_Resources.h"
-#include "Cuscuz/Core/RendererSystem.h"
 #include "gtc/type_ptr.inl"
 #include "Cuscuz/Render/Renderer2D.h"
+#include "Cuscuz/World/Scene.h"
+#include "Proxys/SpriteRendererProxy.h"
 
 namespace Cuscuz
 {
     CREATE_COMPONENT_REGISTRY(SpriteRenderer);
 
     SpriteRenderer::SpriteRenderer(int drawOrder) :
-         m_DrawOrder(drawOrder), m_Color(1.f, 1.f, 1.f, 1)
+    m_DrawOrder(drawOrder), m_Color(1.f, 1.f, 1.f, 1)
+    { }
+
+    void SpriteRenderer::OnAdded()
     {
-        RendererSystem::AddRenderComponent(this);
+        Scene::GetOnDrawableProxyAddedEvent().Broadcast(this); //TODO create and pass the proxy
     }
 
-    SpriteRenderer::~SpriteRenderer()
+    void SpriteRenderer::OnRemoved()
     {
+        Scene::GetOnDrawableProxyRemovedEvent().Broadcast(this);
     }
 
     void SpriteRenderer::Draw()
@@ -29,7 +34,7 @@ namespace Cuscuz
         if(!m_Sprite)
             return;
 
-        const auto transform = m_OwnerActor->GetTransform();
+        const auto transform = m_OwnerActor->GetTransform().GetWorldTransform();
 
         if(const auto texture = m_Sprite->GetTexture())
             Renderer2D::DrawQuad(transform, m_Color, texture);
@@ -42,7 +47,7 @@ namespace Cuscuz
         m_Sprite = newSprite;
     }
 
-    void SpriteRenderer::SetDrawOrder(int drawOrder)
+    void SpriteRenderer::SetDrawOrder(uint32_t drawOrder)
     {
         m_DrawOrder = drawOrder;
     }
@@ -52,7 +57,7 @@ namespace Cuscuz
         m_Color = color;
     }
 
-    int SpriteRenderer::GetTexHeight() const
+    uint32_t SpriteRenderer::GetTexHeight() const
     {
         if (m_Sprite)
             return m_Sprite->GetHeight();
@@ -61,7 +66,7 @@ namespace Cuscuz
         return 0;
     }
 
-    int SpriteRenderer::GetTextWidth() const
+    uint32_t SpriteRenderer::GetTextWidth() const
     {
         if (m_Sprite)
             return m_Sprite->GetHeight();
