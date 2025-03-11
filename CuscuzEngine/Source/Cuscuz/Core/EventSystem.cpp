@@ -44,6 +44,11 @@ namespace Cuscuz
                         CC_WindowRestoredFocusEvent windowRestoredEvent;
                         m_EventCallbackFn(windowRestoredEvent);
                     }
+                    else if(event.window.event == SDL_WINDOWEVENT_CLOSE)
+                    {
+                        CC_WindowCloseEvent windowCloseEvent;
+                        m_EventCallbackFn(windowCloseEvent);
+                    }
                 }
                 break;
             case SDL_KEYUP:

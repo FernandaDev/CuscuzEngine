@@ -14,6 +14,9 @@ class EditorLayer : public Cuscuz::Layer
 
     Cuscuz::CC_AssetRef<Cuscuz::Sprite> m_ActorSprite {};
     Cuscuz::CC_AssetRef<Cuscuz::Texture2D> m_ActorTexture {};
+    Cuscuz::CC_AssetRef<Cuscuz::Texture2D> m_Spritesheet {};
+    std::array<Cuscuz::CC_AssetRef<Cuscuz::SubTexture2D>, 3> m_MapTiles;
+    // grass 5,29 | water 3,29 | dirt 6,29  
     Cuscuz::Actor* m_MainActor {};
 
     bool m_ShowWorldWindow;

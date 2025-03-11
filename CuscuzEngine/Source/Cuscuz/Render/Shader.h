@@ -24,7 +24,7 @@ namespace Cuscuz
         virtual void SetFloat2(const char* name, const glm::vec2& value) = 0;
         virtual void SetFloat3(const char* name, const glm::vec3& value) = 0;
         virtual void SetFloat4(const char* name, const glm::vec4& value) = 0;
-        virtual void SetInt(const char* name, int value) = 0;
+        virtual void SetInt(const char* name, int32_t value) = 0;
         virtual void SetIntArray(const char* name, int* values, int32_t count) = 0;
         virtual void SetMatrix4(const char* name, const glm::mat4x4& matrix) = 0;
 

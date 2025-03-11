@@ -26,6 +26,7 @@
 #include "Cuscuz/Render/Renderer2D.h"
 #include "Cuscuz/Render/RenderCommand.h"
 #include "Cuscuz/Render/Texture.h"
+#include "Cuscuz/Render/SubTexture2D.h"
 #include "Cuscuz/Render/Sprite.h"
 
 #include "Cuscuz/Utils/Random.h"

@@ -6,10 +6,23 @@
 
 namespace Cuscuz
 {
+    struct OrthographicCameraBounds
+    {
+        float Left, Right;
+        float Bottom, Top;
+
+        OrthographicCameraBounds(float left, float right,float bottom, float top):
+        Left(left), Right(right), Bottom(bottom), Top(top) { }
+        
+        float GetWidth() const { return Right - Left; }
+        float GetHeight() const { return Top - Bottom; }
+    };
+    
     class OrthoCameraController
     {
         float m_aspectRatio;
         float m_ZoomLevel;
+        OrthographicCameraBounds m_Bounds;
         OrthographicCamera m_Camera;
 
         bool m_CanRotate;
@@ -29,6 +42,7 @@ namespace Cuscuz
         void OnImGuiRender();
 
         const OrthographicCamera& GetCamera() const { return m_Camera; }
+        const OrthographicCameraBounds& GetBounds() const { return m_Bounds; }
 
     private:
         bool OnMouseScrolled(CC_MouseScrolledEvent& event);

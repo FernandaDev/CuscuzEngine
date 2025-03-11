@@ -5,6 +5,7 @@
 
 namespace Cuscuz
 {
+    class SubTexture2D;
     class Texture2D;
     class TransformComponent;
 
@@ -21,6 +22,8 @@ namespace Cuscuz
         static void DrawQuad(const glm::mat4& worldTransform, const glm::vec4& color);
         static void DrawQuad(const glm::mat4& worldTransform, const glm::vec4& color,
             const CC_AssetRef<Texture2D>& texture, const glm::vec2& tilingOffset = glm::vec2(1.0f));
+        static void DrawQuad(const glm::mat4& worldTransform, const glm::vec4& color,
+            const CC_AssetRef<SubTexture2D>& subTexture, const glm::vec2& tilingOffset = glm::vec2(1.0f));
 
         struct Statistics
         {
@@ -35,7 +38,7 @@ namespace Cuscuz
         static Statistics GetStats();
 
     private:
-        static void StartNewBatch();
-        static void ResetVariables();
+        static void NextBatch();
+        static void StartBatch();
     };
 }

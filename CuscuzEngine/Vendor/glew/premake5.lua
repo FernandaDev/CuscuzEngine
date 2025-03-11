@@ -3,8 +3,8 @@ project "glew"
    language "C"
    staticruntime "off"
 
-   targetdir ("bin/" .. outputdir .. "/%{prj.name}")
-   objdir ("bin-int/" .. outputdir .. "/%{prj.name}")
+   targetdir ("%{wks.location}/Binaries/" .. outputdir .. "/%{prj.name}")
+   objdir ("%{wks.location}/Binaries/Intermediates/" .. outputdir .. "/%{prj.name}")
 
    files
    {

@@ -100,7 +100,7 @@ namespace Cuscuz
     bool ImGuiLayer::OnSDLEvent(const CC_SDLEvent& event)
     {
         ImGui_ImplSDL2_ProcessEvent(&event.GetSDLEvent());
-        return true;
+        return false;
     }
 
     bool ImGuiLayer::OnKeyDown(const CC_KeyDownEvent& event)

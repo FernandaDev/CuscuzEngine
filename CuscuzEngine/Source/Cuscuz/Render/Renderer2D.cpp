@@ -5,6 +5,7 @@
 #include "RenderCommand.h"
 #include "Shader.h"
 #include "Texture.h"
+#include "SubTexture2D.h"
 #include "VertexArray.h"
 #include "Cuscuz/Components/TransformComponent.h"
 
@@ -112,19 +113,26 @@ namespace Cuscuz
         s_Data.SpriteShader->Bind();
         s_Data.SpriteShader->SetMatrix4("u_ViewProjection", camera.GetViewProjectionMatrix());
 
-        ResetVariables();
+        StartBatch();
     }
 
     void Renderer2D::EndScene()
     {
-        const uint32_t dataSize = (uint8_t*)s_Data.QuadVertexBufferPtr - (uint8_t*)s_Data.QuadVertexBufferBase;
-        s_Data.QuadVertexBuffer->SetData(s_Data.QuadVertexBufferBase, dataSize);
-        
         Flush();   
+    }
+    
+    void Renderer2D::StartBatch()
+    {
+        s_Data.QuadIndexCount = 0;
+        s_Data.TextureSlotIndex = 1;
+        s_Data.QuadVertexBufferPtr = s_Data.QuadVertexBufferBase;
     }
 
     void Renderer2D::Flush()
     {
+        const uint32_t dataSize = (uint8_t*)s_Data.QuadVertexBufferPtr - (uint8_t*)s_Data.QuadVertexBufferBase;
+        s_Data.QuadVertexBuffer->SetData(s_Data.QuadVertexBufferBase, dataSize);
+        
         for (uint32_t i = 0; i < s_Data.TextureSlotIndex; ++i)
             s_Data.TextureSlots[i]->Bind(i);
     
@@ -132,51 +140,31 @@ namespace Cuscuz
         s_Data.Stats.DrawCalls++;
     }
 
-    void Renderer2D::StartNewBatch()
+    void Renderer2D::NextBatch()
     {
-        EndScene();
-        ResetVariables();
-    }
-
-    void Renderer2D::ResetVariables()
-    {
-        s_Data.QuadIndexCount = 0;
-        s_Data.TextureSlotIndex = 1;
-        s_Data.QuadVertexBufferPtr = s_Data.QuadVertexBufferBase;
+        Flush();
+        StartBatch();
     }
 
     void Renderer2D::DrawQuad(const glm::mat4& worldTransform, const glm::vec4& color)
     {
         if(s_Data.QuadIndexCount >= Renderer2DData::MaxIndicesPerDraw)
-            StartNewBatch();
-    
-        s_Data.QuadVertexBufferPtr->Position =  worldTransform * s_Data.QuadVertexPositions[0];
-        s_Data.QuadVertexBufferPtr->Color = color;
-        s_Data.QuadVertexBufferPtr->TexCoord = { 0.0f, 0.0f };
-        s_Data.QuadVertexBufferPtr->TexIndex = 0.0f;
-        s_Data.QuadVertexBufferPtr->TilingOffset = {1.0f, 1.0f};
-        s_Data.QuadVertexBufferPtr++;
+            NextBatch();
 
-        s_Data.QuadVertexBufferPtr->Position =  worldTransform * s_Data.QuadVertexPositions[1];
-        s_Data.QuadVertexBufferPtr->Color = color;
-        s_Data.QuadVertexBufferPtr->TexCoord = { 1.0f, 0.0f };
-        s_Data.QuadVertexBufferPtr->TexIndex = 0.0f;
-        s_Data.QuadVertexBufferPtr->TilingOffset = {1.0f, 1.0f};
-        s_Data.QuadVertexBufferPtr++;
+        constexpr glm::vec2 textureCoords[] = { {0.0f, 0.0f}, { 1.0f, 0.0f },
+                                                { 1.0f, 1.0f }, { 0.0f, 1.0f } };
 
-        s_Data.QuadVertexBufferPtr->Position =  worldTransform * s_Data.QuadVertexPositions[2];
-        s_Data.QuadVertexBufferPtr->Color = color;
-        s_Data.QuadVertexBufferPtr->TexCoord = { 1.0f, 1.0f };
-        s_Data.QuadVertexBufferPtr->TexIndex = 0.0f;
-        s_Data.QuadVertexBufferPtr->TilingOffset = {1.0f, 1.0f};
-        s_Data.QuadVertexBufferPtr++;
-
-        s_Data.QuadVertexBufferPtr->Position =  worldTransform * s_Data.QuadVertexPositions[3];
-        s_Data.QuadVertexBufferPtr->Color = color;
-        s_Data.QuadVertexBufferPtr->TexCoord = { 0.0f, 1.0f };
-        s_Data.QuadVertexBufferPtr->TexIndex = 0.0f;
-        s_Data.QuadVertexBufferPtr->TilingOffset = {1.0f, 1.0f};
-        s_Data.QuadVertexBufferPtr++;
+        constexpr size_t QuadVertexCount = 4;
+        
+        for (size_t i = 0; i < QuadVertexCount; i++)
+        {
+            s_Data.QuadVertexBufferPtr->Position = worldTransform * s_Data.QuadVertexPositions[i];
+            s_Data.QuadVertexBufferPtr->Color = color;
+            s_Data.QuadVertexBufferPtr->TexCoord = textureCoords[i];
+            s_Data.QuadVertexBufferPtr->TexIndex = 0.0f;
+            s_Data.QuadVertexBufferPtr->TilingOffset = {1.0f, 1.0f};
+            s_Data.QuadVertexBufferPtr++;
+        }
 
         s_Data.QuadIndexCount += 6;
         s_Data.Stats.QuadCount++;
@@ -185,10 +173,13 @@ namespace Cuscuz
     void Renderer2D::DrawQuad(const glm::mat4& worldTransform, const glm::vec4& color, const CC_AssetRef<Texture2D>& texture, const glm::vec2& tilingOffset)
     {
         if(s_Data.QuadIndexCount >= Renderer2DData::MaxIndicesPerDraw)
-            StartNewBatch();
+            NextBatch();
     
-        float textureIndex = 0.0f;
+        constexpr glm::vec2 textureCoords[] = { {0.0f, 0.0f}, { 1.0f, 0.0f },
+                                            { 1.0f, 1.0f }, { 0.0f, 1.0f } };
 
+        float textureIndex = 0.0f;
+        
         for (uint32_t i = 1; i < s_Data.TextureSlotIndex; ++i)
         {
             if(*s_Data.TextureSlots[i] == *texture)
@@ -200,38 +191,78 @@ namespace Cuscuz
     
         if(textureIndex == 0.0f)
         {
+            if(s_Data.TextureSlotIndex >= Renderer2DData::MaxTextureSlotsPerDraw)
+            {
+                Flush();
+                StartBatch();
+            }
+            
             textureIndex = static_cast<float>(s_Data.TextureSlotIndex);
             s_Data.TextureSlots[s_Data.TextureSlotIndex] = texture;
             s_Data.TextureSlotIndex++;
         }
-    
-        s_Data.QuadVertexBufferPtr->Position = worldTransform * s_Data.QuadVertexPositions[0];
-        s_Data.QuadVertexBufferPtr->Color = color;
-        s_Data.QuadVertexBufferPtr->TexCoord = { 0.0f, 0.0f };
-        s_Data.QuadVertexBufferPtr->TexIndex = textureIndex;
-        s_Data.QuadVertexBufferPtr->TilingOffset = tilingOffset;
-        s_Data.QuadVertexBufferPtr++;
 
-        s_Data.QuadVertexBufferPtr->Position =  worldTransform * s_Data.QuadVertexPositions[1];
-        s_Data.QuadVertexBufferPtr->Color = color;
-        s_Data.QuadVertexBufferPtr->TexCoord = { 1.0f, 0.0f };
-        s_Data.QuadVertexBufferPtr->TexIndex = textureIndex;
-        s_Data.QuadVertexBufferPtr->TilingOffset = tilingOffset;
-        s_Data.QuadVertexBufferPtr++;
+        constexpr size_t QuadVertexCount = 4;
 
-        s_Data.QuadVertexBufferPtr->Position = worldTransform * s_Data.QuadVertexPositions[2];
-        s_Data.QuadVertexBufferPtr->Color = color;
-        s_Data.QuadVertexBufferPtr->TexCoord = { 1.0f, 1.0f };
-        s_Data.QuadVertexBufferPtr->TexIndex = textureIndex;
-        s_Data.QuadVertexBufferPtr->TilingOffset = tilingOffset;
-        s_Data.QuadVertexBufferPtr++;
+        
+        for (size_t i = 0; i < QuadVertexCount; i++)
+        {
+            s_Data.QuadVertexBufferPtr->Position = worldTransform * s_Data.QuadVertexPositions[i];
+            s_Data.QuadVertexBufferPtr->Color = color;
+            s_Data.QuadVertexBufferPtr->TexCoord = textureCoords[i];
+            s_Data.QuadVertexBufferPtr->TexIndex = textureIndex;
+            s_Data.QuadVertexBufferPtr->TilingOffset = tilingOffset;
+            s_Data.QuadVertexBufferPtr++;
+        }
 
-        s_Data.QuadVertexBufferPtr->Position =  worldTransform * s_Data.QuadVertexPositions[3];
-        s_Data.QuadVertexBufferPtr->Color = color;
-        s_Data.QuadVertexBufferPtr->TexCoord = { 0.0f, 1.0f };
-        s_Data.QuadVertexBufferPtr->TexIndex = textureIndex;
-        s_Data.QuadVertexBufferPtr->TilingOffset = tilingOffset;
-        s_Data.QuadVertexBufferPtr++;
+        s_Data.QuadIndexCount += 6;
+        s_Data.Stats.QuadCount++;
+    }
+
+    void Renderer2D::DrawQuad(const glm::mat4& worldTransform, const glm::vec4& color, const CC_AssetRef<SubTexture2D>& subTexture,
+        const glm::vec2& tilingOffset)
+    {
+        if (s_Data.QuadIndexCount >= Renderer2DData::MaxIndicesPerDraw)
+            NextBatch();
+
+        const glm::vec2* textureCoords = subTexture->GetTexCoords();
+        const CC_AssetRef<Texture2D> texture = subTexture->GetTexture();
+
+        float textureIndex = 0.0f;
+
+        for (uint32_t i = 1; i < s_Data.TextureSlotIndex; ++i)
+        {
+            if (*s_Data.TextureSlots[i] == *texture)
+            {
+                textureIndex = static_cast<float>(i);
+                break;
+            }
+        }
+
+        if (textureIndex == 0.0f)
+        {
+            if(s_Data.TextureSlotIndex >= Renderer2DData::MaxTextureSlotsPerDraw)
+            {
+                Flush();
+                StartBatch();
+            }
+            
+            textureIndex = static_cast<float>(s_Data.TextureSlotIndex);
+            s_Data.TextureSlots[s_Data.TextureSlotIndex] = texture;
+            s_Data.TextureSlotIndex++;
+        }
+
+        constexpr size_t QuadVertexCount = 4;
+        
+        for (size_t i = 0; i < QuadVertexCount; i++)
+        {
+            s_Data.QuadVertexBufferPtr->Position = worldTransform * s_Data.QuadVertexPositions[i];
+            s_Data.QuadVertexBufferPtr->Color = color;
+            s_Data.QuadVertexBufferPtr->TexCoord = textureCoords[i];
+            s_Data.QuadVertexBufferPtr->TexIndex = textureIndex;
+            s_Data.QuadVertexBufferPtr->TilingOffset = tilingOffset;
+            s_Data.QuadVertexBufferPtr++;
+        }
 
         s_Data.QuadIndexCount += 6;
         s_Data.Stats.QuadCount++;
