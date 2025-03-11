@@ -2,11 +2,24 @@
 
 #include "Cuscuz/core/Input.h"
 #include "Cuscuz/Utils/Instrumentor.h"
+#include "ext/matrix_transform.hpp"
 #include "ImGui/imgui.h"
 #include "Utils/ImGuiHelper_ActorCreation.h"
 #include "Utils/ImGuiHelper_Settings.h"
 #include "Utils/ImGuiHelper_World.h"
 
+struct Tile
+{
+    glm::mat4 Transform;
+    Cuscuz::CC_AssetRef<Cuscuz::SubTexture2D> SubTexture;
+
+    Tile(const Cuscuz::CC_AssetRef<Cuscuz::SubTexture2D>& subTexture, glm::mat4 transform):
+    Transform(transform), SubTexture(subTexture) { }
+
+    const glm::vec3& GetPos() { return { Transform[3] }; }
+};
+
+std::vector<Tile> gTiles;
 
 EditorLayer::EditorLayer() :
 m_Camera(std::make_unique<Cuscuz::OrthoCameraController>(static_cast<float>(SCREEN_WIDTH) / static_cast<float>(SCREEN_HEIGHT), true)),
@@ -28,6 +41,33 @@ void EditorLayer::OnAttach()
     m_ActorSprite->SetTexture(m_ActorTexture);
     
     actorSprite.SetSprite(m_ActorSprite);
+
+    m_Spritesheet = Cuscuz::Texture2D::Create("Assets/Images/Map_SpriteSheet.png");
+    m_MapTiles[0] = Cuscuz::SubTexture2D::CreateFromCoords(m_Spritesheet, {5, 29}, {16,16}, {1,1}, 1.f);
+    m_MapTiles[1] = Cuscuz::SubTexture2D::CreateFromCoords(m_Spritesheet, {3, 29}, {16,16}, {1,1}, 1.f);
+    m_MapTiles[2] = Cuscuz::SubTexture2D::CreateFromCoords(m_Spritesheet, {6, 29}, {16,16}, {1,1}, 1.f);
+
+    const glm::ivec2& gridSize = {25,25};
+
+    gTiles.clear();
+    gTiles.reserve(gridSize.x * gridSize.y);
+    
+    Random& random = Random::Get();
+    float halfGridX = gridSize.x * 0.5f;
+    float halfGridY = gridSize.y * 0.5f;
+    
+    for (int x = 0; x < gridSize.x; ++x)
+    {
+        for (int y = 0; y < gridSize.y; ++y)
+        {
+            auto pos = glm::vec3(x - halfGridX , y - halfGridY, -0.1f);
+            //LOG_INFO("Pos: {0}, {1}", pos.x, pos.y);
+            const auto randomIndex = random.GetRandomNumber(0, m_MapTiles.size() - 1);
+            std::shared_ptr<Cuscuz::SubTexture2D>& tile = m_MapTiles[randomIndex];
+            glm::mat4 transform = glm::translate(glm::mat4(1.0f), pos);
+            gTiles.emplace_back(tile, transform);
+        }
+    }
 }
 
 void EditorLayer::OnUpdate(float deltaTime)
@@ -38,8 +78,21 @@ void EditorLayer::OnUpdate(float deltaTime)
     
     m_EditorWorld->Update(deltaTime); // Game thread
     MoveActor(deltaTime);
+
+    Cuscuz::Renderer2D::ResetStats();
+    Cuscuz::RenderCommand::SetClearColor({0.6f, 0.6f, 0.6f, 1.0f});
+    Cuscuz::RenderCommand::Clear();
+
+    Cuscuz::Renderer2D::BeginScene(m_Camera->GetCamera());
     
-    m_EditorScene->OnRender(m_Camera.get()); // Render Thread
+    for (size_t i = 0; i < gTiles.size(); i++)
+    {
+        Cuscuz::Renderer2D::DrawQuad(gTiles[i].Transform, {1.f,1.f,1.f,1.f}, gTiles[i].SubTexture);
+    }
+    
+    Cuscuz::Renderer2D::EndScene();
+    
+    m_EditorScene->OnRender(m_Camera->GetCamera()); // Render Thread
 }
 
 void EditorLayer::MoveActor(float deltaTime)
@@ -60,8 +113,8 @@ void EditorLayer::MoveActor(float deltaTime)
 
 void EditorLayer::OnImGuiRender()
 {
-    // if (m_ShowWorldWindow)
-    //     ShowWorldWindow();
+    if (m_ShowWorldWindow)
+        ShowWorldWindow();
 
     if (m_ShowTimeStatsOverlay)
         ImGuiHelper::ShowTimeOverlay(m_ShowTimeStatsOverlay);
@@ -71,6 +124,7 @@ void EditorLayer::OnEvent(Cuscuz::CuscuzEvent& event)
 {
     Layer::OnEvent(event);
 
+    m_Camera->OnEvent(event);
     // Cuscuz::CC_EventSingleDispatcher eventDispatcher(event);
     // eventDispatcher.Dispatch<CC_KeyDownEvent>(BIND_FUNCTION(this, EditorLayer::ToggleWindow));
 }

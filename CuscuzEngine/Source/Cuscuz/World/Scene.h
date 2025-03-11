@@ -4,7 +4,7 @@
 
 namespace Cuscuz
 {
-    class OrthoCameraController;
+    class OrthographicCamera;
     class IDrawable;
     class Texture2D;
 
@@ -21,7 +21,7 @@ namespace Cuscuz
         Scene();
         ~Scene();
 
-        void OnRender(OrthoCameraController* camera) const;
+        void OnRender(const OrthographicCamera& camera) const;
 
         static DrawableProxyEvent GetOnDrawableProxyAddedEvent() { return m_OnDrawableProxyAdded; }
         static DrawableProxyEvent GetOnDrawableProxyRemovedEvent() { return m_OnDrawableProxyRemoved; }

@@ -26,7 +26,7 @@ public:
     void SetFloat2(const char* name, const glm::vec2& value) override;
     void SetFloat3(const char* name, const glm::vec3& value) override;
     void SetFloat4(const char* name, const glm::vec4& value) override;
-    void SetInt(const char* name, int value) override;
+    void SetInt(const char* name, int32_t value) override;
     void SetIntArray(const char* name, int* values, int32_t count) override;
     void SetMatrix4(const char* name, const glm::mat4x4& matrix) override;
     

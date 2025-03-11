@@ -11,7 +11,8 @@ namespace Cuscuz
 {
     OrthoCameraController::OrthoCameraController(float aspectRatio, bool rotate) :
         m_aspectRatio(aspectRatio), m_ZoomLevel(4.0f),
-        m_Camera(-m_aspectRatio * m_ZoomLevel, m_aspectRatio * m_ZoomLevel, -m_ZoomLevel, m_ZoomLevel),
+        m_Bounds(-m_aspectRatio * m_ZoomLevel, m_aspectRatio * m_ZoomLevel, -m_ZoomLevel, m_ZoomLevel),
+        m_Camera(m_Bounds.Left, m_Bounds.Right, m_Bounds.Bottom, m_Bounds.Top),
         m_CanRotate(rotate), m_Position(0), m_Rotation(0)
     {    }
 
@@ -58,7 +59,8 @@ namespace Cuscuz
     bool OrthoCameraController::OnWindowResized(CC_WindowResizeEvent& event)
     {
         m_aspectRatio = static_cast<float>(event.GetWidth()) / static_cast<float>(event.GetHeight());
-        m_Camera.SetProjection(-m_aspectRatio * m_ZoomLevel, m_aspectRatio * m_ZoomLevel, -m_ZoomLevel, m_ZoomLevel);
+        m_Bounds = {-m_aspectRatio * m_ZoomLevel, m_aspectRatio * m_ZoomLevel, -m_ZoomLevel, m_ZoomLevel };
+        m_Camera.SetProjection(m_Bounds.Left, m_Bounds.Right, m_Bounds.Bottom, m_Bounds.Top);
 
         return false;
     }
@@ -67,7 +69,8 @@ namespace Cuscuz
     {
         m_ZoomLevel = amount;
         m_ZoomLevel = std::max(m_ZoomLevel, 0.25f);
-        m_Camera.SetProjection(-m_aspectRatio * m_ZoomLevel, m_aspectRatio * m_ZoomLevel, -m_ZoomLevel, m_ZoomLevel);
+        m_Bounds = {-m_aspectRatio * m_ZoomLevel, m_aspectRatio * m_ZoomLevel, -m_ZoomLevel, m_ZoomLevel };
+        m_Camera.SetProjection(m_Bounds.Left, m_Bounds.Right, m_Bounds.Bottom, m_Bounds.Top);
     }
 
     void OrthoCameraController::OnImGuiRender()

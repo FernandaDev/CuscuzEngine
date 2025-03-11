@@ -212,7 +212,7 @@ void OpenGLShader::SetFloat4(const char* name, const glm::vec4& value)
     glUniform4f(uniformId, value.x, value.y, value.z, value.w);
 }
 
-void OpenGLShader::SetInt(const char* name, int value)
+void OpenGLShader::SetInt(const char* name, int32_t value)
 {
     const auto uniformId = GetUniformID(name);
 
