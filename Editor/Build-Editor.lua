@@ -1,33 +1,31 @@
-project "App"
+project "Editor"
    kind "ConsoleApp"
    language "C++"
    cppdialect "C++20"
    targetdir "Binaries/%{cfg.buildcfg}"
-   staticruntime "off"  
+   staticruntime "off"
 
-   files 
-   { 
-    "Source/**.h", 
-    "Source/**.cpp",
-    "Assets/**.glsl",
-    "Assets/**.png",
-    "Assets/**.bmp",
-    "Assets/**.jpeg",
-    -- "%{includedir.glm}/**.hpp",
-    -- "%{includedir.glm}/**.inl",
+   files
+   {
+        "Source/**.h",
+        "Source/**.cpp",
+        "Assets/**.glsl",
+        "Assets/**.png",
+        "Assets/**.bmp",
+        "Assets/**.jpeg",
    }
 
    includedirs
    {
-      "Source",
-      "Assets",
+        "Source",
+        "Assets",
 
-      "%{wks.location}/CuscuzEngine/Source",
-      "%{wks.location}/CuscuzEngine/Vendor",
+        "%{wks.location}/CuscuzEngine/Source",
+        "%{wks.location}/CuscuzEngine/Vendor",
 
-      "%{includedir.SPD_Log}",
-      "%{includedir.SDL2}",
-      "%{includedir.glm}",
+        "%{includedir.SPD_Log}",
+        "%{includedir.SDL2}",
+        "%{includedir.glm}",
    }
 
    -- libdirs {} 
@@ -37,7 +35,7 @@ project "App"
       "CuscuzEngine",
    }
 
-   postbuildcommands 
+   postbuildcommands
    {
       '{COPYDIR} "' .. engine_dlls .. '" "$(TargetDir)"'
    }

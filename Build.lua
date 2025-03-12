@@ -2,7 +2,7 @@
 workspace "CuscuzEngine"
    architecture "x64"
    configurations { "Debug", "Release", "Dist" }
-   startproject "App"
+   startproject "Editor"
 
    -- Workspace-wide build options for MSVC
    filter "system:windows"
@@ -22,7 +22,6 @@ includedir["stb_image"] = "%{wks.location}/CuscuzEngine/Vendor/stb_image"
 
 include "CuscuzEngine/Vendor/yaml"
 include "CuscuzEngine/Vendor/glew"
-
 include "CuscuzEngine/Vendor/Build-ImGui.lua"
 include "CuscuzEngine/Build-CuscuzEngine.lua"
-include "App/Build-App.lua"
+include "Editor/Build-Editor.lua"

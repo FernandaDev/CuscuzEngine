@@ -38,6 +38,7 @@ namespace Cuscuz
 		static Engine& Get() { return *s_Instance;}
 	
 		void Run();
+		void Close();
 	
 		void OnEvent(CuscuzEvent& event);
 	

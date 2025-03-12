@@ -78,6 +78,12 @@ namespace Cuscuz
 		}
 	}
 
+	void Engine::Close()
+	{
+		LOG_WARN("Quitting the engine...");
+		m_IsRunning = false;
+	}
+
 	void Engine::PushLayer(std::shared_ptr<Layer> layer)
 	{
 		m_LayerStack.PushLayer(layer);
