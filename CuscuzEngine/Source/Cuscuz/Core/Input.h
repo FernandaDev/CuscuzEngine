@@ -9,15 +9,12 @@ namespace Cuscuz
     class Input
     {
     public:
-        static bool IsKeyPressed(unsigned int keyCode)
-        {
-            const Uint8* key_CurrentState = SDL_GetKeyboardState(nullptr);
-            return key_CurrentState[keyCode];
-        }
+        static bool IsKeyPressed(uint32_t keyCode);
 
-        static bool IsMousePressed(unsigned int button)
-        {
-            return SDL_GetMouseState(nullptr, nullptr) & SDL_BUTTON(button);
-        }
+        static bool IsMousePressed(uint32_t button);
+        static std::pair<uint32_t, uint32_t> GetMousePositionInt();
+        static std::pair<float, float> GetMousePosition();
+        static float GetMouseX();
+        static float GetMouseY();
     };
 } 

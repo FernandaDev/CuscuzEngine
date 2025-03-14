@@ -1,6 +1,9 @@
 ﻿#include "EditorLayer.h"
 
+#include <stdbool.h>
+
 #include "Cuscuz/core/Input.h"
+#include "Cuscuz/GUI/ImGuiLayer.h"
 #include "Cuscuz/Utils/Instrumentor.h"
 #include "ext/matrix_transform.hpp"
 #include "ImGui/imgui.h"
@@ -28,7 +31,7 @@ namespace Cuscuz
     m_EditorWorld(std::make_unique<World>()),
     m_EditorScene(std::make_unique<Scene>()),
     m_ActorSprite(std::make_shared<Sprite>()),
-    m_ShowWorldWindow(true), m_ShowTimeStatsOverlay(true)
+    m_ShowTimeStatsOverlay(true)
     {  }
 
     void EditorLayer::OnAttach()
@@ -82,15 +85,14 @@ namespace Cuscuz
         Layer::OnEvent(event);
 
         m_Camera->OnEvent(event);
-        // CC_EventSingleDispatcher eventDispatcher(event);
-        // eventDispatcher.Dispatch<CC_KeyDownEvent>(BIND_FUNCTION(this, EditorLayer::ToggleWindow));
     }
 
     void EditorLayer::OnUpdate(float deltaTime)
     {
         CC_PROFILE_FUNCTION();
-    
-        m_Camera->OnUpdate(deltaTime);
+
+        if(m_IsViewportFocused)
+            m_Camera->OnUpdate(deltaTime);
     
         m_EditorWorld->Update(deltaTime); // Game thread
         MoveActor(deltaTime);
@@ -134,19 +136,14 @@ namespace Cuscuz
 
     void EditorLayer::OnImGuiRender()
     {
-        InitEditorWindow();
-    
-        // if (m_ShowWorldWindow)
-        //     ShowWorldWindow();
-        //
-        // if (m_ShowTimeStatsOverlay)
+        ShowEditorWindow();
+
+        // if (m_ShowTimeStatsOverlay) TODO this should be part of scene/viewport window.
         //     ImGuiHelper::ShowTimeOverlay(m_ShowTimeStatsOverlay);
     }
 
-    void EditorLayer::InitEditorWindow()
+    void EditorLayer::ShowEditorWindow()
     {
-        //ImGui::DockSpaceOverViewport(0, ImGui::GetMainViewport());
-    
         static bool pOpen = true;
         static ImGuiDockNodeFlags dockspace_flags = ImGuiDockNodeFlags_None;
 
@@ -170,9 +167,8 @@ namespace Cuscuz
             window_flags |= ImGuiWindowFlags_NoBackground;
     
         ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, ImVec2(0.0f, 0.0f));
-        ImGui::Begin("DockSpace Demo", &pOpen, window_flags);
-        ImGui::PopStyleVar();
-        ImGui::PopStyleVar(2);
+        ImGui::Begin("DockSpace", &pOpen, window_flags);
+        ImGui::PopStyleVar(3);
 
         // Submit the DockSpace
         ImGuiIO& io = ImGui::GetIO();
@@ -182,87 +178,72 @@ namespace Cuscuz
             ImGui::DockSpace(dockspace_id, ImVec2(0.0f, 0.0f), dockspace_flags);
         }
 
+        DrawMenuBar();
+        DrawSceneWindow();
+
+        ImGui::End();
+    }
+
+    void EditorLayer::DrawMenuBar()
+    {
+        static bool s_ShowHierarchy = true;
+        
         if (ImGui::BeginMenuBar())
         {
             if (ImGui::BeginMenu("File"))
             {
                 if (ImGui::MenuItem("Exit", NULL, false))
                 {
-                    pOpen = false;
                     Engine::Get().Close();
                 }
                 ImGui::EndMenu();
             }
+
+            if(ImGui::BeginMenu("Windows"))
+            {
+                ImGui::MenuItem("Hierarchy##00", NULL, &s_ShowHierarchy);
+
+                ImGui::EndMenu();
+            }
             ImGui::EndMenuBar();
         }
+
+        ShowHierarchyWindow(s_ShowHierarchy);
+    }
     
+    void EditorLayer::DrawSceneWindow()
+    {
+        ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, ImVec2(0.0f, 0.0f));
         ImGui::Begin("Scene");
-        uint32_t textureID = m_Framebuffer->GetColorAttachmentRendererID();
-        ImGui::Image(textureID, ImVec2{SCREEN_WIDTH, SCREEN_HEIGHT}, ImVec2{0,1}, ImVec2{1,0});
-        ImGui::End();
-    
-        ImGui::End();
-    }
+        ImGui::PopStyleVar();
 
-    bool EditorLayer::ToggleWindow(const CC_KeyDownEvent& event)
-    {
-        // if (event.GetKeyCode() == CC_KeyCode::F1)
-        //     m_ShowWorldWindow = !m_ShowWorldWindow;
+        m_IsViewportFocused = ImGui::IsWindowFocused();
+        m_IsViewportHovered = ImGui::IsWindowHovered();
+        Engine::Get().GetImGuiLayer()->SetBlockEvents(!m_IsViewportFocused || !m_IsViewportHovered);
+        
+        ImVec2 viewportSize = ImGui::GetContentRegionAvail();
 
-        return false;
-    }
-
-    void EditorLayer::ShowWorldWindow()
-    {
-        ImGui::Begin("World", &m_ShowWorldWindow, ImGuiWindowFlags_MenuBar);
-
-        static bool showActorCreation = false;
-        static bool showCameraWindow = false;
-        static bool showTimeStatsWindow = false;
-        static bool showRendererStatsWindow = true;
-
-        if (ImGui::BeginMenuBar())
+        if(m_ViewportSize != glm::vec2(viewportSize.x, viewportSize.y))
         {
-            if (ImGui::BeginMenu("Tools"))
-            {
-                ImGui::MenuItem("Create New Actor", NULL, &showActorCreation);
-
-                ImGui::EndMenu();
-            }
-
-            if (ImGui::BeginMenu("Camera"))
-            {
-                ImGui::MenuItem("Settings", NULL, &showCameraWindow);
-
-                ImGui::EndMenu();
-            }
-
-            if (ImGui::BeginMenu("Stats"))
-            {
-                ImGui::MenuItem("Time", NULL, &showTimeStatsWindow);
-                ImGui::MenuItem("Renderer", NULL, &showRendererStatsWindow);
-
-                ImGui::EndMenu();
-            }
-
-            ImGui::EndMenuBar();
+            m_ViewportSize = {viewportSize.x, viewportSize.y};
+            m_Framebuffer->Resize(static_cast<uint32_t>(m_ViewportSize.x), static_cast<uint32_t>(m_ViewportSize.y));
+            m_Camera->OnResize(m_ViewportSize.x, m_ViewportSize.y);
         }
+        
+        uint32_t textureID = m_Framebuffer->GetColorAttachmentRendererID();
+        ImGui::Image(textureID, ImVec2{m_ViewportSize.x, m_ViewportSize.y}, ImVec2{0,1}, ImVec2{1,0});
+        ImGui::End();
+    }
 
-        // if (showActorCreation)
-        //     ImGuiHelper::ShowActorCreation(showActorCreation, m_World);
-
-        if (showCameraWindow)
-            ImGuiHelper::ShowCameraWindow(showCameraWindow);
-
-        if (showTimeStatsWindow)
-            ImGuiHelper::ShowTimeStatsWindow(showTimeStatsWindow, m_ShowTimeStatsOverlay);
-
-        if (showRendererStatsWindow)
-            ImGuiHelper::ShowRendererStatsWindow(showRendererStatsWindow);
-
-        const bool showingActors = ImGui::CollapsingHeader("Hierarchy", ImGuiTreeNodeFlags_DefaultOpen);
-        //ImGuiHelper::ShowAllActors(showingActors, m_World);
-
+    void EditorLayer::ShowHierarchyWindow(bool& show)
+    {
+        if(!show)
+            return;
+        
+        ImGui::Begin("Hierarchy##01", &show);
+        
+        ImGuiHelper::ShowAllActors(m_EditorWorld.get());
+        
         ImGui::End();
     }
 }

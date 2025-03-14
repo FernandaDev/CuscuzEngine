@@ -19,11 +19,12 @@ namespace Cuscuz
         std::array<CC_AssetRef<SubTexture2D>, 3> m_MapTiles;  // grass 5,29 | water 3,29 | dirt 6,29  
         Actor* m_MainActor {};
 
-        bool m_ShowWorldWindow;
         bool m_ShowTimeStatsOverlay;
-
+        bool m_IsViewportFocused = false;
+        bool m_IsViewportHovered = false;
         float MoveSpeed = 1.f;
 
+        glm::vec2 m_ViewportSize = {0, 0};
         CC_AssetRef<Framebuffer> m_Framebuffer;
 
     public:
@@ -37,9 +38,11 @@ namespace Cuscuz
         void OnEvent(CuscuzEvent& event) override;
 
     private:
+        void ShowEditorWindow();
+        void DrawMenuBar();
+        void DrawSceneWindow();
+        void ShowHierarchyWindow(bool& show);
+
         void MoveActor(float deltaTime);
-        bool ToggleWindow(const CC_KeyDownEvent& event);
-        void ShowWorldWindow();
-        void InitEditorWindow();
     };
 }

@@ -45,6 +45,7 @@ namespace Cuscuz
 		void PushLayer(std::shared_ptr<Layer> layer);
 		void PushOverlay(std::shared_ptr<Layer> layer);
 
+		ImGuiLayer* GetImGuiLayer() { return m_ImGuiLayer.get(); }
 	private:
 		void Init();
 		bool Quit(CC_WindowCloseEvent& event);

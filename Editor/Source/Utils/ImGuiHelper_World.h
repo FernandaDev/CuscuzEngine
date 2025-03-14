@@ -37,11 +37,8 @@ namespace ImGuiHelper
         ImGui::PopID();
     }
     
-     inline static void ShowAllActors(bool showing, Cuscuz::World* world)
+     inline static void ShowAllActors(Cuscuz::World* world)
      {
-         if (!showing)
-             return;
-    
          static Cuscuz::Actor* selectedActor = nullptr;
          static int selectedIndex = 0;
     

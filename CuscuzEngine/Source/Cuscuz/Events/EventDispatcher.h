@@ -41,7 +41,7 @@ namespace Cuscuz
 
             for (auto&& Listener : m_Listeners.at(event.GetEventType()))
             {
-                if (!event.Handled())
+                if (!event.Handled)
                     Listener(event);
             }
         }
@@ -62,7 +62,7 @@ namespace Cuscuz
         {
             if(m_Event.GetEventType() == T::GetStaticType())
             {
-                m_Event.m_Handled = func(*(T*)&m_Event);
+                m_Event.Handled = func(*(T*)&m_Event);
                 return true;
             }
         

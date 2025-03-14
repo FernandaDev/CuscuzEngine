@@ -39,7 +39,6 @@ namespace Cuscuz
 
     protected:
         virtual ~CuscuzEvent() = default;
-        bool m_Handled = false;
 
     public:
         virtual CuscuzEventType GetEventType() const = 0;
@@ -52,7 +51,7 @@ namespace Cuscuz
             return GetCategoryFlags() & category;
         }
 
-        bool Handled() const { return m_Handled; }
+        bool Handled = false;
     };
 
     inline std::ostream& operator<<(std::ostream& os, const CuscuzEvent& e)

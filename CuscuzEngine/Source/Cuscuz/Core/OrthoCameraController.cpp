@@ -58,10 +58,8 @@ namespace Cuscuz
 
     bool OrthoCameraController::OnWindowResized(CC_WindowResizeEvent& event)
     {
-        m_aspectRatio = static_cast<float>(event.GetWidth()) / static_cast<float>(event.GetHeight());
-        m_Bounds = {-m_aspectRatio * m_ZoomLevel, m_aspectRatio * m_ZoomLevel, -m_ZoomLevel, m_ZoomLevel };
-        m_Camera.SetProjection(m_Bounds.Left, m_Bounds.Right, m_Bounds.Bottom, m_Bounds.Top);
-
+        OnResize(static_cast<float>(event.GetWidth()), static_cast<float>(event.GetHeight()));
+      
         return false;
     }
 
@@ -72,7 +70,14 @@ namespace Cuscuz
         m_Bounds = {-m_aspectRatio * m_ZoomLevel, m_aspectRatio * m_ZoomLevel, -m_ZoomLevel, m_ZoomLevel };
         m_Camera.SetProjection(m_Bounds.Left, m_Bounds.Right, m_Bounds.Bottom, m_Bounds.Top);
     }
-
+    
+    void OrthoCameraController::OnResize(float width, float height)
+    {
+        m_aspectRatio = width / height;
+        m_Bounds = {-m_aspectRatio * m_ZoomLevel, m_aspectRatio * m_ZoomLevel, -m_ZoomLevel, m_ZoomLevel };
+        m_Camera.SetProjection(m_Bounds.Left, m_Bounds.Right, m_Bounds.Bottom, m_Bounds.Top);
+    }
+    
     void OrthoCameraController::OnImGuiRender()
     {
         ImGui::TextColored(ImVec4(0.8f, .8f, .1f, 1.f), "Camera");

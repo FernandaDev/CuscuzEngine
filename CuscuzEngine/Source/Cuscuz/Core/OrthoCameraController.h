@@ -39,6 +39,8 @@ namespace Cuscuz
 
         void OnUpdate(float deltaTime);
         void OnEvent(CuscuzEvent& event);
+        void OnResize(float width, float height);
+        
         void OnImGuiRender();
 
         const OrthographicCamera& GetCamera() const { return m_Camera; }
