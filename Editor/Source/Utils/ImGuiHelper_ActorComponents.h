@@ -5,7 +5,7 @@
 
 #include "ImGui/imgui.h"
 #include "ImGuiHelper_Resources.h"
-#include "Cuscuz/Components/SpriteRenderer.h"
+#include "Cuscuz/World/Components/SpriteRenderer.h"
 #include "Cuscuz/World/Actor.h"
 #include "Cuscuz/Core/ClassRegistry.h"
 

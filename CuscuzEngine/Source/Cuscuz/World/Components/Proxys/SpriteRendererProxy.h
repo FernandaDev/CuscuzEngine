@@ -1,7 +1,7 @@
 ﻿#pragma once
 #include "vec4.hpp"
 #include "mat4x4.hpp"
-#include "Cuscuz/Components/SpriteRenderer.h"
+#include "Cuscuz/World/Components/SpriteRenderer.h"
 #include "Cuscuz/Core/Core.h"
 #include "Cuscuz/Render/IDrawable.h"
 

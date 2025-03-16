@@ -1,6 +1,6 @@
 ﻿#pragma once
 
-#include "Cuscuz/Components/CircleDetectionComponent.h"
+#include "Cuscuz/World/Components/CircleDetectionComponent.h"
 #include "Cuscuz/Utils/Math.h"
 
 namespace Cuscuz

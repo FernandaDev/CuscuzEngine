@@ -42,6 +42,7 @@ namespace Cuscuz
         void DrawMenuBar();
         void DrawSceneWindow();
         void ShowHierarchyWindow(bool& show);
+        void ShowInspectorWindow(bool& show);
 
         void MoveActor(float deltaTime);
     };

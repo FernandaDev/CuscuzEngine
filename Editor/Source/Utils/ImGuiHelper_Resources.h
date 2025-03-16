@@ -1,6 +1,6 @@
 ﻿#pragma once
 #include "ImGui/imgui.h"
-#include "Cuscuz/Components/SpriteRenderer.h"
+#include "Cuscuz/World/Components/SpriteRenderer.h"
 #include "Cuscuz/Render/Sprite.h"
 #include "Cuscuz/Render/Texture.h"
 #include "Cuscuz/Utils/ResourcesManager.h"

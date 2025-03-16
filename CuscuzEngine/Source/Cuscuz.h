@@ -16,9 +16,9 @@
 #include "Cuscuz/World/Component.h"
 #include "Cuscuz/World/Scene.h"
 
-#include "Cuscuz/Components/Simple2DMovementComponent.h"
-#include "Cuscuz/Components/SpriteRenderer.h"
-#include "Cuscuz/Components/CircleDetectionComponent.h"
+#include "Cuscuz/World/Components/Simple2DMovementComponent.h"
+#include "Cuscuz/World/Components/SpriteRenderer.h"
+#include "Cuscuz/World/Components/CircleDetectionComponent.h"
 
 #include "Cuscuz/Layers/Layer.h"
 

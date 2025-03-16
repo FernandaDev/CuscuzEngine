@@ -41,11 +41,16 @@ namespace Cuscuz
         m_MainActor = &m_EditorWorld->CreateActor("Fer", glm::vec3(0, 0, 0), 1.f);
         m_MainActor->AddComponent<CircleDetectionComponent>(48.f);
         auto& actorSprite = m_MainActor->AddComponent<SpriteRenderer>();
-    
         m_ActorTexture = Texture2D::Create("Assets/Images/player.png");
         m_ActorSprite->SetTexture(m_ActorTexture);
-    
         actorSprite.SetSprite(m_ActorSprite);
+
+        Actor* anotherActor = &m_EditorWorld->CreateActor("Another one", {2.0f, 0.f, 0.f}, 1.f);
+        SpriteRenderer& anotherSpriteComp = anotherActor->AddComponent<SpriteRenderer>();
+        auto anotherTexture = Texture2D::Create("Assets/Images/soldier.png");
+        CC_AssetRef<Sprite> anotherSprite = CreateAssetRef<Sprite>();
+        anotherSprite->SetTexture(anotherTexture);
+        anotherSpriteComp.SetSprite(anotherSprite);
 
         m_Spritesheet = Texture2D::Create("Assets/Images/Map_SpriteSheet.png");
         m_MapTiles[0] = SubTexture2D::CreateFromCoords(m_Spritesheet, {5, 29}, {16,16}, {1,1}, 1.f);
@@ -91,6 +96,14 @@ namespace Cuscuz
     {
         CC_PROFILE_FUNCTION();
 
+        if (const FramebufferSpecification spec = m_Framebuffer->GetSpecification();
+           m_ViewportSize.x > 0.0f && m_ViewportSize.y > 0.0f && // zero sized framebuffer is invalid
+           (spec.Width != static_cast<uint32_t>(m_ViewportSize.x) || spec.Height != static_cast<uint32_t>(m_ViewportSize.y)))
+        {
+            m_Framebuffer->Resize(static_cast<uint32_t>(m_ViewportSize.x), static_cast<uint32_t>(m_ViewportSize.y));
+            m_Camera->OnResize(m_ViewportSize.x, m_ViewportSize.y);
+        }
+        
         if(m_IsViewportFocused)
             m_Camera->OnUpdate(deltaTime);
     
@@ -187,6 +200,7 @@ namespace Cuscuz
     void EditorLayer::DrawMenuBar()
     {
         static bool s_ShowHierarchy = true;
+        static bool s_ShowInspector= true;
         
         if (ImGui::BeginMenuBar())
         {
@@ -202,6 +216,7 @@ namespace Cuscuz
             if(ImGui::BeginMenu("Windows"))
             {
                 ImGui::MenuItem("Hierarchy##00", NULL, &s_ShowHierarchy);
+                ImGui::MenuItem("Inspector##00", NULL, &s_ShowInspector);
 
                 ImGui::EndMenu();
             }
@@ -209,6 +224,7 @@ namespace Cuscuz
         }
 
         ShowHierarchyWindow(s_ShowHierarchy);
+        ShowInspectorWindow(s_ShowInspector);
     }
     
     void EditorLayer::DrawSceneWindow()
@@ -222,13 +238,7 @@ namespace Cuscuz
         Engine::Get().GetImGuiLayer()->SetBlockEvents(!m_IsViewportFocused || !m_IsViewportHovered);
         
         ImVec2 viewportSize = ImGui::GetContentRegionAvail();
-
-        if(m_ViewportSize != glm::vec2(viewportSize.x, viewportSize.y))
-        {
-            m_ViewportSize = {viewportSize.x, viewportSize.y};
-            m_Framebuffer->Resize(static_cast<uint32_t>(m_ViewportSize.x), static_cast<uint32_t>(m_ViewportSize.y));
-            m_Camera->OnResize(m_ViewportSize.x, m_ViewportSize.y);
-        }
+        m_ViewportSize = {viewportSize.x , viewportSize.y};
         
         uint32_t textureID = m_Framebuffer->GetColorAttachmentRendererID();
         ImGui::Image(textureID, ImVec2{m_ViewportSize.x, m_ViewportSize.y}, ImVec2{0,1}, ImVec2{1,0});
@@ -244,6 +254,19 @@ namespace Cuscuz
         
         ImGuiHelper::ShowAllActors(m_EditorWorld.get());
         
+        ImGui::End();
+    }
+
+    void EditorLayer::ShowInspectorWindow(bool& show)
+    {
+        if(!show)
+            return;
+
+        ImGui::Begin("Inspector##01", &show);
+
+        if(ImGuiHelper::selectedActor)
+            ImGuiHelper::ShowActor(ImGuiHelper::selectedActor);
+
         ImGui::End();
     }
 }

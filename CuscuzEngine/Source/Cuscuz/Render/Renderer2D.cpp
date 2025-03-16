@@ -7,7 +7,7 @@
 #include "Texture.h"
 #include "SubTexture2D.h"
 #include "VertexArray.h"
-#include "Cuscuz/Components/TransformComponent.h"
+#include "Cuscuz/World/Components/TransformComponent.h"
 
 namespace Cuscuz
 {
@@ -112,6 +112,16 @@ namespace Cuscuz
     {
         s_Data.SpriteShader->Bind();
         s_Data.SpriteShader->SetMatrix4("u_ViewProjection", camera.GetViewProjectionMatrix());
+
+        StartBatch();
+    }
+
+    void Renderer2D::BeginScene(const Camera& camera, const glm::mat4& transform)
+    {
+        const auto viewProjection = camera.GetProjection() * glm::inverse(transform);
+        
+        s_Data.SpriteShader->Bind();
+        s_Data.SpriteShader->SetMatrix4("u_ViewProjection", viewProjection);
 
         StartBatch();
     }

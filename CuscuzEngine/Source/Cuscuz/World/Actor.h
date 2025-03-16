@@ -2,7 +2,7 @@
 
 #include "Cuscuz/Utils/Log.h"
 #include "Component.h"
-#include "Cuscuz/Components/TransformComponent.h"
+#include "Components/TransformComponent.h"
 #include "Cuscuz/Events/EventDefinitions.h"
 #include "Cuscuz/Utils/Math.h"
 

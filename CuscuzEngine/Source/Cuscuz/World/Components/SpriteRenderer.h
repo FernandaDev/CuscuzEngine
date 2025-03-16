@@ -8,6 +8,7 @@
 
 namespace Cuscuz
 {
+    class TransformComponent;
     class Sprite;
     
     class SpriteRenderer : public Component, public IDrawable
