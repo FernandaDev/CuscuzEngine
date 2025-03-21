@@ -1,15 +1,13 @@
 ﻿#include "EditorLayer.h"
 
-#include <stdbool.h>
-
 #include "Cuscuz/core/Input.h"
 #include "Cuscuz/GUI/ImGuiLayer.h"
 #include "Cuscuz/Utils/Instrumentor.h"
 #include "ext/matrix_transform.hpp"
 #include "ImGui/imgui.h"
-#include "Utils/ImGuiHelper_ActorCreation.h"
-#include "Utils/ImGuiHelper_Settings.h"
-#include "Utils/ImGuiHelper_World.h"
+#include "Utils\Editor_ActorCreation.h"
+#include "Utils\Editor_Settings.h"
+#include "Utils\Editor_World.h"
 
 namespace Cuscuz
 {
@@ -149,13 +147,18 @@ namespace Cuscuz
 
     void EditorLayer::OnImGuiRender()
     {
-        ShowEditorWindow();
+        EditorWindowBegin();
+        
+        DrawEditorWindow();
 
-        // if (m_ShowTimeStatsOverlay) TODO this should be part of scene/viewport window.
-        //     ImGuiHelper::ShowTimeOverlay(m_ShowTimeStatsOverlay);
+        EditorWindowEnd();
+
     }
 
-    void EditorLayer::ShowEditorWindow()
+    static bool s_ShowHierarchy = true;
+    static bool s_ShowInspector= true;
+    
+    void EditorLayer::EditorWindowBegin()
     {
         static bool pOpen = true;
         static ImGuiDockNodeFlags dockspace_flags = ImGuiDockNodeFlags_None;
@@ -190,18 +193,24 @@ namespace Cuscuz
             ImGuiID dockspace_id = ImGui::GetID("MyDockSpace");
             ImGui::DockSpace(dockspace_id, ImVec2(0.0f, 0.0f), dockspace_flags);
         }
-
+    }
+    
+    void EditorLayer::DrawEditorWindow()
+    {
         DrawMenuBar();
         DrawSceneWindow();
 
+        DrawHierarchyWindow(s_ShowHierarchy);
+        DrawInspectorWindow(s_ShowInspector);
+    }
+
+    void EditorLayer::EditorWindowEnd()
+    {
         ImGui::End();
     }
 
     void EditorLayer::DrawMenuBar()
     {
-        static bool s_ShowHierarchy = true;
-        static bool s_ShowInspector= true;
-        
         if (ImGui::BeginMenuBar())
         {
             if (ImGui::BeginMenu("File"))
@@ -220,11 +229,17 @@ namespace Cuscuz
 
                 ImGui::EndMenu();
             }
+
+            if(ImGui::BeginMenu("World"))
+            {
+                if(ImGui::MenuItem("Create Actor##00", NULL))
+                    m_EditorWorld->CreateActor("Actor", glm::vec3(0));
+                
+                ImGui::EndMenu();
+            }
+            
             ImGui::EndMenuBar();
         }
-
-        ShowHierarchyWindow(s_ShowHierarchy);
-        ShowInspectorWindow(s_ShowInspector);
     }
     
     void EditorLayer::DrawSceneWindow()
@@ -242,30 +257,34 @@ namespace Cuscuz
         
         uint32_t textureID = m_Framebuffer->GetColorAttachmentRendererID();
         ImGui::Image(textureID, ImVec2{m_ViewportSize.x, m_ViewportSize.y}, ImVec2{0,1}, ImVec2{1,0});
+
+        // if (m_ShowTimeStatsOverlay) TODO this should be part of scene/viewport window.
+        //     ImGuiHelper::ShowTimeOverlay(m_ShowTimeStatsOverlay);
+
         ImGui::End();
     }
 
-    void EditorLayer::ShowHierarchyWindow(bool& show)
+    void EditorLayer::DrawHierarchyWindow(bool& show)
     {
         if(!show)
             return;
         
         ImGui::Begin("Hierarchy##01", &show);
         
-        ImGuiHelper::ShowAllActors(m_EditorWorld.get());
+        Editor::ShowAllActors(m_EditorWorld.get());
         
         ImGui::End();
     }
 
-    void EditorLayer::ShowInspectorWindow(bool& show)
+    void EditorLayer::DrawInspectorWindow(bool& show)
     {
         if(!show)
             return;
 
         ImGui::Begin("Inspector##01", &show);
 
-        if(ImGuiHelper::selectedActor)
-            ImGuiHelper::ShowActor(ImGuiHelper::selectedActor);
+        if(Editor::s_SelectedActor)
+            Editor::ShowActor(Editor::s_SelectedActor);
 
         ImGui::End();
     }

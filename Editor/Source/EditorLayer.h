@@ -26,7 +26,7 @@ namespace Cuscuz
 
         glm::vec2 m_ViewportSize = {0, 0};
         CC_AssetRef<Framebuffer> m_Framebuffer;
-
+        
     public:
         EditorLayer();
         ~EditorLayer() override = default;
@@ -38,11 +38,13 @@ namespace Cuscuz
         void OnEvent(CuscuzEvent& event) override;
 
     private:
-        void ShowEditorWindow();
+        void EditorWindowBegin();
+        void DrawEditorWindow();
+        void EditorWindowEnd();
         void DrawMenuBar();
         void DrawSceneWindow();
-        void ShowHierarchyWindow(bool& show);
-        void ShowInspectorWindow(bool& show);
+        void DrawHierarchyWindow(bool& show);
+        void DrawInspectorWindow(bool& show);
 
         void MoveActor(float deltaTime);
     };

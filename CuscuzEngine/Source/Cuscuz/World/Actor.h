@@ -35,6 +35,8 @@ namespace Cuscuz
         void Update(float deltaTime);
         void Destroy();
 
+        void SetName(std::string&& newName) { m_Name = std::move(newName); }
+        void SetName(const char* newName) { m_Name = newName; }
         const std::string& GetName() const { return m_Name; }
         ActorState GetState() const { return m_State; }
         TransformComponent& GetTransform() const { return *m_Transform; }
