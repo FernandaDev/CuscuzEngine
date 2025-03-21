@@ -272,6 +272,9 @@ namespace Cuscuz
         ImGui::Begin("Hierarchy##01", &show);
         
         Editor::ShowAllActors(m_EditorWorld.get());
+
+        if(ImGui::IsMouseDown(0) && ImGui::IsWindowHovered())
+            Editor::s_SelectedActor = nullptr;
         
         ImGui::End();
     }

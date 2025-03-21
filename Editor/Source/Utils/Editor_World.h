@@ -12,9 +12,9 @@ namespace Cuscuz
         inline static void ShowActor(Actor* actor)
         {
             const std::string actorName = actor->GetName();
-            char nameBuffer[256];
 
-            std::strncpy(nameBuffer, actorName.c_str(), sizeof(nameBuffer));
+            char nameBuffer[256];
+            strncpy_s(nameBuffer, actorName.c_str(), sizeof(nameBuffer));
             nameBuffer[sizeof(nameBuffer) - 1] = '\0';
 
             if (ImGui::InputText("##ActorName", nameBuffer, sizeof(nameBuffer)))
