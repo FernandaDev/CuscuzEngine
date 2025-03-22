@@ -40,7 +40,6 @@ namespace Cuscuz
         uint32_t GetTextWidth() const;
 
         REGISTER_COMPONENT(SpriteRenderer);
-        //void ImGuiDisplayComponent() override;        
     protected:
         void Draw() override;
         float GetRotationDegrees() const;

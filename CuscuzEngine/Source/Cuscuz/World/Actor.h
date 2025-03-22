@@ -80,7 +80,6 @@ namespace Cuscuz
             {
                 if (auto comp = std::dynamic_pointer_cast<T>(component))
                 {
-                    LOG_INFO("Got {0} from {1}.", T::GetStaticComponentType(), m_Name);
                     return *comp;
                 }
             }
@@ -96,10 +95,7 @@ namespace Cuscuz
             for (const auto& component : m_Components)
             {
                 if (std::dynamic_pointer_cast<T>(component)) // quem tem Animation2D has um sprite component, entao ele entra.
-                {
-                    LOG_INFO("{0} has {1}.", m_Name, T::GetStaticComponentType());
                     return true;
-                }
             }
 
             return false;

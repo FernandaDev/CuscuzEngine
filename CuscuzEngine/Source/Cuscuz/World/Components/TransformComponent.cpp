@@ -1,8 +1,7 @@
 ﻿#include "pch.h"
 
 #include "TransformComponent.h"
-#include "imgui.h"
-#include "ext/matrix_transform.hpp"
+#include "gtc/matrix_transform.hpp"
 #include "Cuscuz/Utils/Math.h"
 
 namespace Cuscuz
@@ -61,52 +60,5 @@ namespace Cuscuz
         m_WorldTransform = glm::translate(m_WorldTransform, glm::vec3(m_Position.x, m_Position.y, m_Position.z));
         m_WorldTransform = glm::rotate(m_WorldTransform, glm::radians(m_Rotation), glm::vec3(0.0f, 0.0f, 1.0f));
         m_WorldTransform = glm::scale(m_WorldTransform, glm::vec3(m_Scale.x, m_Scale.y, 1.0f));
-    }
-
-    void TransformComponent::ImGuiDisplayComponent()
-    {
-        ImGui::TextColored(ImVec4(0.8f, .8f, .1f, 1.f), "Transform");
-
-        ImGui::Separator();
-
-        ImGui::PushItemWidth(100.0f); 
-        
-        ImGui::Text("Position");
-
-        auto pos = m_Position;
-    
-        ImGui::DragFloat("x##pos", &pos.x);
-        ImGui::SameLine();
-        ImGui::DragFloat("y##pos", &pos.y);
-        ImGui::SameLine();
-        ImGui::DragFloat("z##pos", &pos.z);
-
-        SetPosition(pos);
-
-        ImGui::Dummy(ImVec2(0.0f, 10.0f));
-
-        ImGui::Text("Rotation");
-    
-        auto rot = m_Rotation;
-
-        ImGui::DragFloat("degrees", &rot);
-
-        SetRotation(rot);
-    
-        ImGui::Dummy(ImVec2(0.0f, 10.0f));
-        
-        ImGui::Text("Scale");
-
-        auto scale = m_Scale;
-    
-        ImGui::DragFloat("x##scale", &scale.x);
-        ImGui::DragFloat("y##scale", &scale.y);
-
-        SetScale(scale);
-    
-        ImGui::PopItemWidth();
-    
-        ImGui::Dummy(ImVec2(0.0f, 3.0f));
-        ImGui::Separator();
     }
 }

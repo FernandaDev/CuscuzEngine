@@ -1,7 +1,6 @@
 ﻿#pragma once
 
 #include "Cuscuz/Events/CuscuzEvent.h"
-#include "Cuscuz/Events/KeyEvents.h"
 #include "Cuscuz/Layers/Layer.h"
 
 namespace Cuscuz
@@ -20,17 +19,13 @@ namespace Cuscuz
         ~ImGuiLayer() override;
 
         void OnAttach() override;
-        void OnDetach() override;
-        void OnImGuiRender() override;
         void OnEvent(CuscuzEvent& event) override;
         void SetBlockEvents(bool block) { m_BlockEvents = block; } 
 
         void Begin();
         void End();
     private:
+        void SetDarkThemeColors();
         bool OnSDLEvent(const class CC_SDLEvent& event);
-        bool OnKeyDown(const class CC_KeyDownEvent& event);
-        bool ToggleMainWindow(const CC_KeyDownEvent& event);
-        void ShowMainWindow();
     };
 }

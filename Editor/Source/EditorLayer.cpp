@@ -11,6 +11,10 @@
 
 namespace Cuscuz
 {
+    static bool s_ShowHierarchy = true;
+    static bool s_ShowInspector= true;
+    static bool s_ShowTimeStatsOverlay = false;
+    
     struct Tile
     {
         glm::mat4 Transform;
@@ -28,22 +32,21 @@ namespace Cuscuz
     m_Camera(std::make_unique<OrthoCameraController>(static_cast<float>(SCREEN_WIDTH) / static_cast<float>(SCREEN_HEIGHT), true)),
     m_EditorWorld(std::make_unique<World>()),
     m_EditorScene(std::make_unique<Scene>()),
-    m_ActorSprite(std::make_shared<Sprite>()),
-    m_ShowTimeStatsOverlay(true)
+    m_ActorSprite(std::make_shared<Sprite>())
     {  }
 
     void EditorLayer::OnAttach()
     {
         CC_PROFILE_FUNCTION();
     
-        m_MainActor = &m_EditorWorld->CreateActor("Fer", glm::vec3(0, 0, 0), 1.f);
+        m_MainActor = &m_EditorWorld->CreateActor("Fer", glm::vec3(0, 0, 1.f), 1.f);
         m_MainActor->AddComponent<CircleDetectionComponent>(48.f);
         auto& actorSprite = m_MainActor->AddComponent<SpriteRenderer>();
         m_ActorTexture = Texture2D::Create("Assets/Images/player.png");
         m_ActorSprite->SetTexture(m_ActorTexture);
         actorSprite.SetSprite(m_ActorSprite);
 
-        Actor* anotherActor = &m_EditorWorld->CreateActor("Another one", {2.0f, 0.f, 0.f}, 1.f);
+        Actor* anotherActor = &m_EditorWorld->CreateActor("Another one", {2.0f, 0.f, 1.f}, 1.f);
         SpriteRenderer& anotherSpriteComp = anotherActor->AddComponent<SpriteRenderer>();
         auto anotherTexture = Texture2D::Create("Assets/Images/soldier.png");
         CC_AssetRef<Sprite> anotherSprite = CreateAssetRef<Sprite>();
@@ -88,6 +91,8 @@ namespace Cuscuz
         Layer::OnEvent(event);
 
         m_Camera->OnEvent(event);
+        EventSingleDispatcher eventDispatcher(event);
+        eventDispatcher.Dispatch<CC_KeyDownEvent>(BIND_FUNCTION(this, EditorLayer::OnKeyDownEvent));
     }
 
     void EditorLayer::OnUpdate(float deltaTime)
@@ -145,6 +150,16 @@ namespace Cuscuz
         m_MainActor->GetTransform().SetPosition(pos);
     }
 
+    bool EditorLayer::OnKeyDownEvent(const CC_KeyDownEvent& event)
+    {
+        if(event.GetKeyCode() == CC_KEYCODE_F1)
+        {
+            s_ShowTimeStatsOverlay = !s_ShowTimeStatsOverlay;
+        }
+
+        return false;
+    }
+
     void EditorLayer::OnImGuiRender()
     {
         EditorWindowBegin();
@@ -154,17 +169,12 @@ namespace Cuscuz
         EditorWindowEnd();
 
     }
-
-    static bool s_ShowHierarchy = true;
-    static bool s_ShowInspector= true;
     
     void EditorLayer::EditorWindowBegin()
     {
         static bool pOpen = true;
         static ImGuiDockNodeFlags dockspace_flags = ImGuiDockNodeFlags_None;
 
-        // We are using the ImGuiWindowFlags_NoDocking flag to make the parent window not dockable into,
-        // because it would be confusing to have two docking targets within each others.
         ImGuiWindowFlags window_flags = ImGuiWindowFlags_MenuBar | ImGuiWindowFlags_NoDocking;
 
         const ImGuiViewport* viewport = ImGui::GetMainViewport();
@@ -177,8 +187,6 @@ namespace Cuscuz
             ImGuiWindowFlags_NoMove;
         window_flags |= ImGuiWindowFlags_NoBringToFrontOnFocus | ImGuiWindowFlags_NoNavFocus;
 
-        // When using ImGuiDockNodeFlags_PassthruCentralNode, DockSpace() will render our background
-        // and handle the pass-thru hole, so we ask Begin() to not render a background.
         if (dockspace_flags & ImGuiDockNodeFlags_PassthruCentralNode)
             window_flags |= ImGuiWindowFlags_NoBackground;
     
@@ -188,11 +196,17 @@ namespace Cuscuz
 
         // Submit the DockSpace
         ImGuiIO& io = ImGui::GetIO();
+        ImGuiStyle& style = ImGui::GetStyle();
+        const float minWindowSizeX = style.WindowMinSize.x;
+        style.WindowMinSize.x = 300.f;
+        
         if (io.ConfigFlags & ImGuiConfigFlags_DockingEnable)
         {
             ImGuiID dockspace_id = ImGui::GetID("MyDockSpace");
             ImGui::DockSpace(dockspace_id, ImVec2(0.0f, 0.0f), dockspace_flags);
         }
+        
+        style.WindowMinSize.x = minWindowSizeX;        
     }
     
     void EditorLayer::DrawEditorWindow()
@@ -257,9 +271,6 @@ namespace Cuscuz
         
         uint32_t textureID = m_Framebuffer->GetColorAttachmentRendererID();
         ImGui::Image(textureID, ImVec2{m_ViewportSize.x, m_ViewportSize.y}, ImVec2{0,1}, ImVec2{1,0});
-
-        // if (m_ShowTimeStatsOverlay) TODO this should be part of scene/viewport window.
-        //     ImGuiHelper::ShowTimeOverlay(m_ShowTimeStatsOverlay);
 
         ImGui::End();
     }

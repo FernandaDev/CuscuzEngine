@@ -23,7 +23,6 @@ namespace Cuscuz
 
         void Update(float deltaTime) override;
         void OnAdded() override;
-        void ImGuiDisplayComponent() override;
     
         glm::mat4 GetWorldTransform() const  { return m_WorldTransform; }
 

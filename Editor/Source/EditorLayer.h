@@ -19,7 +19,6 @@ namespace Cuscuz
         std::array<CC_AssetRef<SubTexture2D>, 3> m_MapTiles;  // grass 5,29 | water 3,29 | dirt 6,29  
         Actor* m_MainActor {};
 
-        bool m_ShowTimeStatsOverlay;
         bool m_IsViewportFocused = false;
         bool m_IsViewportHovered = false;
         float MoveSpeed = 1.f;
@@ -47,5 +46,7 @@ namespace Cuscuz
         void DrawInspectorWindow(bool& show);
 
         void MoveActor(float deltaTime);
+
+        bool OnKeyDownEvent(const CC_KeyDownEvent& event);
     };
 }

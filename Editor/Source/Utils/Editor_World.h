@@ -1,7 +1,7 @@
 ﻿#pragma once
 
 #include "ImGui/imgui.h"
-#include "Editor_ActorComponents.h"
+#include "Editor_Components.h"
 #include "Cuscuz/World/World.h"
 #include "Cuscuz/World/Actor.h"
 
@@ -22,7 +22,7 @@ namespace Cuscuz
 
             ImGui::Dummy({0, 5});
 
-            actor->GetTransform().ImGuiDisplayComponent();
+            ShowActorComponents(actor);
         }
 
         static Actor* s_SelectedActor = nullptr;
@@ -34,6 +34,7 @@ namespace Cuscuz
             for(auto& actor : allActors)
             {
                 ImGuiTreeNodeFlags flags = ( (actor.get() == s_SelectedActor) ? ImGuiTreeNodeFlags_Selected : 0) | ImGuiTreeNodeFlags_OpenOnArrow;
+                flags |= ImGuiTreeNodeFlags_SpanAvailWidth;
                 const bool isOpened = ImGui::TreeNodeEx(actor.get(), flags, actor->GetName().c_str());
 
                 if(ImGui::IsItemClicked())
