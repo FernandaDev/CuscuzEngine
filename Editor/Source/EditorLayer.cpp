@@ -167,7 +167,6 @@ namespace Cuscuz
         DrawEditorWindow();
 
         EditorWindowEnd();
-
     }
     
     void EditorLayer::EditorWindowBegin()

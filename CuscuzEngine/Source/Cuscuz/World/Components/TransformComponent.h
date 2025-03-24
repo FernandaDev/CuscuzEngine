@@ -26,8 +26,6 @@ namespace Cuscuz
     
         glm::mat4 GetWorldTransform() const  { return m_WorldTransform; }
 
-        std::string GetComponentType() const override { return "TransformComponent"; }
-    
         void SetPosition(const glm::vec3& newPosition);
         void SetRotation(float newRotation);
         void SetScale(glm::vec2 newScale);
@@ -37,6 +35,9 @@ namespace Cuscuz
         glm::vec2 GetScale() const { return m_Scale; }
         glm::vec3 GetForward() const { return {glm::cos(m_Rotation), -glm::sin(m_Rotation), 1.0f}; }
 
+        DECLARE_CLASS_TYPE(TransformComponent)
+    protected:
+        CLASS_TYPE_IMPLEMENT_WITH_BASE(TransformComponent, Component)
     private:
         void ComputeWorldTransform();
     };

@@ -3,6 +3,7 @@ project "CuscuzEngine"
    language "C++"
    cppdialect "C++20"
    staticruntime "off"
+   rtti "off"
 
    pchheader "pch.h"
    pchsource "Source/pch.cpp"

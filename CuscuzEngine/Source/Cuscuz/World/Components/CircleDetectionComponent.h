@@ -18,10 +18,10 @@ namespace Cuscuz
 
         void SetRadius(float newRadius);
         float GetRadius() const override { return m_Radius; }
-
+        
         const glm::vec3& GetCenter() const override;
         Actor* GetActor() const override { return GetOwner(); }
-    
+        
         void OnOverlapping(Actor* other) override;
         void OnOverlapEnter(Actor* other) override;
         void OnOverlapExit(Actor* other) override;
@@ -30,6 +30,8 @@ namespace Cuscuz
 
         void ImGuiDisplayComponent() override;
 
-        REGISTER_COMPONENT(CircleDetectionComponent);
+        DECLARE_CLASS_TYPE(CircleDetectionComponent)
+    protected:
+        CLASS_TYPE_IMPLEMENT_WITH_BASE(CircleDetectionComponent, Component)
     };
 }

@@ -85,7 +85,7 @@ namespace Cuscuz
             {
                 ImGuiTreeNodeFlags flags = ImGuiTreeNodeFlags_DefaultOpen | ImGuiTreeNodeFlags_AllowItemOverlap |
                                            ImGuiTreeNodeFlags_Framed | ImGuiTreeNodeFlags_FramePadding;
-                T& component = actor->GetComponent<T>();
+                T* component = actor->GetComponent<T>();
 
                 ImGui::Separator();
                 if(ImGui::TreeNodeEx((void*)typeid(T).hash_code(), flags, name.c_str()))
@@ -112,11 +112,11 @@ namespace Cuscuz
                 {
                     ImGui::Text("Color");
                     ImGui::SameLine();
-                    static glm::vec4 spriteColor = component.GetColor();
+                    static glm::vec4 spriteColor = component->GetColor();
                     ImGui::ColorEdit4("##SpriteColor", glm::value_ptr(spriteColor));
 
-                    if(spriteColor != component.GetColor())
-                         component.SetColor(spriteColor);
+                    if(spriteColor != component->GetColor())
+                         component->SetColor(spriteColor);
 
                     ImGui::Dummy({0.0f, 1.f});
                     
@@ -127,7 +127,7 @@ namespace Cuscuz
                     constexpr ImVec4 color(.5f,.8f,1.f,1.f);
     
                     ImDrawList* draw_list = ImGui::GetWindowDrawList();
-                    if(auto& sprite = component.GetSprite())
+                    if(auto& sprite = component->GetSprite())
                     {
                         if (const auto texture = sprite->GetTexture())
                         {

@@ -17,7 +17,9 @@ namespace Cuscuz
         CameraComponent(const CameraComponent& other) = default;
         
         ~CameraComponent() override = default;
-        
-        REGISTER_COMPONENT(CameraComponent);
+
+        DECLARE_CLASS_TYPE(SpriteRenderer)
+    protected:
+        CLASS_TYPE_IMPLEMENT_WITH_BASE(CameraComponent, Component)
     };
 }

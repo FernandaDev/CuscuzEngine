@@ -10,8 +10,6 @@
 
 namespace Cuscuz
 {
-    CREATE_COMPONENT_REGISTRY(SpriteRenderer);
-
     SpriteRenderer::SpriteRenderer(int drawOrder) :
     m_DrawOrder(drawOrder), m_Color(1.f, 1.f, 1.f, 1)
     { }

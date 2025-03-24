@@ -1,5 +1,6 @@
 ﻿#pragma once
 
+#include "Cuscuz/Core/ObjectBase.h"
 #include "Cuscuz/Utils/Log.h"
 #include "Component.h"
 #include "Components/TransformComponent.h"
@@ -18,7 +19,7 @@ namespace Cuscuz
         Dead
     };
 
-    class Actor
+    class Actor : public ObjectBase
     {
     protected:
         std::string m_Name;
@@ -30,7 +31,7 @@ namespace Cuscuz
     public:
         Actor(World* world, std::string&& name, const glm::vec3& position,
               float scale = 1.f, float rotation = Math::PiOver2);
-        virtual ~Actor();
+        ~Actor() override;
 
         void Update(float deltaTime);
         void Destroy();
@@ -42,10 +43,12 @@ namespace Cuscuz
         TransformComponent& GetTransform() const { return *m_Transform; }
         const std::vector<std::shared_ptr<Component>>& GetComponents() const { return m_Components; }
 
+        DECLARE_CLASS_TYPE(Actor)
     protected:
         void UpdateComponents(float deltaTime) const;
         virtual void UpdateActor(float deltaTime) {}
 
+        CLASS_TYPE_IMPLEMENT(Actor)
     private:
         void UpdateTransform(float deltaTime) const;
 
@@ -59,7 +62,7 @@ namespace Cuscuz
             auto& newComponent = m_Components.emplace_back(std::make_shared<T>(std::forward<Args>(args)...));
             newComponent->SetOwner(this);
             newComponent->OnAdded();
-            LOG_INFO("{0} was added to {1}.", T::GetStaticComponentType(), m_Name);
+            LOG_INFO("{0} was added to {1}.", T::StaticClassName(), m_Name);
             return *std::static_pointer_cast<T>(newComponent);
         }
 
@@ -68,23 +71,23 @@ namespace Cuscuz
             const auto& newComponent = m_Components.emplace_back(component);
             newComponent->SetOwner(this);
             newComponent->OnAdded();
-            LOG_INFO("{0} was added to {1}.", newComponent->GetComponentType(), m_Name);
+            LOG_INFO("{0} was added to {1}.", newComponent->ClassName(), m_Name);
         }
 
         template <typename T>
-        T& GetComponent()
+        T* GetComponent()
         {
             static_assert(std::is_base_of<Component, T>::value, "T must be derived from Component");
 
             for (const auto& component : m_Components)
             {
-                if (auto comp = std::dynamic_pointer_cast<T>(component))
+                if(T* comp = component->As<T>())
                 {
-                    return *comp;
+                    return comp;
                 }
             }
 
-            throw std::runtime_error("Component not found!");
+            return nullptr;
         }
 
         template <typename T>
@@ -94,7 +97,7 @@ namespace Cuscuz
 
             for (const auto& component : m_Components)
             {
-                if (std::dynamic_pointer_cast<T>(component)) // quem tem Animation2D has um sprite component, entao ele entra.
+                if(component->Is<T>())
                     return true;
             }
 
@@ -110,7 +113,8 @@ namespace Cuscuz
             const auto it = std::find_if(m_Components.begin(), m_Components.end(),
                                          [](const std::shared_ptr<Component>& component)
                                          {
-                                             return component->GetComponentType() == T::GetStaticComponentType();
+                                             return component->Is<T>();
+                                             //return component->GetComponentType() == T::GetStaticComponentType();
                                          });
 
             if (it == m_Components.end())
@@ -120,7 +124,7 @@ namespace Cuscuz
             }
 
             it->OnRemoved();
-            LOG_INFO("{0} was removed from {1}.", T::GetStaticComponentType(), m_Name);
+            LOG_INFO("{0} was removed from {1}.", T::StaticClassName(), m_Name);
             m_Components.erase(it);
             return true;
         }

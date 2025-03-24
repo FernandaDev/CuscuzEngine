@@ -6,8 +6,6 @@
 
 namespace Cuscuz
 {
-    CREATE_COMPONENT_REGISTRY(Animation2DComponent)
-
     Animation2DComponent::Animation2DComponent(int frameCount, int drawOrder) :
     SpriteRenderer(drawOrder), m_FrameCount(frameCount), m_AnimFPS(10), m_CurrentFrame(0)
     {}

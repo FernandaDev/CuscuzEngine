@@ -4,6 +4,7 @@ project "Editor"
    cppdialect "C++20"
    targetdir "Binaries/%{cfg.buildcfg}"
    staticruntime "off"
+   rtti "off"
 
    files
    {

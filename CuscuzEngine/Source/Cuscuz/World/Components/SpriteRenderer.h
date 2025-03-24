@@ -39,8 +39,10 @@ namespace Cuscuz
         uint32_t GetTexHeight() const;
         uint32_t GetTextWidth() const;
 
-        REGISTER_COMPONENT(SpriteRenderer);
+        DECLARE_CLASS_TYPE(SpriteRenderer)
     protected:
+        CLASS_TYPE_IMPLEMENT_WITH_BASE(SpriteRenderer, Component)
+        
         void Draw() override;
         float GetRotationDegrees() const;
     };

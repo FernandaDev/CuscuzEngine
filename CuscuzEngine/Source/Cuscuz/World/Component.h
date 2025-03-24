@@ -1,12 +1,12 @@
 ﻿#pragma once
 
-#include "Cuscuz/Core/ClassRegistry.h"
+#include "Cuscuz/Core/ObjectBase.h"
 
 namespace Cuscuz
 {
     class Actor;
     
-    class Component
+    class Component : public ObjectBase
     {
     protected:
         Actor* m_OwnerActor;
@@ -17,10 +17,8 @@ namespace Cuscuz
         m_OwnerActor(nullptr), m_UpdateOrder(updateOrder)
         {}
 
-        virtual ~Component() = default;
+        ~Component() override = default;
 
-        virtual std::string GetComponentType() const = 0;
-    
         Component(const Component& other): m_OwnerActor(other.m_OwnerActor),
         m_UpdateOrder(other.m_UpdateOrder){}
 
@@ -44,5 +42,9 @@ namespace Cuscuz
         virtual void OnRemoved() {}
         virtual void OnTransformUpdate() {}
         virtual void ImGuiDisplayComponent() {}
+
+        DECLARE_CLASS_TYPE(Component)
+    protected:
+        CLASS_TYPE_IMPLEMENT(Component)
     };
 }

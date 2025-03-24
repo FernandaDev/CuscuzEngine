@@ -6,8 +6,6 @@
 
 namespace Cuscuz
 {
-    CREATE_COMPONENT_REGISTRY(CircleDetectionComponent);
-
     CircleDetectionComponent::CircleDetectionComponent(float radius):
     m_Radius(radius), m_IsOverlapping(false) {}
 
@@ -20,17 +18,17 @@ namespace Cuscuz
     {
         return m_OwnerActor->GetTransform().GetPosition();
     }
-
+    
     void CircleDetectionComponent::OnOverlapping(Actor* other)
     {
         LOG_INFO("{0} is overlapping with {1}", GetActor()->GetName(), other->GetName());
     }
-
+    
     void CircleDetectionComponent::OnOverlapEnter(Actor* other)
     {
         LOG_INFO("{0} entered overlapping with {1}", GetActor()->GetName(), other->GetName());
     }
-
+    
     void CircleDetectionComponent::OnOverlapExit(Actor* other)
     {
         LOG_INFO("{0} exited overlapping with {1}", GetActor()->GetName(), other->GetName());

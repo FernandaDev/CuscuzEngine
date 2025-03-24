@@ -28,7 +28,9 @@ namespace Cuscuz
         float GetAnimFPS() const { return m_AnimFPS; }
         void SetAnimFPS(float fps) { m_AnimFPS = fps; }
 
-        REGISTER_COMPONENT(Animation2DComponent);
+        DECLARE_CLASS_TYPE(Animation2DComponent)
+    protected:
+        CLASS_TYPE_IMPLEMENT_WITH_BASE(Animation2DComponent, SpriteRenderer)
 
     private:
         void PlayFrame(int x, int y);

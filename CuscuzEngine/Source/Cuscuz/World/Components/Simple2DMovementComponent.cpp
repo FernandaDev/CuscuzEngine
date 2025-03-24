@@ -7,7 +7,7 @@
 
 namespace Cuscuz
 {
-    CREATE_COMPONENT_REGISTRY(Simple2DMovementComponent)
+    //CREATE_COMPONENT_REGISTRY(Simple2DMovementComponent)
 
     Simple2DMovementComponent::Simple2DMovementComponent(float forwardSpeed, float angularSpeed, int updateOrder) :
         Component(updateOrder), m_ForwardSpeed(forwardSpeed), m_AngularSpeed(angularSpeed)

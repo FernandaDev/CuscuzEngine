@@ -21,6 +21,10 @@ namespace Cuscuz
         void SetForwardSpeed(float speed);
         void SetAngularSpeed(float speed);
 
-        REGISTER_COMPONENT(Simple2DMovementComponent);
+        DECLARE_CLASS_TYPE(Simple2DMovementComponent)
+        //REGISTER_COMPONENT(Simple2DMovementComponent);
+
+    protected:
+        CLASS_TYPE_IMPLEMENT_WITH_BASE(Simple2DMovementComponent, Component)
     };
 }
