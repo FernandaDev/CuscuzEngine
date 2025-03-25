@@ -29,13 +29,13 @@ namespace Cuscuz
         void SetSprite(const CC_AssetRef<Sprite>& newSprite);
         const CC_AssetRef<Sprite>& GetSprite() const { return m_Sprite; }
 
+        uint32_t GetDrawOrder() const override { return m_DrawOrder; }
         void SetDrawOrder(uint32_t drawOrder);
-        void SetColor(glm::vec4 color);
 
         TransformComponent& GetTransform() const { return m_OwnerActor->GetTransform(); }
         const glm::vec4& GetColor() const { return m_Color; }
+        void SetColor(glm::vec4 color);
 
-        uint32_t GetDrawOrder() const override { return m_DrawOrder; }
         uint32_t GetTexHeight() const;
         uint32_t GetTextWidth() const;
 

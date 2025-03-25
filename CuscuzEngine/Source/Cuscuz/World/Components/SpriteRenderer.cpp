@@ -26,15 +26,17 @@ namespace Cuscuz
 
     void SpriteRenderer::Draw()
     {
-        if(!m_Sprite)
-            return;
-
         const auto transform = m_OwnerActor->GetTransform().GetWorldTransform();
 
-        if(const auto texture = m_Sprite->GetTexture())
-            Renderer2D::DrawQuad(transform, m_Color, texture);
-        else
+        if(!m_Sprite)
             Renderer2D::DrawQuad(transform, m_Color);
+        else
+        {
+            if(const auto texture = m_Sprite->GetTexture())
+                Renderer2D::DrawQuad(transform, m_Color, texture);
+            else
+                Renderer2D::DrawQuad(transform, m_Color);
+        }
     }
 
     void SpriteRenderer::SetSprite(const CC_AssetRef<Sprite>& newSprite)

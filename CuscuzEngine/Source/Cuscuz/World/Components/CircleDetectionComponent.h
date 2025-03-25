@@ -28,8 +28,6 @@ namespace Cuscuz
         bool IsOverlapping() const override { return m_IsOverlapping; }
         void SetIsOverlapping(bool isOverlapping) override { m_IsOverlapping = isOverlapping; }
 
-        void ImGuiDisplayComponent() override;
-
         DECLARE_CLASS_TYPE(CircleDetectionComponent)
     protected:
         CLASS_TYPE_IMPLEMENT_WITH_BASE(CircleDetectionComponent, Component)

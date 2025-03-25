@@ -9,57 +9,46 @@
 #include "Cuscuz/World/Components/SpriteRenderer.h"
 #include "Cuscuz/World/Actor.h"
 #include "Cuscuz/Core/ClassRegistry.h"
+#include "Cuscuz/World/Components/CameraComponent.h"
 #include "gtc/type_ptr.hpp"
 
 namespace Cuscuz
 {
     namespace Editor
     {
-        inline static bool ItemGetter(void* data, int idx, const char** out_text)
+        template<typename T>
+        inline static void ShowComponentMenuItem(Actor* actor)
         {
-            const std::vector<std::string>* items = static_cast<std::vector<std::string>*>(data);
-            if (idx < 0 || idx >= items->size()) return false; // Out of bounds check
-            *out_text = (*items)[idx].c_str();
-            return true;
-        }
-
-        inline static void ShowAddComponentBar(Actor* actor, int index)
-        {
-            const auto registry = ClassRegistry::GetRegistry();
-
-            std::vector<std::string> items;
-            items.reserve(registry.size());
-
-            for (const auto& registryKey : registry | std::views::keys)
+            if(ImGui::MenuItem(T::StaticClassName().data()))
             {
-                items.emplace_back(registryKey);
-            }
-
-            static int currentItem = 0; // Index of the currently selected item
-
-            ImGui::TextColored(ImVec4(0.8f, .8f, .1f, 1.f), "Components List");
-        
-            const auto componentsListLabel = "##ComponentList" + std::to_string(index);
-
-            if (ImGui::Combo(componentsListLabel.c_str(), &currentItem, ItemGetter, &items, static_cast<int>(items.size())))
-            {
-                LOG_INFO("Selected component: {0}", items[currentItem]);
-            }
-
-            const auto addLabel = "Add##" + std::to_string(index);
-
-            if (ImGui::Button(addLabel.c_str()))
-            {
-                auto selectedComponent = ClassRegistry::GetClassType(items[currentItem]);
-
-                if (!selectedComponent)
+                if(actor->HasComponent<T>())
+                {
+                    LOG_WARN("{0} already has {1}!", actor->GetName(), T::StaticClassName());
+                    ImGui::CloseCurrentPopup();
                     return;
+                }
 
-                const auto newComponent = Cuscuz::Instantiate<Component>(selectedComponent->Name);
-                actor->AddComponent(newComponent);
+                actor->AddComponent<T>();
+                ImGui::CloseCurrentPopup();
             }
         }
-    
+
+        inline static void ShowAddComponentButton(Actor* actor)
+        {
+            if(ImGui::Button("Add Component"))
+                ImGui::OpenPopup("AddComponent");
+            
+            if(ImGui::BeginPopup("AddComponent"))
+            {
+                ShowComponentMenuItem<SpriteRenderer>(actor);
+                ShowComponentMenuItem<CircleDetectionComponent>(actor);
+                ShowComponentMenuItem<Simple2DMovementComponent>(actor);
+                //ShowComponentMenuItem<CameraComponent>(actor);
+                
+                ImGui::EndPopup();
+            }
+        }
+        
         inline static void DrawTransformComponent(Actor* actor)
         {
              auto& transformComponent = actor->GetTransform();
@@ -68,14 +57,14 @@ namespace Cuscuz
              DrawVec3Control("Position", pos);
              transformComponent.SetPosition(pos);
 
-            glm::vec3 rot = {0.0f, 0.0f, transformComponent.GetRotation()};
-            DrawVec3Control("Rotation", rot);
-            transformComponent.SetRotation(rot.z);
+             glm::vec3 rot = {0.0f, 0.0f, transformComponent.GetRotation()};
+             DrawVec3Control("Rotation", rot);
+             transformComponent.SetRotation(rot.z);
 
-            const auto actorScale = transformComponent.GetScale();
-            glm::vec3 scale = {actorScale.x, actorScale.y, 1.0f };
-            DrawVec3Control("Scale", scale);
-            transformComponent.SetScale(scale);
+             const auto actorScale = transformComponent.GetScale();
+             glm::vec3 scale = {actorScale.x, actorScale.y, 1.0f};
+             DrawVec3Control("Scale", scale);
+             transformComponent.SetScale(scale);
         }
 
         template<typename T, typename UIFunction>
@@ -83,16 +72,49 @@ namespace Cuscuz
         {
             if(actor->HasComponent<T>())
             {
+                ImGui::PushStyleVar(ImGuiStyleVar_FramePadding, ImVec2{4,4});
+                
                 ImGuiTreeNodeFlags flags = ImGuiTreeNodeFlags_DefaultOpen | ImGuiTreeNodeFlags_AllowItemOverlap |
                                            ImGuiTreeNodeFlags_Framed | ImGuiTreeNodeFlags_FramePadding;
                 T* component = actor->GetComponent<T>();
 
                 ImGui::Separator();
-                if(ImGui::TreeNodeEx((void*)typeid(T).hash_code(), flags, name.c_str()))
+
+                bool isOpen = ImGui::TreeNodeEx((void*)typeid(T).hash_code(), flags, name.c_str());
+
+                ImGui::SameLine(ImGui::GetWindowWidth() - 40.f);
+
+                if(ImGui::Button("***", ImVec2{25.f,25.f}))
+                    ImGui::OpenPopup("componentPopUp");
+
+                ImGui::PopStyleVar();
+                
+                bool removeComponent = false;
+                if(ImGui::BeginPopup("componentPopUp"))
+                {
+                    if(ImGui::MenuItem("Reset"))
+                    {
+                        LOG_ERROR("Implement the reset function!");
+                        ImGui::CloseCurrentPopup();
+                    }
+
+                    if(ImGui::MenuItem("Remove Component"))
+                    {
+                        removeComponent = true;
+                        ImGui::CloseCurrentPopup();
+                    }
+                    
+                    ImGui::EndPopup();
+                }
+
+                if(isOpen)
                 {
                     function(component);
                     ImGui::TreePop();
                 }
+
+                if(removeComponent)
+                    actor->RemoveComponent<T>();
             }
         }
         
@@ -110,6 +132,10 @@ namespace Cuscuz
             DrawComponent<SpriteRenderer>("Sprite Renderer", actor,
                 [](auto& component)
                 {
+                    uint32_t drawOrder = component->GetDrawOrder();
+                    DrawIntControl("Draw Order", drawOrder);
+                    component->SetDrawOrder(drawOrder);
+                    
                     ImGui::Text("Color");
                     ImGui::SameLine();
                     static glm::vec4 spriteColor = component->GetColor();
@@ -155,6 +181,30 @@ namespace Cuscuz
                         ImGui::Dummy(ImVec2(0.0f, squareSize));
                     }
                 });
+
+            DrawComponent<Simple2DMovementComponent>("Simple Movement Component", actor,
+                [](auto& component)
+                {
+                    glm::vec2 forwardSpeed = component->GetMoveSpeed();
+                    DrawVec2Control("Forward Speed", forwardSpeed, 120.f);
+                    component->SetMoveSpeed(forwardSpeed); 
+
+                    float angularSpeed = component->GetAngularSpeed();
+                    DrawFloatControl("Angular Speed", angularSpeed, 120.f);
+                    component->SetAngularSpeed(angularSpeed);
+                });
+
+            DrawComponent<CircleDetectionComponent>("Circle Detection Component", actor,
+                [](auto& component)
+                {
+                    float radius = component->GetRadius();
+                    DrawFloatControl("Detection Radius", radius, 140.f);
+                    component->SetRadius(radius);
+                });
+
+            ImGui::Separator();
+            
+            ShowAddComponentButton(actor);
         }
         
     }

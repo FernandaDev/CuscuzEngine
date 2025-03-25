@@ -123,7 +123,7 @@ namespace Cuscuz
                 return false;
             }
 
-            it->OnRemoved();
+            //it->OnRemoved();
             LOG_INFO("{0} was removed from {1}.", T::StaticClassName(), m_Name);
             m_Components.erase(it);
             return true;

@@ -33,16 +33,4 @@ namespace Cuscuz
     {
         LOG_INFO("{0} exited overlapping with {1}", GetActor()->GetName(), other->GetName());
     }
-
-    void CircleDetectionComponent::ImGuiDisplayComponent()
-    {
-        ImGui::Dummy(ImVec2(0.0f, 3.0f));
-
-        ImGui::Text("Detection Radius:");
-        ImGui::SameLine();
-
-        ImGui::DragFloat("##DetectionRadius", &m_Radius);
-    
-        ImGui::Dummy(ImVec2(0.0f, 3.0f));
-    }
 }

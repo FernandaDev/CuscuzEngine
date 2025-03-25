@@ -41,7 +41,6 @@ namespace Cuscuz
         virtual void OnAdded() {}
         virtual void OnRemoved() {}
         virtual void OnTransformUpdate() {}
-        virtual void ImGuiDisplayComponent() {}
 
         DECLARE_CLASS_TYPE(Component)
     protected:

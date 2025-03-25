@@ -47,6 +47,7 @@ namespace Cuscuz
         actorSprite.SetSprite(m_ActorSprite);
 
         Actor* anotherActor = &m_EditorWorld->CreateActor("Another one", {2.0f, 0.f, 1.f}, 1.f);
+        anotherActor->AddComponent<Simple2DMovementComponent>();
         SpriteRenderer& anotherSpriteComp = anotherActor->AddComponent<SpriteRenderer>();
         auto anotherTexture = Texture2D::Create("Assets/Images/soldier.png");
         CC_AssetRef<Sprite> anotherSprite = CreateAssetRef<Sprite>();
