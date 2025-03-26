@@ -114,7 +114,6 @@ namespace Cuscuz
                                          [](const std::shared_ptr<Component>& component)
                                          {
                                              return component->Is<T>();
-                                             //return component->GetComponentType() == T::GetStaticComponentType();
                                          });
 
             if (it == m_Components.end())
@@ -123,7 +122,7 @@ namespace Cuscuz
                 return false;
             }
 
-            //it->OnRemoved();
+            it->get()->OnRemoved();
             LOG_INFO("{0} was removed from {1}.", T::StaticClassName(), m_Name);
             m_Components.erase(it);
             return true;

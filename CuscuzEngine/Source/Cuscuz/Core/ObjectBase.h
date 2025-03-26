@@ -34,10 +34,15 @@ namespace Cuscuz
             return static_cast<const T*>(const_cast<ObjectBase*>(this)->CastToTypePtr(T::StaticTypeID()));
         }
 
-        bool Is(uint32_t typeID) { return CastToTypePtr(typeID) != nullptr; }
+        bool Is(uint32_t typeID) { return typeID == GetTypeID(); }
 
         template <typename T>
-        bool Is() { return CastToTypePtr(T::StaticTypeID()) != nullptr; }
+        bool Is() { return T::StaticTypeID() == GetTypeID(); }
+
+        bool IsA(uint32_t typeID) { return CastToTypePtr(typeID) != nullptr; }
+        
+        template <typename T>
+        bool IsA() { return CastToTypePtr(T::StaticTypeID()) != nullptr; }
 
     protected:
         virtual void* CastToTypePtr(uint32_t typeID) = 0;
