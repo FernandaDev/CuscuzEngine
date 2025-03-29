@@ -3,6 +3,7 @@
 #include "Cuscuz/core/Input.h"
 #include "Cuscuz/GUI/ImGuiLayer.h"
 #include "Cuscuz/Utils/Instrumentor.h"
+#include "Cuscuz/World/SceneCamera.h"
 #include "ext/matrix_transform.hpp"
 #include "ImGui/imgui.h"
 #include "Utils\Editor_ActorCreation.h"
@@ -28,42 +29,15 @@ namespace Cuscuz
 
     std::vector<Tile> gTiles;
 
-    EditorLayer::EditorLayer() :
-    m_Camera(std::make_unique<OrthoCameraController>(static_cast<float>(SCREEN_WIDTH) / static_cast<float>(SCREEN_HEIGHT), true)),
-    m_EditorWorld(std::make_unique<World>()),
-    m_EditorScene(std::make_unique<Scene>()),
-    m_ActorSprite(std::make_shared<Sprite>())
-    {  }
-
-    void EditorLayer::OnAttach()
+    static void DrawRandomMap()
     {
-        CC_PROFILE_FUNCTION();
-    
-        m_MainActor = &m_EditorWorld->CreateActor("Fer", glm::vec3(0, 0, 1.f), 1.f);
-        m_MainActor->AddComponent<CircleDetectionComponent>(48.f);
-        auto& actorSprite = m_MainActor->AddComponent<SpriteRenderer>();
-        m_ActorTexture = Texture2D::Create("Assets/Images/player.png");
-        m_ActorSprite->SetTexture(m_ActorTexture);
-        actorSprite.SetSprite(m_ActorSprite);
-
-        Actor* anotherActor = &m_EditorWorld->CreateActor("Another one", {2.0f, 0.f, 1.f}, 1.f);
-        anotherActor->AddComponent<Simple2DMovementComponent>();
-        SpriteRenderer& anotherSpriteComp = anotherActor->AddComponent<SpriteRenderer>();
-        auto anotherTexture = Texture2D::Create("Assets/Images/soldier.png");
-        CC_AssetRef<Sprite> anotherSprite = CreateAssetRef<Sprite>();
-        anotherSprite->SetTexture(anotherTexture);
-        anotherSpriteComp.SetSprite(anotherSprite);
-
-        m_Spritesheet = Texture2D::Create("Assets/Images/Map_SpriteSheet.png");
+        CC_AssetRef<Texture2D> m_Spritesheet = Texture2D::Create("Assets/Images/Map_SpriteSheet.png");
+        std::array<CC_AssetRef<SubTexture2D>, 3> m_MapTiles; // grass 5,29 | water 3,29 | dirt 6,29  
+        
         m_MapTiles[0] = SubTexture2D::CreateFromCoords(m_Spritesheet, {5, 29}, {16,16}, {1,1}, 1.f);
         m_MapTiles[1] = SubTexture2D::CreateFromCoords(m_Spritesheet, {3, 29}, {16,16}, {1,1}, 1.f);
         m_MapTiles[2] = SubTexture2D::CreateFromCoords(m_Spritesheet, {6, 29}, {16,16}, {1,1}, 1.f);
-
-        FramebufferSpecification spec;
-        spec.Width =  SCREEN_WIDTH;
-        spec.Height = SCREEN_HEIGHT;
-        m_Framebuffer = Framebuffer::Create(spec);
-    
+        
         const glm::ivec2& gridSize = {25,25};
 
         gTiles.clear();
@@ -72,7 +46,7 @@ namespace Cuscuz
         Random& random = Random::Get();
         float halfGridX = gridSize.x * 0.5f;
         float halfGridY = gridSize.y * 0.5f;
-    
+        
         for (int x = 0; x < gridSize.x; ++x)
         {
             for (int y = 0; y < gridSize.y; ++y)
@@ -86,12 +60,36 @@ namespace Cuscuz
             }
         }
     }
+        
+    EditorLayer::EditorLayer() :
+    m_CameraController(std::make_unique<OrthoCameraController>(static_cast<float>(SCREEN_WIDTH) / static_cast<float>(SCREEN_HEIGHT), true)),
+    m_EditorWorld(std::make_unique<World>()),
+    m_EditorScene(std::make_unique<Scene>())
+    {  }
+ 
+    void EditorLayer::OnAttach()
+    {
+        CC_PROFILE_FUNCTION();
+
+        auto camera = &m_EditorWorld->CreateActor("MainCamera", glm::vec3(0));
+        auto& cameraComp = camera->AddComponent<CameraComponent>();
+
+        auto actor = &m_EditorWorld->CreateActor("Fer", glm::vec3(0));
+        actor->AddComponent<SpriteRenderer>();
+
+        m_EditorScene->SetMainCamera(&cameraComp.GetCamera(), &camera->GetTransform());
+        
+        FramebufferSpecification spec;
+        spec.Width =  SCREEN_WIDTH;
+        spec.Height = SCREEN_HEIGHT;
+        m_Framebuffer = Framebuffer::Create(spec);
+    }
 
     void EditorLayer::OnEvent(CuscuzEvent& event)
     {
         Layer::OnEvent(event);
 
-        m_Camera->OnEvent(event);
+        m_CameraController->OnEvent(event);
         EventSingleDispatcher eventDispatcher(event);
         eventDispatcher.Dispatch<CC_KeyDownEvent>(BIND_FUNCTION(this, EditorLayer::OnKeyDownEvent));
     }
@@ -105,14 +103,14 @@ namespace Cuscuz
            (spec.Width != static_cast<uint32_t>(m_ViewportSize.x) || spec.Height != static_cast<uint32_t>(m_ViewportSize.y)))
         {
             m_Framebuffer->Resize(static_cast<uint32_t>(m_ViewportSize.x), static_cast<uint32_t>(m_ViewportSize.y));
-            m_Camera->OnResize(m_ViewportSize.x, m_ViewportSize.y);
+            m_CameraController->OnResize(m_ViewportSize.x, m_ViewportSize.y);
+            m_EditorScene->OnViewPortResize(m_ViewportSize.x, m_ViewportSize.y);
         }
         
         if(m_IsViewportFocused)
-            m_Camera->OnUpdate(deltaTime);
+            m_CameraController->OnUpdate(deltaTime);
     
-        m_EditorWorld->Update(deltaTime); // Game thread
-        MoveActor(deltaTime);
+        m_EditorWorld->Update(deltaTime);
 
         Renderer2D::ResetStats();
 
@@ -120,35 +118,11 @@ namespace Cuscuz
     
         RenderCommand::SetClearColor({0.6f, 0.6f, 0.6f, 1.0f});
         RenderCommand::Clear();
-
-        Renderer2D::BeginScene(m_Camera->GetCamera());
     
-        for (size_t i = 0; i < gTiles.size(); i++)
-        {
-            Renderer2D::DrawQuad(gTiles[i].Transform, {1.f,1.f,1.f,1.f}, gTiles[i].SubTexture);
-        }
-    
-        Renderer2D::EndScene();
-    
-        m_EditorScene->OnRender(m_Camera->GetCamera()); // Render Thread
+        m_EditorScene->OnRender();
+        //m_EditorScene->OnRender(m_CameraController->GetCamera());
 
         m_Framebuffer->Unbind();
-    }
-
-    void EditorLayer::MoveActor(float deltaTime)
-    {
-        auto pos = m_MainActor->GetTransform().GetPosition();
-    
-        if(Input::IsKeyPressed(CC_KEYCODE_W))
-            pos.y += MoveSpeed * deltaTime;
-        if(Input::IsKeyPressed(CC_KEYCODE_S))
-            pos.y -= MoveSpeed * deltaTime;
-        if(Input::IsKeyPressed(CC_KEYCODE_A))
-            pos.x -= MoveSpeed * deltaTime;
-        if(Input::IsKeyPressed(CC_KEYCODE_D))
-            pos.x += MoveSpeed * deltaTime;
-    
-        m_MainActor->GetTransform().SetPosition(pos);
     }
 
     bool EditorLayer::OnKeyDownEvent(const CC_KeyDownEvent& event)
@@ -302,4 +276,5 @@ namespace Cuscuz
 
         ImGui::End();
     }
+
 }

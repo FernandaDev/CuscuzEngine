@@ -7,8 +7,6 @@
 
 namespace Cuscuz
 {
-    //CREATE_COMPONENT_REGISTRY(Simple2DMovementComponent)
-
     Simple2DMovementComponent::Simple2DMovementComponent(const glm::vec2& moveSpeed, float angularSpeed, int updateOrder) :
         Component(updateOrder), m_MoveSpeed(moveSpeed), m_AngularSpeed(angularSpeed)
     {}
@@ -24,9 +22,9 @@ namespace Cuscuz
 
         if (!Math::NearZero(m_AngularSpeed))
         {
-            float rotation = m_OwnerActor->GetTransform().GetRotation();
+            float rotation = m_OwnerActor->GetTransform().GetRotation().z;
             rotation += m_AngularSpeed * deltaTime;
-            m_OwnerActor->GetTransform().SetRotation(rotation);
+            m_OwnerActor->GetTransform().SetRotation(glm::vec3(0.f,0.f,rotation));
         }
     }
 

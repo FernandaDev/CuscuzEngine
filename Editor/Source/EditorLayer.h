@@ -9,15 +9,9 @@ namespace Cuscuz
 
     class EditorLayer : public Layer
     {
-        std::unique_ptr<OrthoCameraController> m_Camera;
+        std::unique_ptr<OrthoCameraController> m_CameraController;
         std::unique_ptr<World> m_EditorWorld;
         std::unique_ptr<Scene> m_EditorScene;
-
-        CC_AssetRef<Sprite> m_ActorSprite {};
-        CC_AssetRef<Texture2D> m_ActorTexture {};
-        CC_AssetRef<Texture2D> m_Spritesheet {};
-        std::array<CC_AssetRef<SubTexture2D>, 3> m_MapTiles;  // grass 5,29 | water 3,29 | dirt 6,29  
-        Actor* m_MainActor {};
 
         bool m_IsViewportFocused = false;
         bool m_IsViewportHovered = false;
@@ -44,8 +38,7 @@ namespace Cuscuz
         void DrawSceneWindow();
         void DrawHierarchyWindow(bool& show);
         void DrawInspectorWindow(bool& show);
-
-        void MoveActor(float deltaTime);
+        void DrawEditorCameraSettings(bool& show);
 
         bool OnKeyDownEvent(const CC_KeyDownEvent& event);
     };

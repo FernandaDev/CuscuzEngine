@@ -2,23 +2,24 @@
 
 #include "Cuscuz/Render/Camera.h"
 #include "Cuscuz/World/Component.h"
+#include "Cuscuz/World/SceneCamera.h"
 
 namespace Cuscuz
 {
     class CameraComponent : public Component
     {
-        Camera m_Camera;
+        SceneCamera m_Camera;
 
     public:
-        CameraComponent() :
-        m_Camera(glm::mat4(1.f)){}
-        CameraComponent(const glm::mat4& Projection) :
-        m_Camera(Projection){}
+        CameraComponent() = default;
+        CameraComponent(const glm::mat4& projection) :
+        m_Camera(projection) {}
         CameraComponent(const CameraComponent& other) = default;
-        
         ~CameraComponent() override = default;
 
-        DECLARE_CLASS_TYPE(SpriteRenderer)
+        SceneCamera& GetCamera() { return m_Camera; }        
+
+        DECLARE_CLASS_TYPE(CameraComponent)
     protected:
         CLASS_TYPE_IMPLEMENT_WITH_BASE(CameraComponent, Component)
     };

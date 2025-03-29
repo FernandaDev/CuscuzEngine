@@ -2,11 +2,13 @@
 
 #include "TransformComponent.h"
 #include "gtc/matrix_transform.hpp"
-#include "Cuscuz/Utils/Math.h"
+
+#define GLM_ENABLE_EXPERIMENTAL
+#include "gtx/quaternion.hpp"
 
 namespace Cuscuz
 {
-    TransformComponent::TransformComponent(const glm::vec3& position, float scale, float rotation) :
+    TransformComponent::TransformComponent(const glm::vec3& position, const glm::vec3& scale, const glm::vec3& rotation) :
     m_Position(position), m_Scale(scale), m_Rotation(rotation),
     m_WorldTransform(glm::mat4(1.f)), m_RecomputeWorldTransform(true)
     {}
@@ -25,16 +27,16 @@ namespace Cuscuz
         m_RecomputeWorldTransform = true;
     }
 
-    void TransformComponent::SetRotation(float newRotation)
+    void TransformComponent::SetRotation(const glm::vec3& newRotation)
     {
-        if(FLOAT_EQUAL(newRotation, m_Rotation))
+        if(m_Rotation == newRotation)
             return;
 
         m_Rotation = newRotation;
         m_RecomputeWorldTransform = true;
     }
 
-    void TransformComponent::SetScale(glm::vec2 newScale)
+    void TransformComponent::SetScale(const glm::vec3& newScale)
     {
         if(newScale == m_Scale)
             return;
@@ -54,11 +56,15 @@ namespace Cuscuz
             return;
 
         m_RecomputeWorldTransform = false;
-    
-        m_WorldTransform = glm::mat4(1.0f); 
-    
-        m_WorldTransform = glm::translate(m_WorldTransform, glm::vec3(m_Position.x, m_Position.y, m_Position.z));
-        m_WorldTransform = glm::rotate(m_WorldTransform, glm::radians(m_Rotation), glm::vec3(0.0f, 0.0f, 1.0f));
-        m_WorldTransform = glm::scale(m_WorldTransform, glm::vec3(m_Scale.x, m_Scale.y, 1.0f));
+
+        m_WorldTransform = glm::translate(glm::mat4(1.0f), m_Position)
+                         * glm::toMat4(glm::quat(m_Rotation))
+                         * glm::scale(glm::mat4(1.0f), m_Scale);
+        
+        // m_WorldTransform = glm::mat4(1.0f); 
+        //
+        // m_WorldTransform = glm::translate(m_WorldTransform, glm::vec3(m_Position.x, m_Position.y, m_Position.z));
+        // m_WorldTransform = glm::rotate(m_WorldTransform, glm::radians(m_Rotation), glm::vec3(0.0f, 0.0f, 1.0f));
+        // m_WorldTransform = glm::scale(m_WorldTransform, glm::vec3(m_Scale.x, m_Scale.y, 1.0f));
     }
 }

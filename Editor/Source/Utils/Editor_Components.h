@@ -57,12 +57,11 @@ namespace Cuscuz
              DrawVec3Control("Position", pos);
              transformComponent.SetPosition(pos);
 
-             glm::vec3 rot = {0.0f, 0.0f, transformComponent.GetRotation()};
+             glm::vec3 rot = transformComponent.GetRotation();
              DrawVec3Control("Rotation", rot);
-             transformComponent.SetRotation(rot.z);
+             transformComponent.SetRotation(rot);
 
-             const auto actorScale = transformComponent.GetScale();
-             glm::vec3 scale = {actorScale.x, actorScale.y, 1.0f};
+             glm::vec3 scale = transformComponent.GetScale();
              DrawVec3Control("Scale", scale);
              transformComponent.SetScale(scale);
         }
@@ -202,6 +201,61 @@ namespace Cuscuz
                     component->SetRadius(radius);
                 });
 
+            DrawComponent<CameraComponent>("Camera Component", actor,
+                [](auto& component)
+                {
+                    auto& sceneCamera = component->GetCamera();
+
+                    const char* projectionTypeStrings[] = { "Orthographic", "Perspective" };
+                    const char* currentProjectionType = projectionTypeStrings[(int)sceneCamera.GetProjectionType()];
+                    if(ImGui::BeginCombo("Projection", currentProjectionType))
+                    {
+                        for (int i = 0; i < 2; ++i)
+                        {
+                            const bool isSelected = currentProjectionType == projectionTypeStrings[i];
+                            if(ImGui::Selectable(projectionTypeStrings[i], isSelected))
+                            {
+                                currentProjectionType = projectionTypeStrings[i];
+                                sceneCamera.SetProjectionType(static_cast<SceneCamera::ProjectionType>(i));
+                            }
+
+                            if(isSelected)
+                                ImGui::SetItemDefaultFocus();
+                        }
+                        
+                        ImGui::EndCombo();
+                    }
+
+                    if(currentProjectionType == projectionTypeStrings[0])
+                    {
+                        auto orthoSize = sceneCamera.GetOrthographicSize();
+                        DrawFloatControl("Size", orthoSize);
+                        sceneCamera.SetOrthographicSize(orthoSize);
+
+                        auto orthoNear = sceneCamera.GetOrthographicNearClip();
+                        DrawFloatControl("Near Clip", orthoNear);
+                        sceneCamera.SetOrthographicNearClip(orthoNear);
+
+                        auto orthoFar = sceneCamera.GetOrthographicFarClip();
+                        DrawFloatControl("Far Clip", orthoFar);
+                        sceneCamera.SetOrthographicFarClip(orthoFar);
+                    }
+                    else if (currentProjectionType == projectionTypeStrings[1])
+                    {
+                        auto fov = glm::degrees(sceneCamera.GetPerspectiveFOV());
+                        DrawFloatControl("Field of view", fov);
+                        sceneCamera.SetPerspectiveFOV(glm::radians(fov));
+
+                        auto perspectiveNear = sceneCamera.GetPerspectiveNearClip();
+                        DrawFloatControl("Near Clip", perspectiveNear);
+                        sceneCamera.SetPerspectiveNearClip(perspectiveNear);
+
+                        auto perspectiveFar = sceneCamera.GetPerspectiveFarClip();
+                        DrawFloatControl("Far Clip", perspectiveFar);
+                        sceneCamera.SetPerspectiveFarClip(perspectiveFar);   
+                    }
+                });
+            
             ImGui::Separator();
             
             ShowAddComponentButton(actor);

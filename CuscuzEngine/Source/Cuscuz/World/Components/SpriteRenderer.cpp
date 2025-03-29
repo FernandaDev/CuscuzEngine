@@ -71,9 +71,4 @@ namespace Cuscuz
         LOG_WARN("You are trying to get a sprite's Width, but there is no sprite!");
         return 0;
     }
-
-    float SpriteRenderer::GetRotationDegrees() const
-    {
-        return glm::degrees(m_OwnerActor->GetTransform().GetRotation());
-    }
 }

@@ -44,6 +44,5 @@ namespace Cuscuz
         CLASS_TYPE_IMPLEMENT_WITH_BASE(SpriteRenderer, Component)
         
         void Draw() override;
-        float GetRotationDegrees() const;
     };
 }
