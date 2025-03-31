@@ -2,15 +2,52 @@
 
 #include "World.h"
 #include "Actor.h"
+#include "Level.h"
 
 namespace Cuscuz
 {
+    void World::AddLevel(const CC_AssetRef<Level>& level) 
+    {
+        level->SetOwningWorld(this);
+        m_Levels[level->GetName().data()] = level;
+
+        if (!m_ActiveLevel)
+           SetActiveLevel(level->GetName().data());
+    }
+    
+    void World::SetActiveLevel(const std::string& levelName)
+    {
+        const auto it = m_Levels.find(levelName);
+        
+        if (it != m_Levels.end())
+        {
+            if(m_UpdatingActors)
+            {
+                for (const auto& actor : m_ActiveActors)
+                    actor->Destroy();
+            }
+            else
+            {
+                m_ActiveActors.clear();
+            }
+            
+            m_ActiveLevel = it->second;
+            
+            m_PendingActors.clear();
+            m_PendingActors = m_ActiveLevel->GetAllActors();
+            
+            LOG_INFO("Switched to active level: {0}", levelName);
+        }
+        else
+        {
+            LOG_ERROR("Level {0} not found!", levelName);
+        }
+    }
+
     void World::Update(float deltaTime)
     {
-        CC_PROFILE_FUNCTION();
-        
         m_UpdatingActors = true;
-        for (const auto& actor : m_ActiveActors)
+        for (auto& actor : m_ActiveActors)
         {
             actor->Update(deltaTime);
         }
@@ -20,7 +57,7 @@ namespace Cuscuz
         {
             for (auto& pendingActor : m_PendingActors)
             {
-                m_ActiveActors.emplace_back(pendingActor);
+                m_ActiveActors.push_back(pendingActor);
             }
         
             m_PendingActors.clear();
@@ -34,17 +71,22 @@ namespace Cuscuz
         if(name.empty())
             name = "Actor";
 
-        const auto& actor = (m_UpdatingActors ? m_PendingActors : m_ActiveActors).emplace_back(
-             std::make_shared<Actor>(this, std::move(name), position, scale, rotation));
-
+        const std::shared_ptr<Actor>& actor = std::make_shared<Actor>(m_ActiveLevel, std::move(name), position, scale, rotation);
+        m_ActiveLevel->AddActor(actor);
+        m_PendingActors.push_back(actor);
+        
         return *actor;
     }
 
-    void World::DestroyActor(Actor* actor) const
+    void World::DestroyActor(const std::shared_ptr<Actor>& actor) const
     {
+        if(!m_ActiveLevel)
+            return;
+        
+        m_ActiveLevel->RemoveActor(actor);
         actor->Destroy();
     }
-
+    
     void World::HandleDeadActors()
     {
         auto iter = m_ActiveActors.begin();
@@ -59,18 +101,5 @@ namespace Cuscuz
                 ++iter;
             }
         }
-    }
-
-    void World::ResetWorld()
-    {
-        for (const auto& actor : m_ActiveActors)
-            actor->Destroy();
-
-        for (auto& pendingActor : m_PendingActors)
-            pendingActor.reset();
-
-        m_PendingActors.clear();
-    
-        HandleDeadActors();
     }
 }

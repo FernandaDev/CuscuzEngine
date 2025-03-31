@@ -9,6 +9,7 @@
 
 namespace Cuscuz
 {
+    class Level;
     class IPhysics;
     class World;
 
@@ -26,15 +27,17 @@ namespace Cuscuz
         ActorState m_State;
         std::vector<std::shared_ptr<Component>> m_Components{};
         std::unique_ptr<TransformComponent> m_Transform;
-        World* m_World;
+        CC_AssetRef<Level> m_Level;
 
     public:
-        Actor(World* world, std::string&& name, const glm::vec3& position,
+        Actor(const CC_AssetRef<Level>& owningLevel, std::string&& name, const glm::vec3& position,
               float scale = 1.f, float rotation = Math::PiOver2);
         ~Actor() override;
 
         void Update(float deltaTime);
         void Destroy();
+
+        CC_AssetRef<Level> GetLevel() const { return m_Level; }
 
         void SetName(std::string&& newName) { m_Name = std::move(newName); }
         void SetName(const char* newName) { m_Name = newName; }

@@ -50,10 +50,8 @@ namespace Cuscuz
             ImGui::End();
         }
 
-        static void ShowRendererStatsWindow(bool& showing)
+        static void ShowRendererStatsWindow()
         {
-            ImGui::Begin("Renderer Stats", &showing);
-        
             ImGui::TextColored(ImVec4(0.8f, .8f, .1f, 1.f), "Renderer 2D Statistics:");
             ImGui::Separator();
 
@@ -62,8 +60,6 @@ namespace Cuscuz
             ImGui::Text("Quads: %d", stats.QuadCount);
             ImGui::Text("Vertices: %d", stats.GetTotalVertexCount());
             ImGui::Text("Indices: %d", stats.GetTotalIndexCount());
-
-            ImGui::End();
         }
     }
 }

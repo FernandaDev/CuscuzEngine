@@ -3,6 +3,7 @@
 #include "Cuscuz/core/Input.h"
 #include "Cuscuz/GUI/ImGuiLayer.h"
 #include "Cuscuz/Utils/Instrumentor.h"
+#include "Cuscuz/World/LevelSerializer.h"
 #include "Cuscuz/World/SceneCamera.h"
 #include "ext/matrix_transform.hpp"
 #include "ImGui/imgui.h"
@@ -14,6 +15,7 @@ namespace Cuscuz
 {
     static bool s_ShowHierarchy = true;
     static bool s_ShowInspector= true;
+    static bool s_ShowRendererStats= true;
     static bool s_ShowTimeStatsOverlay = false;
     
     struct Tile
@@ -69,16 +71,11 @@ namespace Cuscuz
  
     void EditorLayer::OnAttach()
     {
-        CC_PROFILE_FUNCTION();
+        const auto level = CreateAssetRef<Level>("Main");
+        LevelSerializer serializer(level);
+        serializer.Deserialize("Assets/Levels/Main.level");
+        m_EditorWorld->AddLevel(level);
 
-        auto camera = &m_EditorWorld->CreateActor("MainCamera", glm::vec3(0));
-        auto& cameraComp = camera->AddComponent<CameraComponent>();
-
-        auto actor = &m_EditorWorld->CreateActor("Fer", glm::vec3(0));
-        actor->AddComponent<SpriteRenderer>();
-
-        m_EditorScene->SetMainCamera(&cameraComp.GetCamera(), &camera->GetTransform());
-        
         FramebufferSpecification spec;
         spec.Width =  SCREEN_WIDTH;
         spec.Height = SCREEN_HEIGHT;
@@ -119,8 +116,8 @@ namespace Cuscuz
         RenderCommand::SetClearColor({0.6f, 0.6f, 0.6f, 1.0f});
         RenderCommand::Clear();
     
-        m_EditorScene->OnRender();
-        //m_EditorScene->OnRender(m_CameraController->GetCamera());
+        //m_EditorScene->OnRender();
+        m_EditorScene->OnRender(m_CameraController->GetCamera());
 
         m_Framebuffer->Unbind();
     }
@@ -190,6 +187,7 @@ namespace Cuscuz
 
         DrawHierarchyWindow(s_ShowHierarchy);
         DrawInspectorWindow(s_ShowInspector);
+        DrawRendererStatsWindow(s_ShowRendererStats);
     }
 
     void EditorLayer::EditorWindowEnd()
@@ -207,6 +205,17 @@ namespace Cuscuz
                 {
                     Engine::Get().Close();
                 }
+                if(ImGui::MenuItem("Serialize Level"))
+                {
+                    LevelSerializer serializer(m_EditorWorld->GetActiveLevel());
+                    serializer.Serialize("Assets/Levels/Main.level");
+                }
+                if(ImGui::MenuItem("Deserialize Level"))
+                {
+                    LevelSerializer serializer(m_EditorWorld->GetActiveLevel());
+                    serializer.Deserialize("Assets/Levels/Main.level");
+                }
+                
                 ImGui::EndMenu();
             }
 
@@ -214,6 +223,7 @@ namespace Cuscuz
             {
                 ImGui::MenuItem("Hierarchy##00", NULL, &s_ShowHierarchy);
                 ImGui::MenuItem("Inspector##00", NULL, &s_ShowInspector);
+                ImGui::MenuItem("RendererStats##00", NULL, &s_ShowRendererStats);
 
                 ImGui::EndMenu();
             }
@@ -277,4 +287,15 @@ namespace Cuscuz
         ImGui::End();
     }
 
+    void EditorLayer::DrawRendererStatsWindow(bool& show)
+    {
+        if(!show)
+            return;
+
+        ImGui::Begin("RendererStats##01", &show);
+
+        Editor::ShowRendererStatsWindow();
+
+        ImGui::End();
+    }
 }

@@ -7,10 +7,10 @@
 
 namespace Cuscuz
 {
-    Actor::Actor(World* world, std::string&& name, const glm::vec3& position, float scale, float rotation) :
+    Actor::Actor(const CC_AssetRef<Level>& owningLevel, std::string&& name, const glm::vec3& position, float scale, float rotation) :
     m_Name(std::move(name)), m_State(Active),
     m_Transform(std::make_unique<TransformComponent>(position, glm::vec3(scale, scale, 1.f), glm::vec3(0.f,0.f,rotation))),
-    m_World(world)
+    m_Level(owningLevel)
     {}
 
     Actor::~Actor()

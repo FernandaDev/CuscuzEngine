@@ -246,7 +246,7 @@ namespace Cuscuz
         const auto uniformID = glGetUniformLocation(m_RendererID, name);
         if (uniformID == -1)
         {
-            LOG_ERROR("Warning: uniform '{0}' doesn't exist or is unused!", name);
+            LOG_ERROR("Uniform '{0}' doesn't exist or is unused!", name);
         }
 
         m_uniformMap[name] = uniformID;

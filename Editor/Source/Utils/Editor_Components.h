@@ -137,7 +137,8 @@ namespace Cuscuz
                     
                     ImGui::Text("Color");
                     ImGui::SameLine();
-                    static glm::vec4 spriteColor = component->GetColor();
+
+                    glm::vec4 spriteColor = component->GetColor();
                     ImGui::ColorEdit4("##SpriteColor", glm::value_ptr(spriteColor));
 
                     if(spriteColor != component->GetColor())

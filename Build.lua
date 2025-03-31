@@ -16,7 +16,7 @@ includedir["SDL2"] = "%{wks.location}/CuscuzEngine/Dependencies/SDL2/include"
 includedir["glm"] = "%{wks.location}/CuscuzEngine/Dependencies/glm"
 includedir["SPD_Log"] = "%{wks.location}/Vendor/Log/include"
 includedir["ImGui"] = "%{wks.location}/CuscuzEngine/Vendor/ImGui"
-includedir["yaml"] = "%{wks.location}/CuscuzEngine/Vendor/yaml/include/yaml-cpp"
+includedir["yaml"] = "%{wks.location}/CuscuzEngine/Vendor/yaml/include"
 includedir["glew"] = "%{wks.location}/CuscuzEngine/Vendor/glew/include"
 includedir["stb_image"] = "%{wks.location}/CuscuzEngine/Vendor/stb_image"
 

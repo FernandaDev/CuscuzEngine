@@ -1,0 +1,43 @@
+Level: Main
+Actors:
+  - Actor: 1231232312
+    Name: MainCamera
+    TransformComponent:
+      Position: [0, 0, 0]
+      Rotation: [0, 0, 0]
+      Scale: [1, 1, 1]
+    CameraComponent:
+      ProjectionType: 0
+      PerspectiveFOV: 0.785398185
+      PerspectiveNear: 0.00999999978
+      PerspectiveFar: 1000
+      OrthographicSize: 10
+      OrthographicNear: -1
+      OrthographicFar: 1
+  - Actor: 1231232312
+    Name: Fer
+    TransformComponent:
+      Position: [0, 0, 0]
+      Rotation: [0, 0, 0]
+      Scale: [1, 1, 1]
+    SpriteRenderer:
+      DrawOrder: 0
+      Color: [0.800000012, 0.600000024, 0.100000001, 1]
+  - Actor: 1231232312
+    Name: Another
+    TransformComponent:
+      Position: [2.70000005, 1.29999995, 0]
+      Rotation: [0, 0, 0]
+      Scale: [1, 1, 1]
+    SpriteRenderer:
+      DrawOrder: 0
+      Color: [0.843416333, 0.19809778, 0.19809778, 1]
+  - Actor: 1231232312
+    Name: Actor
+    TransformComponent:
+      Position: [-4.0999999, 0, 0]
+      Rotation: [0, 0, 0]
+      Scale: [1, 1, 1]
+    SpriteRenderer:
+      DrawOrder: 0
+      Color: [0.141842157, 0.412260354, 0.622775793, 1]

@@ -38,7 +38,7 @@ namespace Cuscuz
         void DrawSceneWindow();
         void DrawHierarchyWindow(bool& show);
         void DrawInspectorWindow(bool& show);
-        void DrawEditorCameraSettings(bool& show);
+        void DrawRendererStatsWindow(bool& show);
 
         bool OnKeyDownEvent(const CC_KeyDownEvent& event);
     };

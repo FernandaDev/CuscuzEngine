@@ -14,6 +14,11 @@ namespace Cuscuz
     m_DrawOrder(drawOrder), m_Color(1.f, 1.f, 1.f, 1)
     { }
 
+    SpriteRenderer::~SpriteRenderer()
+    {
+        LOG_WARN("Sprite renderer is being destroyed. Owning Actor: {0}", m_OwnerActor->GetName());
+    }
+
     void SpriteRenderer::OnAdded()
     {
         Scene::GetOnDrawableProxyAddedEvent().Broadcast(this); //TODO create and pass the proxy

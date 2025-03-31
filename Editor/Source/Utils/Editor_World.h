@@ -4,6 +4,7 @@
 #include "Editor_Components.h"
 #include "Cuscuz/World/World.h"
 #include "Cuscuz/World/Actor.h"
+#include "Cuscuz/World/Level.h"
 
 namespace Cuscuz
 {
@@ -29,7 +30,7 @@ namespace Cuscuz
 
         inline static void ShowAllActors(World* world)
         {
-            const auto allActors = world->GetAllActors();
+            const auto allActors = world->GetActiveLevel()->GetAllActors();
 
             for(auto& actor : allActors)
             {
@@ -40,10 +41,26 @@ namespace Cuscuz
                 if(ImGui::IsItemClicked())
                     s_SelectedActor = actor.get();
 
+                bool actorDeleted = false;
+                if(ImGui::BeginPopupContextItem())
+                {
+                    if(ImGui::MenuItem("Delete Actor"))
+                        actorDeleted = true;
+
+                    ImGui::EndPopup();
+                }
+                
                 if(isOpened)
                 {
                     //TODO show child!
                     ImGui::TreePop();
+                }
+
+                if(actorDeleted)
+                {
+                    if(s_SelectedActor == actor.get())
+                        s_SelectedActor = {};
+                    world->DestroyActor(actor);
                 }
             }
         }

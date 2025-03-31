@@ -50,7 +50,7 @@ namespace Cuscuz
     {
         s_Data.QuadVertexArray = VertexArray::Create();
     
-        s_Data.QuadVertexBuffer = VertexBuffer::Create(s_Data.MaxVerticesPerDraw * sizeof(QuadVertex));
+        s_Data.QuadVertexBuffer = VertexBuffer::Create(Renderer2DData::MaxVerticesPerDraw * sizeof(QuadVertex));
         s_Data.QuadVertexBuffer->SetLayout(
         {
             { ShaderDataType::Float3, "inPosition" },
@@ -61,12 +61,12 @@ namespace Cuscuz
         });
         s_Data.QuadVertexArray->AddBuffer(s_Data.QuadVertexBuffer);
 
-        s_Data.QuadVertexBufferBase = new QuadVertex[s_Data.MaxVerticesPerDraw];
+        s_Data.QuadVertexBufferBase = new QuadVertex[Renderer2DData::MaxVerticesPerDraw];
 
-        auto* quadIndices = new uint32_t[s_Data.MaxIndicesPerDraw];
+        auto* quadIndices = new uint32_t[Renderer2DData::MaxIndicesPerDraw];
 
         uint32_t offset = 0;
-        for (uint32_t i = 0; i < s_Data.MaxIndicesPerDraw; i += 6)
+        for (uint32_t i = 0; i < Renderer2DData::MaxIndicesPerDraw; i += 6)
         {
             quadIndices[i + 0] = offset + 0;
             quadIndices[i + 1] = offset + 1;
@@ -135,12 +135,16 @@ namespace Cuscuz
     {
         s_Data.QuadIndexCount = 0;
         s_Data.TextureSlotIndex = 1;
+        
+        if(s_Data.QuadVertexBufferPtr)
+            memset(s_Data.QuadVertexBufferBase, 0, (uint8_t*)s_Data.QuadVertexBufferPtr - (uint8_t*)s_Data.QuadVertexBufferBase);
+
         s_Data.QuadVertexBufferPtr = s_Data.QuadVertexBufferBase;
     }
 
     void Renderer2D::Flush()
     {
-        const uint32_t dataSize = (uint8_t*)s_Data.QuadVertexBufferPtr - (uint8_t*)s_Data.QuadVertexBufferBase;
+        const uint32_t dataSize = (uint32_t)((uint8_t*)s_Data.QuadVertexBufferPtr - (uint8_t*)s_Data.QuadVertexBufferBase);
         s_Data.QuadVertexBuffer->SetData(s_Data.QuadVertexBufferBase, dataSize);
         
         for (uint32_t i = 0; i < s_Data.TextureSlotIndex; ++i)

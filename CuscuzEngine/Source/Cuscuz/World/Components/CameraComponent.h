@@ -17,7 +17,7 @@ namespace Cuscuz
         CameraComponent(const CameraComponent& other) = default;
         ~CameraComponent() override = default;
 
-        SceneCamera& GetCamera() { return m_Camera; }        
+        SceneCamera& GetCamera() { return m_Camera; }
 
         DECLARE_CLASS_TYPE(CameraComponent)
     protected:

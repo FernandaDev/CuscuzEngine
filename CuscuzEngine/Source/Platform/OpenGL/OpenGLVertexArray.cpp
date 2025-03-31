@@ -34,7 +34,7 @@ namespace Cuscuz
 
     OpenGLVertexArray::OpenGLVertexArray()
     {
-        glGenVertexArrays(1, &m_RendererID);
+        glCreateVertexArrays(1, &m_RendererID);
     }
 
     OpenGLVertexArray::~OpenGLVertexArray()
@@ -48,11 +48,11 @@ namespace Cuscuz
 
         glBindVertexArray(m_RendererID);
         vertexBuffer->Bind();
-    
+
         auto layout = vertexBuffer->GetLayout();
 
         uint32_t index = 0;
-        for (const auto& element : layout)
+        for (auto& element : layout)
         {
             glEnableVertexAttribArray(index); 
             glVertexAttribPointer(index, element.GetElementCount(),

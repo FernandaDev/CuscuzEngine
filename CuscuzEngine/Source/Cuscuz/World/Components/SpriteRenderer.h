@@ -21,7 +21,7 @@ namespace Cuscuz
 
     public:
         SpriteRenderer(int drawOrder = 0);
-        ~SpriteRenderer() override = default;
+        ~SpriteRenderer() override; 
 
         void OnAdded() override;
         void OnRemoved() override;

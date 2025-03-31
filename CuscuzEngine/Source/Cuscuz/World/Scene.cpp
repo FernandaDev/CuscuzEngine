@@ -87,6 +87,7 @@ namespace Cuscuz
         m_ViewportWidth = width;
         m_ViewportHeight = height;
 
-        m_MainCamera->SetViewportSize(width, height);
+        if(m_MainCamera)
+            m_MainCamera->SetViewportSize(width, height);
     }
 }

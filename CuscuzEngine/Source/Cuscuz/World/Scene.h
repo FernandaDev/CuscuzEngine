@@ -30,6 +30,8 @@ namespace Cuscuz
         
         SceneCamera* m_MainCamera = {};
         TransformComponent* m_CameraTransform = {};
+
+        friend class LevelSerializer;
     public:
         Scene();
         Scene(SceneCamera* camera);
