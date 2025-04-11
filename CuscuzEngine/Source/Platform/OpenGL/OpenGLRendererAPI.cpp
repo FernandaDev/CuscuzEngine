@@ -34,7 +34,7 @@ namespace Cuscuz
 
     void OpenGLRendererAPI::DrawIndexed(const CC_AssetRef<VertexArray>& vertexArray, uint32_t indexCount)
     {
-        const auto count = indexCount ? vertexArray->GetIndexBuffer()->GetCount() : indexCount;
+        const auto count = indexCount ? indexCount : vertexArray->GetIndexBuffer()->GetCount();
         glDrawElements(GL_TRIANGLES, count, GL_UNSIGNED_INT, nullptr);
     }
 }

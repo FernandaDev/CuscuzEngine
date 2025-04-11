@@ -80,6 +80,13 @@ namespace Cuscuz
         spec.Width =  SCREEN_WIDTH;
         spec.Height = SCREEN_HEIGHT;
         m_Framebuffer = Framebuffer::Create(spec);
+
+        const auto actor = &m_EditorWorld->CreateActor("Textured Actor", glm::vec3{0.0f, 1.5f, 0.0f});
+        auto& spriteRenderer = actor->AddComponent<SpriteRenderer>();
+        const CC_AssetRef<Sprite> sprite = CreateAssetRef<Sprite>();
+        CC_AssetRef<Texture2D> texture = Texture2D::Create("Assets/Images/adventurer.png");
+        sprite->SetTexture(texture);
+        spriteRenderer.SetSprite(sprite);
     }
 
     void EditorLayer::OnEvent(CuscuzEvent& event)
