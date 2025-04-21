@@ -15,21 +15,21 @@ namespace Cuscuz
         std::vector<std::shared_ptr<Actor>> m_PendingActors {};
         bool m_UpdatingActors = false;
 
-        std::unordered_map<std::string, CC_AssetRef<Level>> m_Levels;
+        //TODO later
+        //std::unordered_map<std::string, CC_AssetRef<Level>> m_Levels;
         CC_AssetRef<Level> m_ActiveLevel;
         
     public:
-        World() = default;
+        World();
         ~World() = default;
 
         void Update(float deltaTime);
         
-        void AddLevel(const CC_AssetRef<Level>& level);
-        void SetActiveLevel(const std::string& levelName);
+        void LoadLevel(CC_AssetRef<Level>&& level);
         const CC_AssetRef<Level>& GetActiveLevel() { return m_ActiveLevel; }
 
         Actor& CreateActor(std::string&& name, const glm::vec3& position = glm::vec3(0),
-                           float scale = 1, float rotation = 0);
+                           const glm::vec3& scale = glm::vec3(1), const glm::vec3& rotation = glm::vec3(0));
         void DestroyActor(const std::shared_ptr<Actor>& actor) const;
 
     private:

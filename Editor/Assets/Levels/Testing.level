@@ -1,0 +1,14 @@
+Level: NewLevel
+Actors:
+  - Actor: 1231232312
+    Name: Testing
+    TransformComponent:
+      Position: [0, 2.5, 0]
+      Rotation: [0, 0, 7.10397434]
+      Scale: [1, 1, 1]
+    SpriteRenderer:
+      DrawOrder: 0
+      Color: [0.996441305, 0.978711009, 0, 1]
+    Simple2DMovementComponent:
+      MoveSpeed: [0, 0]
+      AngularSpeed: 1.39999998

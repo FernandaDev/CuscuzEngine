@@ -2,67 +2,22 @@
 
 #include "Cuscuz/core/Input.h"
 #include "Cuscuz/GUI/ImGuiLayer.h"
+#include "Cuscuz/Utils/FileUtils.h"
 #include "Cuscuz/Utils/Instrumentor.h"
+#include "Cuscuz/Utils/PlatformUtils.h"
 #include "Cuscuz/World/LevelSerializer.h"
-#include "Cuscuz/World/SceneCamera.h"
-#include "ext/matrix_transform.hpp"
 #include "ImGui/imgui.h"
-#include "Utils\Editor_ActorCreation.h"
-#include "Utils\Editor_Settings.h"
-#include "Utils\Editor_World.h"
+#include "Utils/Editor_ActorCreation.h"
+#include "Utils/Editor_Settings.h"
+#include "Utils/Editor_World.h"
 
 namespace Cuscuz
 {
     static bool s_ShowHierarchy = true;
-    static bool s_ShowInspector= true;
-    static bool s_ShowRendererStats= true;
+    static bool s_ShowInspector = true;
+    static bool s_ShowRendererStats = false;
     static bool s_ShowTimeStatsOverlay = false;
-    
-    struct Tile
-    {
-        glm::mat4 Transform;
-        CC_AssetRef<SubTexture2D> SubTexture;
 
-        Tile(const CC_AssetRef<SubTexture2D>& subTexture, glm::mat4 transform):
-        Transform(transform), SubTexture(subTexture) { }
-
-        const glm::vec3& GetPos() { return { Transform[3] }; }
-    };
-
-    std::vector<Tile> gTiles;
-
-    static void DrawRandomMap()
-    {
-        CC_AssetRef<Texture2D> m_Spritesheet = Texture2D::Create("Assets/Images/Map_SpriteSheet.png");
-        std::array<CC_AssetRef<SubTexture2D>, 3> m_MapTiles; // grass 5,29 | water 3,29 | dirt 6,29  
-        
-        m_MapTiles[0] = SubTexture2D::CreateFromCoords(m_Spritesheet, {5, 29}, {16,16}, {1,1}, 1.f);
-        m_MapTiles[1] = SubTexture2D::CreateFromCoords(m_Spritesheet, {3, 29}, {16,16}, {1,1}, 1.f);
-        m_MapTiles[2] = SubTexture2D::CreateFromCoords(m_Spritesheet, {6, 29}, {16,16}, {1,1}, 1.f);
-        
-        const glm::ivec2& gridSize = {25,25};
-
-        gTiles.clear();
-        gTiles.reserve(gridSize.x * gridSize.y);
-    
-        Random& random = Random::Get();
-        float halfGridX = gridSize.x * 0.5f;
-        float halfGridY = gridSize.y * 0.5f;
-        
-        for (int x = 0; x < gridSize.x; ++x)
-        {
-            for (int y = 0; y < gridSize.y; ++y)
-            {
-                auto pos = glm::vec3(x - halfGridX , y - halfGridY, -0.1f);
-                //LOG_INFO("Pos: {0}, {1}", pos.x, pos.y);
-                const auto randomIndex = random.GetRandomNumber(0, m_MapTiles.size() - 1);
-                std::shared_ptr<SubTexture2D>& tile = m_MapTiles[randomIndex];
-                glm::mat4 transform = glm::translate(glm::mat4(1.0f), pos);
-                gTiles.emplace_back(tile, transform);
-            }
-        }
-    }
-        
     EditorLayer::EditorLayer() :
     m_CameraController(std::make_unique<OrthoCameraController>(static_cast<float>(SCREEN_WIDTH) / static_cast<float>(SCREEN_HEIGHT), true)),
     m_EditorWorld(std::make_unique<World>()),
@@ -71,22 +26,10 @@ namespace Cuscuz
  
     void EditorLayer::OnAttach()
     {
-        const auto level = CreateAssetRef<Level>("Main");
-        LevelSerializer serializer(level);
-        serializer.Deserialize("Assets/Levels/Main.level");
-        m_EditorWorld->AddLevel(level);
-
         FramebufferSpecification spec;
         spec.Width =  SCREEN_WIDTH;
         spec.Height = SCREEN_HEIGHT;
         m_Framebuffer = Framebuffer::Create(spec);
-
-        const auto actor = &m_EditorWorld->CreateActor("Textured Actor", glm::vec3{0.0f, 1.5f, 0.0f});
-        auto& spriteRenderer = actor->AddComponent<SpriteRenderer>();
-        const CC_AssetRef<Sprite> sprite = CreateAssetRef<Sprite>();
-        CC_AssetRef<Texture2D> texture = Texture2D::Create("Assets/Images/adventurer.png");
-        sprite->SetTexture(texture);
-        spriteRenderer.SetSprite(sprite);
     }
 
     void EditorLayer::OnEvent(CuscuzEvent& event)
@@ -108,7 +51,7 @@ namespace Cuscuz
         {
             m_Framebuffer->Resize(static_cast<uint32_t>(m_ViewportSize.x), static_cast<uint32_t>(m_ViewportSize.y));
             m_CameraController->OnResize(m_ViewportSize.x, m_ViewportSize.y);
-            m_EditorScene->OnViewPortResize(m_ViewportSize.x, m_ViewportSize.y);
+            m_EditorScene->OnViewPortResize(static_cast<uint32_t>(m_ViewportSize.x), static_cast<uint32_t>(m_ViewportSize.y));
         }
         
         if(m_IsViewportFocused)
@@ -134,11 +77,71 @@ namespace Cuscuz
         if(event.GetKeyCode() == CC_KEYCODE_F1)
         {
             s_ShowTimeStatsOverlay = !s_ShowTimeStatsOverlay;
+            return false;
+        }
+
+        const bool shiftPressed = Input::IsKeyPressed(CC_KeyCode::LShift) || Input::IsKeyPressed(CC_KeyCode::RShift);
+        const bool controlPressed = Input::IsKeyPressed(CC_KeyCode::LCtrl) || Input::IsKeyPressed(CC_KeyCode::RCtrl);
+
+        switch (event.GetKeyCode())
+        {
+        case CC_KeyCode::N:
+            if(controlPressed)
+                NewLevel();
+
+            break;
+        case CC_KeyCode::O:
+            if(controlPressed)
+                OpenLevel();
+            
+            break;
+        case CC_KeyCode::S:
+            if(shiftPressed)
+                SaveLevel();
+            
+            break;
+        default:
+            return false;
         }
 
         return false;
     }
+    
+    void EditorLayer::NewLevel()
+    {
+        CC_AssetRef<Level> newLevel = CreateAssetRef<Level>("Untitled");
+        m_EditorWorld->LoadLevel(std::move(newLevel));
+        Editor::s_SelectedActor = nullptr;
+    }
 
+    void EditorLayer::OpenLevel()
+    {
+        const std::string filepath = FileDialogs::OpenFile("Level (*.level)\0*.level\0");
+
+        if(!filepath.empty())
+        {
+            CC_AssetRef<Level> newLevel = CreateAssetRef<Level>(Utils::ExtractNameFromFile(filepath));
+            {
+                LevelSerializer serializer(newLevel);
+                serializer.Deserialize(filepath);
+            }
+            m_EditorWorld->LoadLevel(std::move(newLevel));
+            Editor::s_SelectedActor = nullptr;
+        }
+    }
+
+    void EditorLayer::SaveLevel()
+    {
+        const CC_AssetRef<Level> activeLevel = m_EditorWorld->GetActiveLevel();
+        const std::string filepath = FileDialogs::SaveFile("Level (*.level)\0*.level\0", "level", activeLevel->GetName().data());
+
+        if(!filepath.empty())
+        {
+            LevelSerializer serializer(activeLevel);
+            serializer.Serialize(filepath);
+        }
+    }
+    
     void EditorLayer::OnImGuiRender()
     {
         EditorWindowBegin();
@@ -208,19 +211,21 @@ namespace Cuscuz
         {
             if (ImGui::BeginMenu("File"))
             {
+                if(ImGui::MenuItem("New Level", "Ctrl+N"))
+                {
+                    NewLevel();
+                }
+                if(ImGui::MenuItem("Open Level...", "Ctrl+O"))
+                {
+                    OpenLevel();
+                }
+                if(ImGui::MenuItem("Save Level As...", "Ctrl+Shift+S"))
+                {
+                    SaveLevel();
+                }
                 if (ImGui::MenuItem("Exit", NULL, false))
                 {
                     Engine::Get().Close();
-                }
-                if(ImGui::MenuItem("Serialize Level"))
-                {
-                    LevelSerializer serializer(m_EditorWorld->GetActiveLevel());
-                    serializer.Serialize("Assets/Levels/Main.level");
-                }
-                if(ImGui::MenuItem("Deserialize Level"))
-                {
-                    LevelSerializer serializer(m_EditorWorld->GetActiveLevel());
-                    serializer.Deserialize("Assets/Levels/Main.level");
                 }
                 
                 ImGui::EndMenu();

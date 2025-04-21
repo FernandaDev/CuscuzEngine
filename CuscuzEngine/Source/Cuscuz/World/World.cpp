@@ -5,43 +5,22 @@
 #include "Level.h"
 
 namespace Cuscuz
-{
-    void World::AddLevel(const CC_AssetRef<Level>& level) 
+{    
+    World::World() : m_ActiveLevel(CreateAssetRef<Level>("default"))
+    {}
+
+    void World::LoadLevel(CC_AssetRef<Level>&& level) 
     {
         level->SetOwningWorld(this);
-        m_Levels[level->GetName().data()] = level;
 
-        if (!m_ActiveLevel)
-           SetActiveLevel(level->GetName().data());
-    }
-    
-    void World::SetActiveLevel(const std::string& levelName)
-    {
-        const auto it = m_Levels.find(levelName);
+        if(m_ActiveLevel)
+        {
+            for (const auto& actor : m_ActiveActors)
+                actor->Destroy();
+        }
         
-        if (it != m_Levels.end())
-        {
-            if(m_UpdatingActors)
-            {
-                for (const auto& actor : m_ActiveActors)
-                    actor->Destroy();
-            }
-            else
-            {
-                m_ActiveActors.clear();
-            }
-            
-            m_ActiveLevel = it->second;
-            
-            m_PendingActors.clear();
-            m_PendingActors = m_ActiveLevel->GetAllActors();
-            
-            LOG_INFO("Switched to active level: {0}", levelName);
-        }
-        else
-        {
-            LOG_ERROR("Level {0} not found!", levelName);
-        }
+        m_ActiveLevel = std::move(level);
+        m_PendingActors = m_ActiveLevel->GetAllActors();
     }
 
     void World::Update(float deltaTime)
@@ -66,7 +45,7 @@ namespace Cuscuz
         HandleDeadActors();
     }
 
-    Actor& World::CreateActor(std::string&& name, const glm::vec3& position, float scale, float rotation)
+    Actor& World::CreateActor(std::string&& name, const glm::vec3& position, const glm::vec3& scale, const glm::vec3& rotation)
     {
         if(name.empty())
             name = "Actor";

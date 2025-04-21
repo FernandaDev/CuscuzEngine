@@ -1,6 +1,8 @@
 #include "pch.h"
 #include "Window.h"
 
+#include <SDL_syswm.h>
+
 #include "EventSystem.h"
 #include "PhysicsSystem.h"
 #include "RendererSystem.h"
@@ -60,6 +62,17 @@ namespace Cuscuz
     {
         CC_EventSystem->OnUpdate();
         m_Context->Render();
+    }
+
+    HWND Window::GetWindowHandle() const
+    {
+        SDL_SysWMinfo wmInfo;
+        SDL_VERSION(&wmInfo.version)
+        
+        if (SDL_GetWindowWMInfo(m_Window, &wmInfo))
+            return wmInfo.info.win.window;
+
+        return nullptr;
     }
 
     void Window::SetVSync(bool enable)

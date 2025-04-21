@@ -227,7 +227,7 @@ namespace Cuscuz
                 auto scale = transform["Scale"].as<glm::vec3>();
                 
                 auto newActor = std::make_shared<Actor>(m_Level, std::move(actorName), 
-                position, scale[0], rotation[2]);
+                position, scale, rotation);
 
                 if(auto cameraCompNode = actor["CameraComponent"])
                 {

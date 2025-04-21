@@ -38,8 +38,10 @@ namespace Cuscuz
 
 		int GetWidth() const { return m_Width; }
 		int GetHeight() const { return m_Height; }
-		SDL_Window* GetWindow() const { return m_Window; }
+		SDL_Window* GetSDLWindow() const { return m_Window; }
 		GraphicsContext* GetContext() const { return m_Context.get(); }
+
+		HWND GetWindowHandle() const;
 
 		void SetVSync(bool enable);
 		bool GetVSync() const { return m_VSync; }

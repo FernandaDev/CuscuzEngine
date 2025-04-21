@@ -9,10 +9,11 @@ namespace Cuscuz
     {
         std::string m_Name;
         std::vector<std::shared_ptr<Actor>> m_Actors;
-        World* m_OwningWorld;
+        World* m_OwningWorld = nullptr;
         
     public:
         Level(std::string&& name);
+        ~Level();
         
         void AddActor(const std::shared_ptr<Actor>& actor);
         void RemoveActor(const std::shared_ptr<Actor>& actor);

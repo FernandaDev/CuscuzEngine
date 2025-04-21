@@ -1,0 +1,27 @@
+Level: Main
+Actors:
+  - Actor: 1231232312
+    Name: MainCamera
+    TransformComponent:
+      Position: [0, 0, 0]
+      Rotation: [0, 0, 0]
+      Scale: [1, 1, 1]
+    CameraComponent:
+      ProjectionType: 0
+      PerspectiveFOV: 0.785398185
+      PerspectiveNear: 0.00999999978
+      PerspectiveFar: 1000
+      OrthographicSize: 10
+      OrthographicNear: -1
+      OrthographicFar: 1
+  - Actor: 1231232312
+    Name: Newwwwww
+    TransformComponent:
+      Position: [2.79999995, 0, 0]
+      Rotation: [0, 0, -0.800000012]
+      Scale: [2, 3, 1]
+    SpriteRenderer:
+      DrawOrder: 0
+      Color: [0.390040666, 0.785021961, 0.928825617, 1]
+    CircleDetectionComponent:
+      Radius: 0

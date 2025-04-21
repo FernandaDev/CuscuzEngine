@@ -2,6 +2,7 @@
 #include "OpenGLShader.h"
 #include "GL/glew.h"
 #include "gtc/type_ptr.hpp"
+#include "Cuscuz/Utils/FileUtils.h"
 
 namespace ShaderHelper
 {
@@ -41,29 +42,6 @@ namespace ShaderHelper
             ss[static_cast<int>(ShaderType::FRAGMENT)].str()
         };
     }
-
-    static std::string ExtractNameFromFile(const std::string& source)
-    {
-        //Example:
-        //  "Assets/Shaders/Sprite.glsl"
-
-        size_t nameBegin = source.find_last_of("/\\"); // try to find the last slash or backslash.
-
-        if(nameBegin == std::string::npos) 
-            nameBegin = 0; // we didn't find slashes, so we'll start at the beginning of the string.
-        else
-            nameBegin = nameBegin + 1; // we found a slash and the name starts 1 char after the slash.
-
-        const size_t lastDot = source.rfind('.'); // try to find a dot/file extension.
-        size_t nameCharCount;
-    
-        if(lastDot == std::string::npos) 
-            nameCharCount = source.size() - nameBegin; // if we didn't find a dot, just count from the end of the source.
-        else
-            nameCharCount = lastDot - nameBegin; // otherwise count from the dot that we found.
-
-        return source.substr(nameBegin, nameCharCount);
-    }
 }
 
 namespace Cuscuz
@@ -75,7 +53,7 @@ namespace Cuscuz
         if(!PreProcess(shaderFile))
             return;
     
-        m_Name = ShaderHelper::ExtractNameFromFile(shaderFile);
+        m_Name = Utils::ExtractNameFromFile(shaderFile);
     }
 
     OpenGLShader::OpenGLShader(const std::string& name, const std::string& shaderFile)

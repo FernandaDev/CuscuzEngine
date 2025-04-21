@@ -27,17 +27,18 @@ namespace Cuscuz
         ActorState m_State;
         std::vector<std::shared_ptr<Component>> m_Components{};
         std::unique_ptr<TransformComponent> m_Transform;
-        CC_AssetRef<Level> m_Level;
+        std::weak_ptr<Level> m_Level;
 
     public:
         Actor(const CC_AssetRef<Level>& owningLevel, std::string&& name, const glm::vec3& position,
-              float scale = 1.f, float rotation = Math::PiOver2);
+              const glm::vec3& scale = glm::vec3(1.f),
+              const glm::vec3& rotation = glm::vec3(0,0, Math::PiOver2));
         ~Actor() override;
 
         void Update(float deltaTime);
         void Destroy();
 
-        CC_AssetRef<Level> GetLevel() const { return m_Level; }
+        std::weak_ptr<Level> GetLevel() const { return m_Level; }
 
         void SetName(std::string&& newName) { m_Name = std::move(newName); }
         void SetName(const char* newName) { m_Name = newName; }

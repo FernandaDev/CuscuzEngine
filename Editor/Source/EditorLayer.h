@@ -31,6 +31,10 @@ namespace Cuscuz
         void OnEvent(CuscuzEvent& event) override;
 
     private:
+        void NewLevel();
+        void OpenLevel();
+        void SaveLevel();
+        
         void EditorWindowBegin();
         void DrawEditorWindow();
         void EditorWindowEnd();

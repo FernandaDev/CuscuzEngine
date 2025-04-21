@@ -36,7 +36,7 @@ namespace Cuscuz
         GraphicsContext* context = window.GetContext();
         const auto openGlContext = (OpenGLContext*)context;
     
-        ImGui_ImplSDL2_InitForOpenGL(window.GetWindow(), openGlContext->GetContext());
+        ImGui_ImplSDL2_InitForOpenGL(window.GetSDLWindow(), openGlContext->GetContext());
         ImGui_ImplOpenGL3_Init("#version 330");
     }
 

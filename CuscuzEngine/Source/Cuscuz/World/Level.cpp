@@ -6,7 +6,14 @@
 namespace Cuscuz
 {
     Level::Level(std::string&& name) : m_Name(std::move(name))
-    {}
+    {
+        LOG_INFO("Level created: {0}", m_Name);
+    }
+
+    Level::~Level()
+    {
+        LOG_INFO("Level destroyed: {0}", m_Name);
+    }
 
     void Level::AddActor(const std::shared_ptr<Actor>& actor)
     {
