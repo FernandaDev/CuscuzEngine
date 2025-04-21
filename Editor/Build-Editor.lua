@@ -27,6 +27,7 @@ project "Editor"
         "%{includedir.SPD_Log}",
         "%{includedir.SDL2}",
         "%{includedir.glm}",
+        "%{includedir.ImGuizmo}",
    }
 
    -- libdirs {} 

@@ -16,6 +16,8 @@ project "CuscuzEngine"
       "%{includedir.glm}/**.inl",
       "%{includedir.stb_image}/**.h",
 		"%{includedir.stb_image}/**.cpp",
+      "%{includedir.ImGuizmo}/ImGuizmo.h",
+		"%{includedir.ImGuizmo}/ImGuizmo.cpp",
    }
 
    includedirs
@@ -29,6 +31,7 @@ project "CuscuzEngine"
       "%{includedir.yaml}",
       "%{includedir.glew}",
       "%{includedir.stb_image}",
+      "%{includedir.ImGuizmo}",
    }
 
    libdirs
@@ -58,6 +61,9 @@ project "CuscuzEngine"
 
    targetdir ("../Binaries/" .. outputdir .. "/%{prj.name}")
    objdir ("../Binaries/Intermediates/" .. outputdir .. "/%{prj.name}")
+
+   filter "files:Vendor/ImGuizmo/**.cpp"
+   flags { "NoPCH" }
 
    filter "system:windows"
        systemversion "latest"

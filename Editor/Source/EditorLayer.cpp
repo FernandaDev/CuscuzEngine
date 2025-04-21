@@ -8,6 +8,7 @@
 #include "Cuscuz/World/LevelSerializer.h"
 #include "ImGui/imgui.h"
 #include "Utils/Editor_ActorCreation.h"
+#include "Utils/Editor_Guizmos.h"
 #include "Utils/Editor_Settings.h"
 #include "Utils/Editor_World.h"
 
@@ -17,6 +18,7 @@ namespace Cuscuz
     static bool s_ShowInspector = true;
     static bool s_ShowRendererStats = false;
     static bool s_ShowTimeStatsOverlay = false;
+    static ImGuizmo::OPERATION s_ImGuizmoOperation = ImGuizmo::OPERATION::TRANSLATE;
 
     EditorLayer::EditorLayer() :
     m_CameraController(std::make_unique<OrthoCameraController>(static_cast<float>(SCREEN_WIDTH) / static_cast<float>(SCREEN_HEIGHT), true)),
@@ -98,6 +100,19 @@ namespace Cuscuz
         case CC_KeyCode::S:
             if(shiftPressed)
                 SaveLevel();
+            
+            break;
+
+        case CC_KeyCode::W:
+            s_ImGuizmoOperation = ImGuizmo::OPERATION::TRANSLATE;
+            
+            break;
+        case CC_KeyCode::E:
+            s_ImGuizmoOperation = ImGuizmo::OPERATION::ROTATE;
+            
+            break;
+        case CC_KeyCode::R:
+            s_ImGuizmoOperation = ImGuizmo::OPERATION::SCALE;
             
             break;
         default:
@@ -260,14 +275,17 @@ namespace Cuscuz
 
         m_IsViewportFocused = ImGui::IsWindowFocused();
         m_IsViewportHovered = ImGui::IsWindowHovered();
-        Engine::Get().GetImGuiLayer()->SetBlockEvents(!m_IsViewportFocused || !m_IsViewportHovered);
+        Engine::Get().GetImGuiLayer()->SetBlockEvents(!m_IsViewportFocused && !m_IsViewportHovered);
         
         ImVec2 viewportSize = ImGui::GetContentRegionAvail();
         m_ViewportSize = {viewportSize.x , viewportSize.y};
         
         uint32_t textureID = m_Framebuffer->GetColorAttachmentRendererID();
         ImGui::Image(textureID, ImVec2{m_ViewportSize.x, m_ViewportSize.y}, ImVec2{0,1}, ImVec2{1,0});
-
+        
+        if(Editor::s_SelectedActor)
+            Editor::DrawGizmos(s_ImGuizmoOperation, m_ViewportSize, Editor::s_SelectedActor, m_CameraController->GetCamera());
+        
         ImGui::End();
     }
 

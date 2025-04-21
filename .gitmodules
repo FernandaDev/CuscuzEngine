@@ -7,3 +7,6 @@
 [submodule "CuscuzEngine/Vendor/ImGui"]
 	path = CuscuzEngine/Vendor/ImGui
 	url = https://github.com/ocornut/imgui.git
+[submodule "CuscuzEngine/Vendor/ImGuizmo"]
+	path = CuscuzEngine/Vendor/ImGuizmo
+	url = https://github.com/CedricGuillemet/ImGuizmo.git

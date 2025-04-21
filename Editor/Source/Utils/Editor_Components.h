@@ -4,7 +4,6 @@
 #include <vector>
 
 #include "ImGui/imgui.h"
-#include "Editor_Resources.h"
 #include "Editor_Utils.h"
 #include "Cuscuz/World/Components/SpriteRenderer.h"
 #include "Cuscuz/World/Actor.h"
@@ -12,10 +11,8 @@
 #include "Cuscuz/World/Components/CameraComponent.h"
 #include "gtc/type_ptr.hpp"
 
-namespace Cuscuz
+namespace Cuscuz::Editor
 {
-    namespace Editor
-    {
         template<typename T>
         inline static void ShowComponentMenuItem(Actor* actor)
         {
@@ -262,5 +259,4 @@ namespace Cuscuz
             ShowAddComponentButton(actor);
         }
         
-    }
 }

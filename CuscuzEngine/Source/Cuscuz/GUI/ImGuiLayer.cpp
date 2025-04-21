@@ -3,6 +3,7 @@
 #include "imgui.h"
 #include <backends/imgui_impl_opengl3.h>
 #include <backends/imgui_impl_sdl2.h>
+#include "ImGuizmo.h"
 
 #include "ImGuiLayer.h"
 #include "Cuscuz/Core/EventSystem.h"
@@ -80,6 +81,7 @@ namespace Cuscuz
         ImGui_ImplOpenGL3_NewFrame();
         ImGui_ImplSDL2_NewFrame();
         ImGui::NewFrame();
+        ImGuizmo::BeginFrame();
     }
     
     void ImGuiLayer::End()

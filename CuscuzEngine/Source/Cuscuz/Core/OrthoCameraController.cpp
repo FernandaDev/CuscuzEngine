@@ -13,7 +13,7 @@ namespace Cuscuz
         m_aspectRatio(aspectRatio), m_ZoomLevel(4.0f),
         m_Bounds(-m_aspectRatio * m_ZoomLevel, m_aspectRatio * m_ZoomLevel, -m_ZoomLevel, m_ZoomLevel),
         m_Camera(m_Bounds.Left, m_Bounds.Right, m_Bounds.Bottom, m_Bounds.Top),
-        m_CanRotate(rotate), m_Position(0), m_Rotation(0)
+        m_CanRotate(rotate), m_Position(0.f,0.f, 0.1f), m_Rotation(0)
     {    }
 
     void OrthoCameraController::OnUpdate(float deltaTime)

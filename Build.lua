@@ -19,6 +19,7 @@ includedir["ImGui"] = "%{wks.location}/CuscuzEngine/Vendor/ImGui"
 includedir["yaml"] = "%{wks.location}/CuscuzEngine/Vendor/yaml/include"
 includedir["glew"] = "%{wks.location}/CuscuzEngine/Vendor/glew/include"
 includedir["stb_image"] = "%{wks.location}/CuscuzEngine/Vendor/stb_image"
+includedir["ImGuizmo"] = "%{wks.location}/CuscuzEngine/Vendor/ImGuizmo"
 
 include "CuscuzEngine/Vendor/yaml"
 include "CuscuzEngine/Vendor/glew"
