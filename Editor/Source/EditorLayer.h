@@ -1,6 +1,7 @@
 ﻿#pragma once
 
 #include <memory>
+
 #include "Cuscuz.h"
 
 namespace Cuscuz
@@ -9,7 +10,7 @@ namespace Cuscuz
 
     class EditorLayer : public Layer
     {
-        std::unique_ptr<OrthoCameraController> m_CameraController;
+        std::unique_ptr<EditorCamera> m_EditorCamera;
         std::unique_ptr<World> m_EditorWorld;
         std::unique_ptr<Scene> m_EditorScene;
 

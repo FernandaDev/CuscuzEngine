@@ -1,10 +1,8 @@
 ﻿#pragma once
 
+#include "Cuscuz.h"
 #include "ImGui/imgui.h"
 #include "Editor_Components.h"
-#include "Cuscuz/World/World.h"
-#include "Cuscuz/World/Actor.h"
-#include "Cuscuz/World/Level.h"
 
 namespace Cuscuz::Editor
 {

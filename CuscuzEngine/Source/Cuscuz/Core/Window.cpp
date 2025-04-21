@@ -1,12 +1,8 @@
 #include "pch.h"
+
 #include "Window.h"
-
-#include <SDL_syswm.h>
-
 #include "EventSystem.h"
 #include "PhysicsSystem.h"
-#include "RendererSystem.h"
-#include "Time.h"
 #include "Cuscuz/Events/EventDispatcher.h"
 #include "Cuscuz/Events/WindowEvents.h"
 #include "Platform/OpenGL/OpenGLContext.h"

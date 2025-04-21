@@ -1,11 +1,5 @@
 ﻿#include "EditorLayer.h"
 
-#include "Cuscuz/core/Input.h"
-#include "Cuscuz/GUI/ImGuiLayer.h"
-#include "Cuscuz/Utils/FileUtils.h"
-#include "Cuscuz/Utils/Instrumentor.h"
-#include "Cuscuz/Utils/PlatformUtils.h"
-#include "Cuscuz/World/LevelSerializer.h"
 #include "ImGui/imgui.h"
 #include "Utils/Editor_ActorCreation.h"
 #include "Utils/Editor_Guizmos.h"
@@ -21,7 +15,7 @@ namespace Cuscuz
     static ImGuizmo::OPERATION s_ImGuizmoOperation = ImGuizmo::OPERATION::TRANSLATE;
 
     EditorLayer::EditorLayer() :
-    m_CameraController(std::make_unique<OrthoCameraController>(static_cast<float>(SCREEN_WIDTH) / static_cast<float>(SCREEN_HEIGHT), true)),
+    m_EditorCamera(std::make_unique<EditorCamera>(30.f, static_cast<float>(SCREEN_WIDTH) / static_cast<float>(SCREEN_HEIGHT), 0.1f, 1000.f)),
     m_EditorWorld(std::make_unique<World>()),
     m_EditorScene(std::make_unique<Scene>())
     {  }
@@ -38,7 +32,7 @@ namespace Cuscuz
     {
         Layer::OnEvent(event);
 
-        m_CameraController->OnEvent(event);
+        m_EditorCamera->OnEvent(event);
         EventSingleDispatcher eventDispatcher(event);
         eventDispatcher.Dispatch<CC_KeyDownEvent>(BIND_FUNCTION(this, EditorLayer::OnKeyDownEvent));
     }
@@ -52,12 +46,11 @@ namespace Cuscuz
            (spec.Width != static_cast<uint32_t>(m_ViewportSize.x) || spec.Height != static_cast<uint32_t>(m_ViewportSize.y)))
         {
             m_Framebuffer->Resize(static_cast<uint32_t>(m_ViewportSize.x), static_cast<uint32_t>(m_ViewportSize.y));
-            m_CameraController->OnResize(m_ViewportSize.x, m_ViewportSize.y);
+            m_EditorCamera->SetViewportSize(m_ViewportSize.x, m_ViewportSize.y);
             m_EditorScene->OnViewPortResize(static_cast<uint32_t>(m_ViewportSize.x), static_cast<uint32_t>(m_ViewportSize.y));
         }
         
-        if(m_IsViewportFocused)
-            m_CameraController->OnUpdate(deltaTime);
+        m_EditorCamera->OnUpdate(deltaTime);
     
         m_EditorWorld->Update(deltaTime);
 
@@ -68,50 +61,49 @@ namespace Cuscuz
         RenderCommand::SetClearColor({0.6f, 0.6f, 0.6f, 1.0f});
         RenderCommand::Clear();
     
-        //m_EditorScene->OnRender();
-        m_EditorScene->OnRender(m_CameraController->GetCamera());
+        m_EditorScene->OnRenderEditor(*m_EditorCamera);
 
         m_Framebuffer->Unbind();
     }
 
     bool EditorLayer::OnKeyDownEvent(const CC_KeyDownEvent& event)
     {
-        if(event.GetKeyCode() == CC_KEYCODE_F1)
+        if(event.GetKeyCode() == Key::F1)
         {
             s_ShowTimeStatsOverlay = !s_ShowTimeStatsOverlay;
             return false;
         }
 
-        const bool shiftPressed = Input::IsKeyPressed(CC_KeyCode::LShift) || Input::IsKeyPressed(CC_KeyCode::RShift);
-        const bool controlPressed = Input::IsKeyPressed(CC_KeyCode::LCtrl) || Input::IsKeyPressed(CC_KeyCode::RCtrl);
+        const bool shiftPressed = Input::IsKeyPressed(Key::LShift) || Input::IsKeyPressed(Key::RShift);
+        const bool controlPressed = Input::IsKeyPressed(Key::LCtrl) || Input::IsKeyPressed(Key::RCtrl);
 
         switch (event.GetKeyCode())
         {
-        case CC_KeyCode::N:
+        case Key::N:
             if(controlPressed)
                 NewLevel();
 
             break;
-        case CC_KeyCode::O:
+        case Key::O:
             if(controlPressed)
                 OpenLevel();
             
             break;
-        case CC_KeyCode::S:
+        case Key::S:
             if(shiftPressed)
                 SaveLevel();
             
             break;
 
-        case CC_KeyCode::W:
+        case Key::W:
             s_ImGuizmoOperation = ImGuizmo::OPERATION::TRANSLATE;
             
             break;
-        case CC_KeyCode::E:
+        case Key::E:
             s_ImGuizmoOperation = ImGuizmo::OPERATION::ROTATE;
             
             break;
-        case CC_KeyCode::R:
+        case Key::R:
             s_ImGuizmoOperation = ImGuizmo::OPERATION::SCALE;
             
             break;
@@ -284,7 +276,7 @@ namespace Cuscuz
         ImGui::Image(textureID, ImVec2{m_ViewportSize.x, m_ViewportSize.y}, ImVec2{0,1}, ImVec2{1,0});
         
         if(Editor::s_SelectedActor)
-            Editor::DrawGizmos(s_ImGuizmoOperation, m_ViewportSize, Editor::s_SelectedActor, m_CameraController->GetCamera());
+            Editor::DrawGizmos(s_ImGuizmoOperation, m_ViewportSize, Editor::s_SelectedActor, *m_EditorCamera);
         
         ImGui::End();
     }

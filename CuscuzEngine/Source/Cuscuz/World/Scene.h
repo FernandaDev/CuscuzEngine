@@ -6,13 +6,9 @@
 
 namespace Cuscuz
 {
+    class EditorCamera;
     class TransformComponent;
-}
-
-namespace Cuscuz
-{
     class SceneCamera;
-    class OrthographicCamera;
     class IDrawable;
     class Texture2D;
 
@@ -39,7 +35,7 @@ namespace Cuscuz
 
         void SetMainCamera(SceneCamera* camera, TransformComponent* cameraTransform);
         
-        void OnRender(const OrthographicCamera& camera) const;
+        void OnRenderEditor(const EditorCamera& camera) const;
         void OnRender() const;
 
         static DrawableProxyEvent GetOnDrawableProxyAddedEvent() { return m_OnDrawableProxyAdded; }

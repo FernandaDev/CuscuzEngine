@@ -3,7 +3,6 @@
 #include "Actor.h"
 #include "World.h"
 #include "Cuscuz/World/Components/SpriteRenderer.h"
-#include "Cuscuz/Core/RendererSystem.h"
 
 namespace Cuscuz
 {

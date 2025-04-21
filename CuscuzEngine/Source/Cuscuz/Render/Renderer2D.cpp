@@ -2,6 +2,7 @@
 
 #include "Renderer2D.h"
 #include "Buffer.h"
+#include "EditorCamera.h"
 #include "RenderCommand.h"
 #include "Shader.h"
 #include "Texture.h"
@@ -108,10 +109,12 @@ namespace Cuscuz
     {
     }
 
-    void Renderer2D::BeginScene(const OrthographicCamera& camera)
+    void Renderer2D::BeginScene(const EditorCamera& camera)
     {
+        const auto viewProjection = camera.GetViewProjection();
+        
         s_Data.SpriteShader->Bind();
-        s_Data.SpriteShader->SetMatrix4("u_ViewProjection", camera.GetViewProjectionMatrix());
+        s_Data.SpriteShader->SetMatrix4("u_ViewProjection", viewProjection);
 
         StartBatch();
     }

@@ -1,7 +1,7 @@
 ﻿#pragma once
 
+#include "Cuscuz.h"
 #include "ImGui/imgui.h"
-#include "Cuscuz/World/World.h"
 
 namespace Cuscuz::Editor
 {

@@ -3,12 +3,9 @@
 #include <ranges>
 #include <vector>
 
-#include "ImGui/imgui.h"
+#include "Cuscuz.h"
 #include "Editor_Utils.h"
-#include "Cuscuz/World/Components/SpriteRenderer.h"
-#include "Cuscuz/World/Actor.h"
-#include "Cuscuz/Core/ClassRegistry.h"
-#include "Cuscuz/World/Components/CameraComponent.h"
+#include "ImGui/imgui.h"
 #include "gtc/type_ptr.hpp"
 
 namespace Cuscuz::Editor
@@ -40,7 +37,7 @@ namespace Cuscuz::Editor
                 ShowComponentMenuItem<SpriteRenderer>(actor);
                 ShowComponentMenuItem<CircleDetectionComponent>(actor);
                 ShowComponentMenuItem<Simple2DMovementComponent>(actor);
-                //ShowComponentMenuItem<CameraComponent>(actor);
+                ShowComponentMenuItem<CameraComponent>(actor);
                 
                 ImGui::EndPopup();
             }

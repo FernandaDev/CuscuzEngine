@@ -35,9 +35,9 @@ Actors:
   - Actor: 1231232312
     Name: Azullll
     TransformComponent:
-      Position: [-4.0999999, 0, 0]
-      Rotation: [0, 0, -0.699999988]
-      Scale: [2.0999999, 2.0999999, 1]
+      Position: [-1.30793381, 0.113420486, -1.24611104]
+      Rotation: [-0.157318145, 0.419469655, 0.0406001024]
+      Scale: [6.24041367, 2.09999633, 0.999999642]
     SpriteRenderer:
       DrawOrder: 0
       Color: [0.141842157, 0.412260354, 0.622775793, 1]

@@ -3,7 +3,7 @@
 #include "Scene.h"
 #include "Cuscuz/Render/IDrawable.h"
 #include "Cuscuz/Render/Renderer2D.h"
-#include "Cuscuz/Render/Camera.h"
+#include "Cuscuz/Render/EditorCamera.h"
 #include "Cuscuz/World/SceneCamera.h"
 #include "Cuscuz/World/Components/TransformComponent.h"
 
@@ -41,7 +41,7 @@ namespace Cuscuz
         m_CameraTransform = cameraTransform;
     }
 
-    void Scene::OnRender(const OrthographicCamera& camera) const
+    void Scene::OnRenderEditor(const EditorCamera& camera) const
     {
         if (m_Drawables.empty())
             return;

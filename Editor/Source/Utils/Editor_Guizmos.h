@@ -1,14 +1,13 @@
 ﻿#pragma once
 
+#include "Cuscuz.h"
 #include "ImGuizmo.h"
-#include "Cuscuz/Render/Camera.h"
-#include "Cuscuz/World/Actor.h"
-#include "gtc/type_ptr.hpp"
 #include "ImGui/imgui.h"
+#include "gtc/type_ptr.hpp"
 
 namespace Cuscuz::Editor
 {
-    static void DrawGizmos(ImGuizmo::OPERATION operation, const glm::vec2& viewportSize, Actor* actor, const OrthographicCamera& camera, ImGuizmo::MODE mode = ImGuizmo::LOCAL)
+    static void DrawGizmos(ImGuizmo::OPERATION operation, const glm::vec2& viewportSize, Actor* actor, const EditorCamera& camera, ImGuizmo::MODE mode = ImGuizmo::LOCAL)
     {
         ImGuizmo::SetOrthographic(false);
         ImGuizmo::SetDrawlist();
@@ -18,11 +17,11 @@ namespace Cuscuz::Editor
         const ImVec2 imagePos = { windowPos.x + contentRegionMin.x, windowPos.y + contentRegionMin.y };
         ImGuizmo::SetRect(imagePos.x, imagePos.y, viewportSize.x, viewportSize.y);
 
-        glm::mat4 cameraProjection = camera.GetProjectionMatrix();
+        glm::mat4 cameraProjection = camera.GetProjection();
         glm::mat4 cameraView = camera.GetViewMatrix();
         auto actorTransform = actor->GetTransform().GetWorldTransform();
 
-        const bool shouldSnap = Input::IsKeyPressed(CC_KeyCode::LCtrl);
+        const bool shouldSnap = Input::IsKeyPressed(Key::LCtrl);
         float snapValue = 0.5f;
         if(operation == ImGuizmo::OPERATION::ROTATE)
             snapValue = 45.f;

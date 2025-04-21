@@ -1,7 +1,6 @@
 ﻿#pragma once
-#include "Cuscuz/Core/Time.h"
-#include "Cuscuz/Core/Window.h"
-#include "Cuscuz/Render/Renderer2D.h"
+
+#include "Cuscuz.h"
 
 namespace Cuscuz::Editor
 {

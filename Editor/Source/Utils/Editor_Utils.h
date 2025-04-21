@@ -1,7 +1,7 @@
 ﻿#pragma once
 
 #include <string>
-#include "glm.hpp"
+
 #include "ImGui/imgui.h"
 #include "ImGui/imgui_internal.h"
 

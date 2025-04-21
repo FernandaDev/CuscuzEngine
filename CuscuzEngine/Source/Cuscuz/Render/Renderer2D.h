@@ -8,6 +8,7 @@ namespace Cuscuz
     class SubTexture2D;
     class Texture2D;
     class TransformComponent;
+    class EditorCamera;
 
     class Renderer2D
     {
@@ -15,7 +16,7 @@ namespace Cuscuz
         static void Init();
         static void Shutdown();
     
-        static void BeginScene(const OrthographicCamera& camera);
+        static void BeginScene(const EditorCamera& camera);
         static void BeginScene(const Camera& camera, const glm::mat4& transform);
         static void EndScene();
         static void Flush();
