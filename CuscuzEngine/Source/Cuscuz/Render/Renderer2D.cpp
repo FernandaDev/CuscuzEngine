@@ -16,8 +16,7 @@ namespace Cuscuz
     {
         glm::vec3 Position;
         glm::vec4 Color;
-        glm::vec2 TexCoord;
-        float TexIndex;
+        glm::vec4 TexCoordAndIndex;
         glm::vec2 TilingOffset;
     };
 
@@ -39,7 +38,7 @@ namespace Cuscuz
         QuadVertex* QuadVertexBufferPtr = nullptr;
 
         std::array<CC_AssetRef<Texture2D>, MaxTextureSlotsPerDraw> TextureSlots;
-        uint32_t TextureSlotIndex = 1;
+        int32_t TextureSlotIndex = 1;
 
         glm::vec4 QuadVertexPositions[4];
         Renderer2D::Statistics Stats;
@@ -56,8 +55,7 @@ namespace Cuscuz
         {
             { ShaderDataType::Float3, "inPosition" },
             { ShaderDataType::Float4, "inColor" },
-            { ShaderDataType::Float2, "inTexCoord" },
-            { ShaderDataType::Float, "inTexIndex" },
+            { ShaderDataType::Float4, "inTexCoordAndIndex" },
             { ShaderDataType::Float2, "inTilingOffset" },
         });
         s_Data.QuadVertexArray->AddBuffer(s_Data.QuadVertexBuffer);
@@ -177,8 +175,7 @@ namespace Cuscuz
         {
             s_Data.QuadVertexBufferPtr->Position = worldTransform * s_Data.QuadVertexPositions[i];
             s_Data.QuadVertexBufferPtr->Color = color;
-            s_Data.QuadVertexBufferPtr->TexCoord = textureCoords[i];
-            s_Data.QuadVertexBufferPtr->TexIndex = 0.0f;
+            s_Data.QuadVertexBufferPtr->TexCoordAndIndex = glm::vec4(textureCoords[i].x, textureCoords[i].y, 0.0f, 0.0f);
             s_Data.QuadVertexBufferPtr->TilingOffset = {1.0f, 1.0f};
             s_Data.QuadVertexBufferPtr++;
         }
@@ -195,18 +192,18 @@ namespace Cuscuz
         constexpr glm::vec2 textureCoords[] = { {0.0f, 0.0f}, { 1.0f, 0.0f },
                                             { 1.0f, 1.0f }, { 0.0f, 1.0f } };
 
-        float textureIndex = 0.0f;
+        int32_t textureIndex = 0.0f;
         
-        for (uint32_t i = 1; i < s_Data.TextureSlotIndex; ++i)
+        for (int32_t i = 1; i < s_Data.TextureSlotIndex; ++i)
         {
             if(*s_Data.TextureSlots[i] == *texture)
             {
-                textureIndex = static_cast<float>(i);
+                textureIndex = i;
                 break;
             }
         }
     
-        if(textureIndex == 0.0f)
+        if(textureIndex == 0)
         {
             if(s_Data.TextureSlotIndex >= Renderer2DData::MaxTextureSlotsPerDraw)
             {
@@ -214,7 +211,7 @@ namespace Cuscuz
                 StartBatch();
             }
             
-            textureIndex = static_cast<float>(s_Data.TextureSlotIndex);
+            textureIndex = s_Data.TextureSlotIndex;
             s_Data.TextureSlots[s_Data.TextureSlotIndex] = texture;
             s_Data.TextureSlotIndex++;
         }
@@ -226,8 +223,7 @@ namespace Cuscuz
         {
             s_Data.QuadVertexBufferPtr->Position = worldTransform * s_Data.QuadVertexPositions[i];
             s_Data.QuadVertexBufferPtr->Color = color;
-            s_Data.QuadVertexBufferPtr->TexCoord = textureCoords[i];
-            s_Data.QuadVertexBufferPtr->TexIndex = textureIndex;
+            s_Data.QuadVertexBufferPtr->TexCoordAndIndex = glm::vec4(textureCoords[i].x, textureCoords[i].y, textureIndex, 0.0f);
             s_Data.QuadVertexBufferPtr->TilingOffset = tilingOffset;
             s_Data.QuadVertexBufferPtr++;
         }
@@ -245,18 +241,18 @@ namespace Cuscuz
         const glm::vec2* textureCoords = subTexture->GetTexCoords();
         const CC_AssetRef<Texture2D> texture = subTexture->GetTexture();
 
-        float textureIndex = 0.0f;
+        int32_t textureIndex = 0;
 
-        for (uint32_t i = 1; i < s_Data.TextureSlotIndex; ++i)
+        for (int32_t i = 1; i < s_Data.TextureSlotIndex; ++i)
         {
             if (*s_Data.TextureSlots[i] == *texture)
             {
-                textureIndex = static_cast<float>(i);
+                textureIndex = i;
                 break;
             }
         }
 
-        if (textureIndex == 0.0f)
+        if (textureIndex == 0)
         {
             if(s_Data.TextureSlotIndex >= Renderer2DData::MaxTextureSlotsPerDraw)
             {
@@ -264,7 +260,7 @@ namespace Cuscuz
                 StartBatch();
             }
             
-            textureIndex = static_cast<float>(s_Data.TextureSlotIndex);
+            textureIndex = s_Data.TextureSlotIndex;
             s_Data.TextureSlots[s_Data.TextureSlotIndex] = texture;
             s_Data.TextureSlotIndex++;
         }
@@ -275,8 +271,7 @@ namespace Cuscuz
         {
             s_Data.QuadVertexBufferPtr->Position = worldTransform * s_Data.QuadVertexPositions[i];
             s_Data.QuadVertexBufferPtr->Color = color;
-            s_Data.QuadVertexBufferPtr->TexCoord = textureCoords[i];
-            s_Data.QuadVertexBufferPtr->TexIndex = textureIndex;
+            s_Data.QuadVertexBufferPtr->TexCoordAndIndex = glm::vec4(textureCoords[i].x, textureCoords[i].y, textureIndex, 0.0f);
             s_Data.QuadVertexBufferPtr->TilingOffset = tilingOffset;
             s_Data.QuadVertexBufferPtr++;
         }
