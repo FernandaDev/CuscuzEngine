@@ -22,10 +22,11 @@ namespace Cuscuz
  
     void EditorLayer::OnAttach()
     {
-        FramebufferSpecification spec;
-        spec.Width =  SCREEN_WIDTH;
-        spec.Height = SCREEN_HEIGHT;
-        m_Framebuffer = Framebuffer::Create(spec);
+        FramebufferSpecification framebufferSpec;
+        framebufferSpec.Attachments = { FramebufferTextureFormat::RGBA8, FramebufferTextureFormat::Depth };
+        framebufferSpec.Width =  SCREEN_WIDTH;
+        framebufferSpec.Height = SCREEN_HEIGHT;
+        m_Framebuffer = Framebuffer::Create(std::move(framebufferSpec));
     }
 
     void EditorLayer::OnEvent(CuscuzEvent& event)
@@ -41,7 +42,7 @@ namespace Cuscuz
     {
         CC_PROFILE_FUNCTION();
 
-        if (const FramebufferSpecification spec = m_Framebuffer->GetSpecification();
+        if (const FramebufferSpecification& spec = m_Framebuffer->GetSpecification();
            m_ViewportSize.x > 0.0f && m_ViewportSize.y > 0.0f && // zero sized framebuffer is invalid
            (spec.Width != static_cast<uint32_t>(m_ViewportSize.x) || spec.Height != static_cast<uint32_t>(m_ViewportSize.y)))
         {
@@ -272,7 +273,7 @@ namespace Cuscuz
         ImVec2 viewportSize = ImGui::GetContentRegionAvail();
         m_ViewportSize = {viewportSize.x , viewportSize.y};
         
-        uint32_t textureID = m_Framebuffer->GetColorAttachmentRendererID();
+        const uint32_t textureID = m_Framebuffer->GetColorAttachmentRendererID();
         ImGui::Image(textureID, ImVec2{m_ViewportSize.x, m_ViewportSize.y}, ImVec2{0,1}, ImVec2{1,0});
         
         if(Editor::s_SelectedActor)

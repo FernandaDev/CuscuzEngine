@@ -1,53 +1,70 @@
 ﻿#include "pch.h"
 #include "OpenGLFramebuffer.h"
 
+#include "GLUtils.h"
 #include "GL/glew.h"
 
 namespace Cuscuz
 {
-    OpenGLFramebuffer::OpenGLFramebuffer(const FramebufferSpecification& spec):
-        m_Spec(spec)
+    OpenGLFramebuffer::OpenGLFramebuffer(FramebufferSpecification&& spec):
+        m_Spec(std::move(spec))
     {
+        for(const auto& config : m_Spec.Attachments.TextureConfigs)
+        {
+            if(!GLUtils::IsDepthFormat(config.format))
+                m_ColorAttachmentsConfig.emplace_back(config);
+            else
+                m_DepthAttachmentConfig = config;
+        }
+        
         Invalidate();
     }
 
-    OpenGLFramebuffer::~OpenGLFramebuffer()
-    {
-        glDeleteFramebuffers(1, &m_RendererID);
-        glDeleteTextures(1, &m_ColorAttachment);
-        glDeleteTextures(1, &m_DepthAttachment);
-    }
+    OpenGLFramebuffer::~OpenGLFramebuffer() { ClearBuffers(); }
 
     void OpenGLFramebuffer::Invalidate()
     {
         if(m_RendererID)
-        {
-            glDeleteFramebuffers(1, &m_RendererID);
-            glDeleteTextures(1, &m_ColorAttachment);
-            glDeleteTextures(1, &m_DepthAttachment);
-        }
+            ClearBuffers();
         
         glCreateFramebuffers(1, &m_RendererID);
         glBindFramebuffer(GL_FRAMEBUFFER, m_RendererID);
 
-        glCreateTextures(GL_TEXTURE_2D, 1, &m_ColorAttachment);
-        glBindTexture(GL_TEXTURE_2D, m_ColorAttachment);
-        glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA8, m_Spec.Width, m_Spec.Height,
-                            0, GL_RGBA, GL_UNSIGNED_BYTE, nullptr);
+        if(!m_ColorAttachmentsConfig.empty())
+        {
+            m_ColorAttachments.resize(m_ColorAttachmentsConfig.size());
+            GLUtils::CreateTextures(m_ColorAttachments.data(), m_ColorAttachmentsConfig.size());
 
-        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+            for (size_t i = 0; i < m_ColorAttachments.size(); ++i)
+            {
+                GLUtils::BindTexture(m_ColorAttachments[i]);
 
-        glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, m_ColorAttachment, 0);
+                const auto format = GLUtils::GetGLFormat(m_ColorAttachmentsConfig[i].format);
+                GLUtils::AttachColorTexture(m_ColorAttachments[i], format, m_Spec.Width, m_Spec.Height, i);
+            }
+        }
+        
+        if(m_DepthAttachmentConfig.format != FramebufferTextureFormat::None)
+        {
+            GLUtils::CreateTextures(&m_DepthAttachment, 1);
+            GLUtils::BindTexture(m_DepthAttachment);
 
-        glCreateTextures(GL_TEXTURE_2D, 1, &m_DepthAttachment);
-        glBindTexture(GL_TEXTURE_2D, m_DepthAttachment);
-        glTexImage2D(GL_TEXTURE_2D, 0, GL_DEPTH24_STENCIL8, m_Spec.Width, m_Spec.Height,
-                      0, GL_DEPTH_STENCIL, GL_UNSIGNED_INT_24_8, NULL);
+            const auto depthFormat = GLUtils::GetGLFormat(m_DepthAttachmentConfig.format);
+            GLUtils::AttachDepthTexture(m_DepthAttachment, depthFormat, GL_DEPTH_STENCIL_ATTACHMENT, m_Spec.Width, m_Spec.Height);
+        }
+        else
+            m_DepthAttachment = 0;
+        
+        if(m_ColorAttachments.size() > 1)
+        {
+            CC_ASSERT(m_ColorAttachments.size() <= 4, "There should only be 4 buffers!")
+            constexpr GLenum buffers[4] = { GL_COLOR_ATTACHMENT0, GL_COLOR_ATTACHMENT1, GL_COLOR_ATTACHMENT2, GL_COLOR_ATTACHMENT3 };
+            glDrawBuffers(static_cast<GLsizei>(m_ColorAttachments.size()), buffers);
+        }
+        else if(m_ColorAttachments.empty())
+            glDrawBuffer(GL_NONE);
 
-        glFramebufferTexture2D(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_TEXTURE_2D, m_DepthAttachment, 0);
-
-        CC_ASSERT(glCheckFramebufferStatus(GL_FRAMEBUFFER) == GL_FRAMEBUFFER_COMPLETE, "Framebuffer is incomplete!");
+        CC_ASSERT(glCheckFramebufferStatus(GL_FRAMEBUFFER) == GL_FRAMEBUFFER_COMPLETE, "Framebuffer is incomplete!")
         
         glBindFramebuffer(GL_FRAMEBUFFER, 0);
     }
@@ -69,5 +86,15 @@ namespace Cuscuz
         m_Spec.Height = height;
 
         Invalidate();
+    }
+
+    void OpenGLFramebuffer::ClearBuffers()
+    {
+        glDeleteFramebuffers(1, &m_RendererID);
+        glDeleteTextures(m_ColorAttachments.size(), m_ColorAttachments.data());
+        glDeleteTextures(1, &m_DepthAttachment);
+
+        m_ColorAttachments.clear();
+        m_DepthAttachment = 0;
     }
 }

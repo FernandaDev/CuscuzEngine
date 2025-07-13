@@ -7,12 +7,12 @@
 
 namespace Cuscuz
 {
-    CC_AssetRef<Framebuffer> Framebuffer::Create(const FramebufferSpecification& spec)
+    CC_AssetRef<Framebuffer> Framebuffer::Create(FramebufferSpecification&& spec)
     {
         switch (Renderer::GetAPI())
         {
         case RendererAPI::API::OpenGL:
-            return CreateAssetRef<OpenGLFramebuffer>(spec);
+            return CreateAssetRef<OpenGLFramebuffer>(std::move(spec));
         case RendererAPI::API::None:
             {
                 CC_ASSERT(false, "RendererAPI::None is not valid!")
